@@ -1,0 +1,356 @@
+/**
+ * Performance Optimizations CSS
+ * Loading states, transitions, and animations
+ */
+
+/* ===== IMAGE LOADING STATES ===== */
+
+/* Placeholder for loading images */
+img:not([src]):not([srcset]) {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s ease-in-out infinite;
+}
+
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
+
+img[loading="lazy"].loaded,
+img[loading="lazy"][src] {
+    opacity: 1;
+}
+
+/* Loading animation */
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Blur-up effect for images */
+img.blur-up {
+    filter: blur(5px);
+    transition: filter 0.3s ease-in;
+}
+
+img.blur-up.loaded {
+    filter: blur(0);
+}
+
+/* Fade-in for lazy loaded images */
+img[data-src],
+[data-bg] {
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
+
+img[data-src].loaded,
+[data-bg].loaded {
+    opacity: 1;
+}
+
+/* ===== LOADING SPINNER ===== */
+
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== SKELETON SCREENS ===== */
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+.skeleton-text {
+    height: 1em;
+    margin-bottom: 0.5em;
+}
+
+.skeleton-title {
+    height: 2em;
+    width: 50%;
+    margin-bottom: 1em;
+}
+
+.skeleton-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.skeleton-image {
+    width: 100%;
+    height: 200px;
+}
+
+/* ===== OPTIMIZED ANIMATIONS ===== */
+
+/* Use transform and opacity for better performance */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Scale animation */
+.scale-in {
+    animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ===== PERFORMANCE HINTS ===== */
+
+/* Force GPU acceleration for smooth animations */
+.gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+}
+
+/* Contain layout for better performance */
+.contain-layout {
+    contain: layout;
+}
+
+.contain-paint {
+    contain: paint;
+}
+
+.contain-strict {
+    contain: strict;
+}
+
+/* ===== REDUCE MOTION ===== */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    img[loading="lazy"] {
+        opacity: 1;
+    }
+}
+
+/* ===== CONTENT VISIBILITY ===== */
+
+/* Use content-visibility for better rendering performance */
+.lazy-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 500px;
+}
+
+/* ===== LOADING STATES FOR COMPONENTS ===== */
+
+.product-card.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.product-card.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== PROGRESSIVE DISCLOSURE ===== */
+
+.hidden-until-load {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.hidden-until-load.loaded {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.3s ease-in;
+}
+
+/* ===== CRITICAL CSS INLINE ===== */
+
+/* These styles should be inlined in <head> for critical path optimization */
+.above-fold {
+    /* Hero section, header, first viewport content */
+    min-height: 100vh;
+}
+
+/* ===== RESPONSIVE IMAGES ===== */
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Aspect ratio boxes for preventing layout shift */
+.aspect-ratio-box {
+    position: relative;
+    width: 100%;
+    height: 0;
+}
+
+.aspect-ratio-box-16-9 {
+    padding-bottom: 56.25%; /* 16:9 */
+}
+
+.aspect-ratio-box-4-3 {
+    padding-bottom: 75%; /* 4:3 */
+}
+
+.aspect-ratio-box-1-1 {
+    padding-bottom: 100%; /* 1:1 */
+}
+
+.aspect-ratio-box > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ===== FONT LOADING ===== */
+
+/* FOUT (Flash of Unstyled Text) prevention */
+.fonts-loading body {
+    opacity: 0;
+}
+
+.fonts-loaded body {
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+/* Font display swap alternative */
+@font-face {
+    font-family: 'CustomFont';
+    src: url('/fonts/custom.woff2') format('woff2');
+    font-display: swap;
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+    /* Hide non-essential elements for printing */
+    .no-print,
+    header,
+    footer,
+    .navigation,
+    .ads,
+    .social-share {
+        display: none !important;
+    }
+    
+    /* Optimize for printing */
+    * {
+        background: transparent !important;
+        color: black !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    
+    a[href]::after {
+        content: " (" attr(href) ")";
+    }
+    
+    img {
+        max-width: 100% !important;
+        page-break-inside: avoid;
+    }
+}
+
+/* ===== DARK MODE ===== */
+
+@media (prefers-color-scheme: dark) {
+    .skeleton,
+    img:not([src]):not([srcset]) {
+        background: linear-gradient(90deg, #2a2a2a 25%, #1a1a1a 50%, #2a2a2a 75%);
+        background-size: 200% 100%;
+    }
+}
+
+/* ===== UTILITIES ===== */
+
+/* Visually hidden but accessible */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Prevent layout shift */
+.no-layout-shift {
+    min-height: 1px;
+}

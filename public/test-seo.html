@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Test Tool - TECH HAVEN</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .test-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .test-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-section h2 i {
+            color: #667eea;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .test-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .test-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .test-card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .test-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .test-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .test-btn i {
+            font-size: 1.1rem;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .quick-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .quick-link {
+            padding: 8px 16px;
+            background: #e8eaf6;
+            color: #667eea;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .quick-link:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .results {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-icon {
+            font-size: 1.2rem;
+        }
+
+        .result-icon.success {
+            color: #28a745;
+        }
+
+        .result-icon.warning {
+            color: #ffc107;
+        }
+
+        .result-icon.error {
+            color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .test-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-search"></i> SEO Test Tool</h1>
+        <p class="subtitle">Kiểm tra SEO cho website TECH HAVEN</p>
+
+        <!-- URL Input Section -->
+        <div class="test-section">
+            <h2><i class="fas fa-link"></i> Nhập URL để test</h2>
+            <input type="text" id="testUrl" class="url-input" placeholder="https://tech-haven-5368b.web.app/" value="https://tech-haven-5368b.web.app/">
+            
+            <div class="quick-links">
+                <span class="quick-link" onclick="setUrl('https://tech-haven-5368b.web.app/')">Trang chủ</span>
+                <span class="quick-link" onclick="setUrl('https://tech-haven-5368b.web.app/shop')">Shop</span>
+                <span class="quick-link" onclick="setUrl('https://tech-haven-5368b.web.app/sitemap.xml')">Sitemap</span>
+                <span class="quick-link" onclick="setUrl('https://tech-haven-5368b.web.app/robots.txt')">Robots.txt</span>
+            </div>
+        </div>
+
+        <!-- Meta Tags Test -->
+        <div class="test-section">
+            <h2><i class="fas fa-tags"></i> Meta Tags & Structured Data</h2>
+            <div class="test-grid">
+                <div class="test-card">
+                    <span class="status-badge status-success">Google</span>
+                    <h3>Rich Results Test</h3>
+                    <p>Test cấu trúc dữ liệu JSON-LD, kiểm tra rich snippets hiển thị trên Google Search</p>
+                    <a href="https://search.google.com/test/rich-results" target="_blank" class="test-btn">
+                        <i class="fas fa-external-link-alt"></i>
+                        Test Rich Results
+                    </a>
+                </div>
+
+                <div class="test-card">
+                    <span class="status-badge status-info">Schema.org</span>
+                    <h3>Schema Markup Validator</h3>
+                    <p>Kiểm tra và validate Schema.org structured data markup</p>
+                    <a href="https://validator.schema.org/" target="_blank" class="test-btn">
+                        <i class="fas fa-check-circle"></i>
+                        Validate Schema
+                    </a>
+                </div>
+
+                <div class="test-card">
+                    <span class="status-badge status-success">Meta Tags</span>
+                    <h3>Meta Tags Analyzer</h3>
+                    <p>Phân tích toàn bộ meta tags, Open Graph, Twitter Cards</p>
+                    <button class="test-btn" onclick="testMetaTags()">
+                        <i class="fas fa-microscope"></i>
+                        Analyze Meta Tags
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Media Test -->
+        <div class="test-section">
+            <h2><i class="fas fa-share-alt"></i> Social Media Preview</h2>
+            <div class="test-grid">
+                <div class="test-card">
+                    <span class="status-badge status-info">Facebook</span>
+                    <h3>Facebook Debugger</h3>
+                    <p>Kiểm tra cách hiển thị link khi chia sẻ trên Facebook</p>
+                    <a href="https://developers.facebook.com/tools/debug/" target="_blank" class="test-btn">
+                        <i class="fab fa-facebook"></i>
+                        Test Facebook
+                    </a>
+                </div>
+
+                <div class="test-card">
+                    <span class="status-badge status-info">Open Graph</span>
+                    <h3>Open Graph Checker</h3>
+                    <p>Preview Open Graph tags và kiểm tra tất cả social platforms</p>
+                    <a href="https://www.opengraph.xyz/" target="_blank" class="test-btn">
+                        <i class="fas fa-image"></i>
+                        Check Open Graph
+                    </a>
+                </div>
+
+                <div class="test-card">
+                    <span class="status-badge status-info">Twitter</span>
+                    <h3>Twitter Card Validator</h3>
+                    <p>Validate và preview Twitter Card markup</p>
+                    <a href="https://cards-dev.twitter.com/validator" target="_blank" class="test-btn">
+                        <i class="fab fa-twitter"></i>
+                        Test Twitter Card
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance & SEO -->
+        <div class="test-section">
+            <h2><i class="fas fa-tachometer-alt"></i> Performance & SEO Analysis</h2>
+            <div class="test-grid">
+                <div class="test-card">
+                    <span class="status-badge status-success">Google</span>
+                    <h3>PageSpeed Insights</h3>
+                    <p>Kiểm tra performance, SEO score, accessibility từ Google</p>
+                    <button class="test-btn" onclick="testPageSpeed()">
+                        <i class="fas fa-rocket"></i>
+                        Test PageSpeed
+                    </button>
+                </div>
+
+                <div class="test-card">
+                    <span class="status-badge status-info">SEO</span>
+                    <h3>SEO Site Checkup</h3>
+                    <p>Phân tích toàn diện 50+ yếu tố SEO quan trọng</p>
+                    <a href="https://seositecheckup.com/" target="_blank" class="test-btn">
+                        <i class="fas fa-chart-line"></i>
+                        Full SEO Audit
+                    </a>
+                </div>
+
+                <div class="test-card">
+                    <span class="status-badge status-success">Mobile</span>
+                    <h3>Mobile-Friendly Test</h3>
+                    <p>Test khả năng hiển thị trên mobile devices</p>
+                    <button class="test-btn" onclick="testMobile()">
+                        <i class="fas fa-mobile-alt"></i>
+                        Test Mobile
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical SEO -->
+        <div class="test-section">
+            <h2><i class="fas fa-cog"></i> Technical SEO</h2>
+            <div class="test-grid">
+                <div class="test-card">
+                    <span class="status-badge status-success">Sitemap</span>
+                    <h3>XML Sitemap</h3>
+                    <p>Kiểm tra và validate XML sitemap của website</p>
+                    <a href="https://tech-haven-5368b.web.app/sitemap.xml" target="_blank" class="test-btn">
+                        <i class="fas fa-sitemap"></i>
+                        View Sitemap
+                    </a>
+                </div>
+
+                <div class="test-card">
+                    <span class="status-badge status-success">Robots</span>
+                    <h3>Robots.txt</h3>
+                    <p>Xem file robots.txt và crawling directives</p>
+                    <a href="https://tech-haven-5368b.web.app/robots.txt" target="_blank" class="test-btn">
+                        <i class="fas fa-robot"></i>
+                        View Robots.txt
+                    </a>
+                </div>
+
+                <div class="test-card">
+                    <span class="status-badge status-info">Security</span>
+                    <h3>SSL Certificate</h3>
+                    <p>Kiểm tra SSL certificate và HTTPS configuration</p>
+                    <a href="https://www.ssllabs.com/ssltest/" target="_blank" class="test-btn">
+                        <i class="fas fa-lock"></i>
+                        Test SSL
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="results">
+            <h3><i class="fas fa-clipboard-check"></i> Test Results</h3>
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        function setUrl(url) {
+            document.getElementById('testUrl').value = url;
+        }
+
+        function getTestUrl() {
+            return document.getElementById('testUrl').value || 'https://tech-haven-5368b.web.app/';
+        }
+
+        function testMetaTags() {
+            const url = getTestUrl();
+            window.open(`https://metatags.io/?url=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        function testPageSpeed() {
+            const url = getTestUrl();
+            window.open(`https://pagespeed.web.dev/analysis?url=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        function testMobile() {
+            const url = getTestUrl();
+            window.open(`https://search.google.com/test/mobile-friendly?url=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        // Quick local test
+        async function quickTest() {
+            const results = document.getElementById('results');
+            const resultContent = document.getElementById('resultContent');
+            
+            results.classList.add('show');
+            resultContent.innerHTML = '<p>Đang test...</p>';
+
+            const tests = [
+                { name: 'Sitemap accessible', test: '/sitemap.xml' },
+                { name: 'Robots.txt accessible', test: '/robots.txt' },
+                { name: 'Homepage loads', test: '/' },
+                { name: 'Shop page loads', test: '/shop' }
+            ];
+
+            let html = '';
+            for (const test of tests) {
+                try {
+                    const response = await fetch(test.test);
+                    const status = response.ok ? 'success' : 'error';
+                    const icon = response.ok ? 'fa-check-circle' : 'fa-times-circle';
+                    html += `
+                        <div class="result-item">
+                            <i class="fas ${icon} result-icon ${status}"></i>
+                            <span>${test.name}: ${response.status} ${response.statusText}</span>
+                        </div>
+                    `;
+                } catch (error) {
+                    html += `
+                        <div class="result-item">
+                            <i class="fas fa-times-circle result-icon error"></i>
+                            <span>${test.name}: Failed</span>
+                        </div>
+                    `;
+                }
+            }
+
+            resultContent.innerHTML = html;
+        }
+
+        // Auto-run quick test on load
+        window.addEventListener('load', () => {
+            console.log('SEO Test Tool loaded');
+        });
+    </script>
+</body>
+</html>

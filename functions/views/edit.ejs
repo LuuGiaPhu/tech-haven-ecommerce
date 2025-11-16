@@ -1,0 +1,2856 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>Chỉnh Sửa Sản Phẩm - TECH HAVEN Admin</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <link rel="manifest" href="/images/site.webmanifest">
+    
+    <!-- Google Fonts for Vietnamese Support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Lottie Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js"></script>
+    
+    <!-- Firebase Compat for Tier Monitoring -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Tier Promotion Manager - Global tier monitoring across all pages -->
+    <script src="/js/tier-promotion-manager.js"></script>
+</head>
+<body class="admin-edit-page">
+    <!-- Back to Home Button -->
+    <a href="/" class="back-to-home">
+        <i class="fas fa-arrow-left"></i> Về Trang Chủ
+    </a>
+
+    <div class="admin-edit-container">
+        <!-- Admin Header -->
+        <div class="admin-header edit-header">
+            <div class="header-icon">
+                <i class="fas fa-edit"></i>
+            </div>
+            <h1>QUẢN LÝ ADMIN</h1>
+            <p>Chỉnh sửa sản phẩm và quản lý người dùng - TECH HAVEN</p>
+        </div>
+
+        <!-- Tab Switcher -->
+        <div class="tab-switcher">
+            <button class="tab-btn active" data-tab="products" onclick="switchTab('products')">
+                <i class="fas fa-box"></i> Sản Phẩm
+            </button>
+            <button class="tab-btn" data-tab="users" onclick="switchTab('users')">
+                <i class="fas fa-users"></i> Người Dùng
+            </button>
+        </div>
+
+        <!-- PRODUCTS TAB -->
+        <div id="productsTab" class="tab-content active">
+        <!-- Search & Filter Section -->
+        <div class="search-filter-section">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="productSearch" class="search-input" placeholder="Tìm kiếm sản phẩm theo tên, ID, hoặc danh mục...">
+                </div>
+                <button id="searchBtn" class="search-btn">
+                    <i class="fas fa-search"></i> Tìm Kiếm
+                </button>
+            </div>
+            
+            <div class="filter-container">
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">Tất cả danh mục</option>
+                    <option value="laptop">Laptop</option>
+                    <option value="pc">PC</option>
+                    <option value="gpu">Card Đồ Họa</option>
+                    <option value="cpu">Bộ Vi Xử Lý</option>
+                    <option value="ram">Bộ Nhớ RAM</option>
+                    <option value="storage">Ổ Cứng</option>
+                    <option value="motherboard">Bo Mạch Chủ</option>
+                    <option value="psu">Nguồn</option>
+                    <option value="case">Vỏ Case</option>
+                    <option value="keyboard">Bàn Phím</option>
+                    <option value="mouse">Chuột</option>
+                    <option value="headset">Tai Nghe</option>
+                    <option value="monitor">Màn Hình</option>
+                    <option value="speaker">Loa</option>
+                    <option value="webcam">Webcam</option>
+                    <option value="other">Khác</option>
+                </select>
+                
+                <select id="statusFilter" class="filter-select">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="in-stock">Còn hàng</option>
+                    <option value="out-of-stock">Hết hàng</option>
+                    <option value="pre-order">Đặt trước</option>
+                </select>
+                
+                <select id="brandFilter" class="filter-select">
+                    <option value="">Tất cả thương hiệu</option>
+                    <option value="ASUS">ASUS</option>
+                    <option value="MSI">MSI</option>
+                    <option value="Gigabyte">Gigabyte</option>
+                    <option value="Intel">Intel</option>
+                    <option value="AMD">AMD</option>
+                    <option value="Corsair">Corsair</option>
+                    <option value="Samsung">Samsung</option>
+                    <option value="Logitech">Logitech</option>
+                    <option value="Razer">Razer</option>
+                    <option value="HyperX">HyperX</option>
+                    <option value="Keychron">Keychron</option>
+                    <option value="other">Khác</option>
+                </select>
+                
+                <select id="stockFilter" class="filter-select">
+                    <option value="">Tất cả tồn kho</option>
+                    <option value="in-stock">Còn hàng (>0)</option>
+                    <option value="low-stock">Sắp hết (1-10)</option>
+                    <option value="out-of-stock">Hết hàng (=0)</option>
+                </select>
+                
+                <select id="sortFilter" class="filter-select">
+                    <option value="newest">Mới nhất</option>
+                    <option value="oldest">Cũ nhất</option>
+                    <option value="name-asc">Tên A-Z</option>
+                    <option value="name-desc">Tên Z-A</option>
+                    <option value="price-asc">Giá thấp đến cao</option>
+                    <option value="price-desc">Giá cao đến thấp</option>
+                    <option value="stock-asc">Tồn kho thấp đến cao</option>
+                    <option value="stock-desc">Tồn kho cao đến thấp</option>
+                </select>
+                
+                <button id="refreshBtn" class="refresh-btn" title="Làm mới danh sách sản phẩm">
+                    <i class="fas fa-sync-alt"></i> Làm Mới
+                </button>
+            </div>
+        </div>
+
+        <!-- Products List Section -->
+        <div class="products-list-section">
+            <div class="products-header">
+                <h3><i class="fas fa-box"></i> Danh Sách Sản Phẩm</h3>
+                <div class="products-count">
+                    <span id="productsCount">0</span> sản phẩm
+                </div>
+            </div>
+            
+            <div id="loadingSpinner" class="loading-spinner-list" style="display: none;">
+                <div class="spinner"></div>
+                <p>Đang tải danh sách sản phẩm...</p>
+            </div>
+            
+            <div id="noProducts" class="no-products" style="display: none;">
+                <i class="fas fa-inbox"></i>
+                <h4>Không tìm thấy sản phẩm nào</h4>
+                <p>Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+            </div>
+            
+            <div id="productsList" class="products-grid">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+        </div>
+        <!-- END PRODUCTS TAB -->
+
+        <!-- USERS TAB -->
+        <div id="usersTab" class="tab-content" style="display: none;">
+            <!-- Search & Filter Section for Users -->
+            <div class="search-filter-section">
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="userSearch" class="search-input" placeholder="Tìm kiếm người dùng theo tên, email, hoặc ID...">
+                    </div>
+                    <button id="searchUserBtn" class="search-btn">
+                        <i class="fas fa-search"></i> Tìm Kiếm
+                    </button>
+                </div>
+                
+                <div class="filter-container">
+                    <select id="membershipFilter" class="filter-select">
+                        <option value="">Tất cả hạng thành viên</option>
+                        <option value="standard">⭐ Standard</option>
+                        <option value="silver">🥈 Silver</option>
+                        <option value="gold">🥇 Gold</option>
+                        <option value="diamond">💎 Diamond</option>
+                    </select>
+                    
+                    <select id="roleFilter" class="filter-select">
+                        <option value="">Tất cả vai trò</option>
+                        <option value="user">Người dùng</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    
+                    <button id="refreshUserBtn" class="refresh-btn">
+                        <i class="fas fa-sync-alt"></i> Làm Mới
+                    </button>
+                </div>
+            </div>
+
+            <!-- Users List Section -->
+            <div class="users-list-section">
+                <div class="products-header">
+                    <h3><i class="fas fa-users"></i> Danh Sách Người Dùng</h3>
+                    <div class="products-count">
+                        <span id="usersCount">0</span> người dùng
+                    </div>
+                </div>
+                
+                <div id="loadingUsersSpinner" class="loading-spinner-list" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Đang tải danh sách người dùng...</p>
+                </div>
+                
+                <div id="noUsers" class="no-products" style="display: none;">
+                    <i class="fas fa-user-slash"></i>
+                    <h4>Không tìm thấy người dùng nào</h4>
+                    <p>Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+                </div>
+                
+                <div id="usersList" class="users-grid">
+                    <!-- Users will be loaded here -->
+                </div>
+            </div>
+        </div>
+        <!-- END USERS TAB -->
+
+        <!-- Messages -->
+        <div id="successMessage" class="message success" style="display: none;">
+            <i class="fas fa-check-circle"></i>
+            <span>Thao tác thành công!</span>
+        </div>
+        
+        <div id="errorMessage" class="message error" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText">Có lỗi xảy ra!</span>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="edit-modal-overlay" style="display: none;">
+        <div class="edit-modal-content">
+            <div class="edit-modal-header">
+                <h3><i class="fas fa-edit"></i> Chỉnh Sửa Sản Phẩm</h3>
+                <button class="close-modal" onclick="closeEditModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="edit-modal-body">
+                <form id="editForm" class="edit-form">
+                    <input type="hidden" id="editProductId">
+                    
+                    <!-- Basic Information -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-info-circle"></i> Thông Tin Cơ Bản</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Tên Sản Phẩm *</label>
+                                <input type="text" id="editProductName" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Danh Mục *</label>
+                                <select id="editProductCategory" class="form-select" required>
+                                    <option value="">Chọn danh mục</option>
+                                    <option value="laptop">Laptop</option>
+                                    <option value="pc">PC</option>
+                                    <option value="gpu">Card Đồ Họa</option>
+                                    <option value="cpu">Bộ Vi Xử Lý</option>
+                                    <option value="ram">Bộ Nhớ RAM</option>
+                                    <option value="storage">Ổ Cứng</option>
+                                    <option value="motherboard">Bo Mạch Chủ</option>
+                                    <option value="psu">Nguồn</option>
+                                    <option value="case">Vỏ Case</option>
+                                    <option value="keyboard">Bàn Phím</option>
+                                    <option value="mouse">Chuột</option>
+                                    <option value="headset">Tai Nghe</option>
+                                    <option value="monitor">Màn Hình</option>
+                                    <option value="speaker">Loa</option>
+                                    <option value="webcam">Webcam</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Thương Hiệu *</label>
+                                <input type="text" id="editProductBrand" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Mã Sản Phẩm (SKU)</label>
+                                <input type="text" id="editProductSku" class="form-input">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Mô Tả Chi Tiết</label>
+                            <textarea id="editProductDescription" class="form-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Product Images -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-images"></i> Hình Ảnh Sản Phẩm</h4>
+                        
+                        <div class="form-group">
+                            <label class="upload-area-label">Tải Lên Hình Ảnh Mới</label>
+                            <div class="custom-file-upload" id="uploadArea">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <div class="upload-text">
+                                    <p class="upload-main-text">Kéo thả ảnh vào đây hoặc <span class="upload-browse">chọn file</span></p>
+                                    <p class="upload-hint">Tối đa 5 ảnh, mỗi ảnh tối đa 5MB (JPG, PNG, GIF)</p>
+                                </div>
+                                <input type="file" id="editProductImages" class="hidden-file-input" multiple accept="image/*">
+                            </div>
+                        </div>
+                        
+                        <div id="editCurrentImages" class="current-images-container">
+                            <!-- Current images will be displayed here -->
+                        </div>
+                        
+                        <div id="editImagePreview" class="image-preview-container">
+                            <!-- New image previews will be displayed here -->
+                        </div>
+                        
+                        <div id="editUploadProgress" class="upload-progress" style="display: none;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="editProgressFill"></div>
+                            </div>
+                            <span class="progress-text" id="editProgressText">0%</span>
+                        </div>
+                    </div>
+
+                    <!-- Pricing & Stock -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-dollar-sign"></i> Giá Cả & Tồn Kho</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Giá Bán (VNĐ) *</label>
+                                <input type="number" id="editProductPrice" class="form-input" required min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Giá Cũ (VNĐ)</label>
+                                <input type="number" id="editProductOldPrice" class="form-input" min="0">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Số Lượng Tồn Kho *</label>
+                                <input type="number" id="editProductStock" class="form-input" required min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Trạng Thái *</label>
+                                <select id="editProductAvailability" class="form-select" required>
+                                    <option value="">Chọn trạng thái</option>
+                                    <option value="in-stock">Còn hàng</option>
+                                    <option value="out-of-stock">Hết hàng</option>
+                                    <option value="pre-order">Đặt trước</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technical Specifications -->
+                    <div class="form-section specs-section">
+                        <h4><i class="fas fa-cogs"></i> Thông Số Kỹ Thuật</h4>
+                        
+                        <div id="editSpecInputs" class="spec-inputs">
+                            <!-- Spec rows will be added dynamically -->
+                        </div>
+                        
+                        <button type="button" class="add-spec-btn" onclick="addEditSpecRow()">
+                            <i class="fas fa-plus"></i> Thêm Thông Số
+                        </button>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="form-actions">
+                        <button type="submit" class="save-btn">
+                            <i class="fas fa-save"></i> LƯU THAY ĐỔI
+                        </button>
+                        <button type="button" class="cancel-btn" onclick="closeEditModal()">
+                            <i class="fas fa-times"></i> HỦY BỎ
+                        </button>
+                        <button type="button" class="delete-btn" onclick="confirmDeleteProduct()">
+                            <i class="fas fa-trash"></i> XÓA SẢN PHẨM
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal - New Cute Design -->
+    <div id="editUserModal" class="cute-modal-overlay" style="display: none;">
+        <div class="cute-modal-container">
+            <div class="cute-modal-header">
+                <div class="modal-icon">
+                    <i class="fas fa-user-edit"></i>
+                </div>
+                <h2>Chỉnh Sửa Thông Tin</h2>
+                <button class="cute-close-btn" onclick="closeEditUserModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="cute-modal-body">
+                <input type="hidden" id="editUserId">
+                
+                <div class="cute-input-group">
+                    <label class="cute-label">
+                        <i class="fas fa-user"></i>
+                        Tên Người Dùng
+                    </label>
+                    <input type="text" id="editUserName" class="cute-input" placeholder="Nhập tên đầy đủ...">
+                </div>
+                
+                <div class="cute-input-group">
+                    <label class="cute-label">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                    </label>
+                    <input type="email" id="editUserEmail" class="cute-input disabled" placeholder="email@example.com" readonly>
+                    <small class="input-hint">📧 Email không thể thay đổi</small>
+                </div>
+                
+                <div class="cute-input-group">
+                    <label class="cute-label">
+                        <i class="fas fa-phone"></i>
+                        Số Điện Thoại
+                    </label>
+                    <input type="tel" id="editUserPhone" class="cute-input" placeholder="0xxxxxxxxx">
+                </div>
+                
+                <div class="cute-input-group">
+                    <label class="cute-label">
+                        <i class="fas fa-image"></i>
+                        Ảnh Đại Diện (URL)
+                    </label>
+                    <input type="url" id="editUserPhoto" class="cute-input" placeholder="https://example.com/avatar.jpg">
+                </div>
+                
+                <div class="cute-input-row">
+                    <div class="cute-input-group">
+                        <label class="cute-label">
+                            <i class="fas fa-shield-alt"></i>
+                            Vai Trò
+                        </label>
+                        <select id="editUserRole" class="cute-select">
+                            <option value="user">👤 Người dùng</option>
+                            <option value="admin">👑 Admin</option>
+                        </select>
+                    </div>
+                    
+                    <div class="cute-input-group">
+                        <label class="cute-label">
+                            <i class="fas fa-star"></i>
+                            Hạng Thành Viên
+                        </label>
+                        <select id="editUserMembership" class="cute-select">
+                            <option value="standard">⭐ Standard</option>
+                            <option value="silver">🥈 Silver</option>
+                            <option value="gold">🥇 Gold</option>
+                            <option value="diamond">💎 Diamond</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="cute-input-group">
+                    <label class="cute-label">
+                        <i class="fas fa-coins"></i>
+                        Điểm Tích Lũy
+                    </label>
+                    <input type="number" id="editUserPoints" class="cute-input" placeholder="0" min="0">
+                    <small class="input-hint">💰 Điểm = 10% tổng tiền bills completed</small>
+                </div>
+            </div>
+            
+            <div class="cute-modal-footer">
+                <button class="cute-btn cute-btn-cancel" onclick="closeEditUserModal()">
+                    <i class="fas fa-times-circle"></i>
+                    Hủy Bỏ
+                </button>
+                <button class="cute-btn cute-btn-save" onclick="saveUserChanges()">
+                    <i class="fas fa-save"></i>
+                    Lưu Thay Đổi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="delete-modal-overlay">
+        <div class="delete-modal-content">
+            <div class="delete-modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Xác Nhận Xóa</h3>
+            </div>
+            <div class="delete-modal-body">
+                <p>Bạn có chắc chắn muốn xóa sản phẩm này?</p>
+                <p class="product-name-delete" id="deleteProductName"></p>
+                <p><strong>Hành động này không thể hoàn tác!</strong></p>
+            </div>
+            <div class="delete-modal-actions">
+                <button id="confirmDeleteBtn" class="confirm-delete-btn">
+                    <i class="fas fa-trash"></i> XÓA SẢN PHẨM
+                </button>
+                <button class="cancel-delete-btn" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i> HỦY BỎ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="/js/firebase-config.js"></script>
+    <script type="module" src="/js/edit-admin.js"></script>
+    <script type="module" src="/js/user-manager.js"></script>
+    
+    <!-- Tab Switcher & Users Management Styles -->
+    <style>
+        /* Tab Switcher */
+        .tab-switcher {
+            display: flex;
+            gap: 10px;
+            margin: 30px 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0;
+        }
+        
+        .tab-btn {
+            padding: 15px 30px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #64748b;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            bottom: -2px;
+        }
+        
+        .tab-btn i {
+            margin-right: 8px;
+        }
+        
+        .tab-btn:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .tab-content {
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Users Grid */
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .user-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .user-card:hover {
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .user-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .user-info-header {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .user-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 0 5px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .user-email {
+            font-size: 0.9rem;
+            color: #64748b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .user-card-body {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .user-detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        
+        .user-detail-label {
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .user-detail-value {
+            color: #1e293b;
+            font-weight: 600;
+        }
+        
+        .membership-badge-card {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .membership-badge-card.standard {
+            background: rgba(108, 117, 125, 0.1);
+            color: #6c757d;
+        }
+        
+        .membership-badge-card.silver {
+            background: rgba(192, 192, 192, 0.2);
+            color: #808080;
+        }
+        
+        .membership-badge-card.gold {
+            background: rgba(255, 215, 0, 0.2);
+            color: #d4a000;
+        }
+        
+        .membership-badge-card.diamond {
+            background: rgba(0, 212, 255, 0.2);
+            color: #0099cc;
+        }
+        
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .role-badge.admin {
+            background: rgba(220, 38, 38, 0.1);
+            color: #dc2626;
+        }
+        
+        .role-badge.user {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+        
+        .user-card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .user-action-btn {
+            flex: 1;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .user-action-btn.edit {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+        
+        .user-action-btn.edit:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .user-action-btn.delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .user-action-btn.delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+        
+        /* ========================================
+           CUTE MODAL STYLES - New Design
+           ======================================== */
+        
+        .cute-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95));
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+            animation: cuteOverlayFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes cuteOverlayFadeIn {
+            from {
+                opacity: 0;
+                backdrop-filter: blur(0px);
+            }
+            to {
+                opacity: 1;
+                backdrop-filter: blur(10px);
+            }
+        }
+        
+        .cute-modal-container {
+            background: white;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 750px;
+            box-shadow: 
+                0 30px 90px rgba(102, 126, 234, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            animation: cuteModalBounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        @keyframes cuteModalBounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) translateY(-100px) rotate(-5deg);
+            }
+            50% {
+                transform: scale(1.05) translateY(10px) rotate(2deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0) rotate(0deg);
+            }
+        }
+        
+        /* Decorative elements */
+        .cute-modal-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 182, 193, 0.3), transparent);
+            border-radius: 50%;
+            animation: floatBubble 6s ease-in-out infinite;
+        }
+        
+        .cute-modal-container::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -15%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(173, 216, 230, 0.3), transparent);
+            border-radius: 50%;
+            animation: floatBubble 8s ease-in-out infinite reverse;
+        }
+        
+        @keyframes floatBubble {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.1); }
+        }
+        
+        .cute-modal-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 2rem;
+            color: #667eea;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
+            50% { transform: scale(1.1); box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4); }
+        }
+        
+        .cute-modal-header h2 {
+            color: white;
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cute-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cute-close-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: rotate(90deg) scale(1.1);
+        }
+        
+        .cute-modal-body {
+            padding: 40px;
+            max-height: 60vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Custom scrollbar */
+        .cute-modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .cute-modal-body::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        
+        .cute-modal-body::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+        }
+        
+        .cute-input-group {
+            margin-bottom: 25px;
+            animation: slideInFromLeft 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        .cute-input-group:nth-child(1) { animation-delay: 0.1s; }
+        .cute-input-group:nth-child(2) { animation-delay: 0.15s; }
+        .cute-input-group:nth-child(3) { animation-delay: 0.2s; }
+        .cute-input-group:nth-child(4) { animation-delay: 0.25s; }
+        .cute-input-group:nth-child(5) { animation-delay: 0.3s; }
+        .cute-input-group:nth-child(6) { animation-delay: 0.35s; }
+        
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .cute-input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .cute-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .cute-label i {
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+        
+        .cute-input,
+        .cute-select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .cute-input:focus,
+        .cute-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 
+                0 0 0 4px rgba(102, 126, 234, 0.1),
+                0 5px 15px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .cute-input.disabled {
+            background: #f8fafc;
+            cursor: not-allowed;
+            color: #94a3b8;
+        }
+        
+        .cute-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23667eea' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 45px;
+        }
+        
+        .input-hint {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        .cute-modal-footer {
+            padding: 25px 40px;
+            background: #f8fafc;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cute-btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .cute-btn i {
+            font-size: 1.1rem;
+        }
+        
+        .cute-btn-cancel {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        
+        .cute-btn-cancel:hover {
+            background: #cbd5e1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cute-btn-save {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .cute-btn-save:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+        
+        .cute-btn-save:active {
+            transform: translateY(-1px);
+        }
+        
+        /* Responsive for mobile */
+        @media (max-width: 768px) {
+            .cute-modal-overlay {
+                padding: 10px;
+            }
+            
+            .cute-modal-container {
+                border-radius: 20px;
+                max-width: 100%;
+            }
+            
+            .cute-modal-header {
+                padding: 25px 20px;
+            }
+            
+            .modal-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .cute-modal-header h2 {
+                font-size: 1.4rem;
+            }
+            
+            .cute-modal-body {
+                padding: 25px 20px;
+                max-height: 55vh;
+            }
+            
+            .cute-input-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            
+            .cute-modal-footer {
+                padding: 20px;
+                flex-direction: column;
+            }
+            
+            .cute-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        /* ========================================
+           CUTE PRODUCTS MODAL STYLES
+           ======================================== */
+        
+        .edit-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(244, 114, 182, 0.95), rgba(251, 146, 60, 0.95));
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+            animation: cuteOverlayFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .edit-modal-content {
+            background: white;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            box-shadow: 
+                0 30px 90px rgba(244, 114, 182, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            animation: cuteModalBounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Decorative elements for products modal */
+        .edit-modal-content::before {
+            content: '🛍️';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            font-size: 150px;
+            opacity: 0.05;
+            animation: floatBubble 6s ease-in-out infinite;
+            z-index: 0;
+        }
+        
+        .edit-modal-content::after {
+            content: '✨';
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            font-size: 100px;
+            opacity: 0.05;
+            animation: floatBubble 8s ease-in-out infinite reverse;
+            z-index: 0;
+        }
+        
+        .edit-modal-header {
+            background: linear-gradient(135deg, #f472b6, #fb923c);
+            padding: 30px 40px;
+            position: relative;
+            z-index: 1;
+            border-bottom: none;
+        }
+        
+        .edit-modal-header h3 {
+            color: white;
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .edit-modal-header h3 i {
+            font-size: 2rem;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-modal:hover {
+            background: white;
+            color: #f472b6;
+            transform: rotate(90deg) scale(1.1);
+        }
+        
+        .edit-modal-body {
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+        
+        /* Custom scrollbar */
+        .edit-modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .edit-modal-body::-webkit-scrollbar-track {
+            background: #fef2f2;
+            border-radius: 10px;
+        }
+        
+        .edit-modal-body::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #f472b6, #fb923c);
+            border-radius: 10px;
+        }
+        
+        .form-section {
+            background: linear-gradient(135deg, #fff7ed 0%, #fef2f2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 2px solid #fed7aa;
+            position: relative;
+            overflow: hidden;
+            animation: slideInFromLeft 0.5s ease forwards;
+        }
+        
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(251, 146, 60, 0.1), transparent);
+            border-radius: 50%;
+            animation: floatBubble 10s ease-in-out infinite;
+        }
+        
+        .form-section h4 {
+            color: #ea580c;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0 0 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .form-section h4 i {
+            color: #f472b6;
+            font-size: 1.4rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #7c2d12;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #fed7aa;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #f472b6;
+            box-shadow: 
+                0 0 0 4px rgba(244, 114, 182, 0.1),
+                0 5px 15px rgba(244, 114, 182, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23f472b6' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 45px;
+        }
+        
+        /* Specs Section */
+        .specs-section {
+            background: linear-gradient(135deg, #ede9fe 0%, #fae8ff 100%);
+            border-color: #d8b4fe;
+        }
+        
+        .spec-inputs {
+            margin-bottom: 20px;
+        }
+        
+        .spec-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            animation: slideInFromLeft 0.3s ease forwards;
+        }
+        
+        .spec-key,
+        .spec-value {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #d8b4fe;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .spec-key:focus,
+        .spec-value:focus {
+            outline: none;
+            border-color: #c084fc;
+            box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.1);
+        }
+        
+        .remove-spec-btn {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .remove-spec-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+        }
+        
+        .add-spec-btn {
+            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .add-spec-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+        }
+        
+        .add-spec-btn i {
+            font-size: 1.1rem;
+        }
+        
+        /* Action Buttons */
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            padding: 25px 30px;
+            background: linear-gradient(to bottom, white, #fef2f2);
+            border-top: 2px solid #fed7aa;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+        
+        .save-btn,
+        .cancel-btn,
+        .delete-btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            position: relative;
+            overflow: hidden;
+            min-height: 48px;
+        }
+        
+        /* Button shine effect */
+        .save-btn::before,
+        .cancel-btn::before,
+        .delete-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .save-btn:hover::before,
+        .cancel-btn:hover::before,
+        .delete-btn:hover::before {
+            left: 100%;
+        }
+        
+        /* Icon animations */
+        .save-btn i,
+        .cancel-btn i,
+        .delete-btn i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .save-btn:hover i {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .cancel-btn:hover i {
+            transform: scale(1.2) rotate(90deg);
+        }
+        
+        .delete-btn:hover i {
+            transform: scale(1.2) rotate(-10deg);
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: scale(1.2) rotate(-10deg); }
+            25% { transform: scale(1.2) rotate(-15deg); }
+            75% { transform: scale(1.2) rotate(-5deg); }
+        }
+        
+        .save-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 
+                0 4px 15px rgba(16, 185, 129, 0.3),
+                0 0 0 0 rgba(16, 185, 129, 0.5);
+        }
+        
+        .save-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 
+                0 8px 25px rgba(16, 185, 129, 0.5),
+                0 0 0 6px rgba(16, 185, 129, 0.1);
+        }
+        
+        .cancel-btn {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+            color: white;
+            box-shadow: 
+                0 4px 15px rgba(148, 163, 184, 0.3),
+                0 0 0 0 rgba(148, 163, 184, 0.5);
+        }
+        
+        .cancel-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 
+                0 8px 25px rgba(148, 163, 184, 0.5),
+                0 0 0 6px rgba(148, 163, 184, 0.1);
+        }
+        
+        .delete-btn {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            color: white;
+            box-shadow: 
+                0 4px 15px rgba(248, 113, 113, 0.3),
+                0 0 0 0 rgba(248, 113, 113, 0.5);
+        }
+        
+        .delete-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 
+                0 8px 25px rgba(248, 113, 113, 0.5),
+                0 0 0 6px rgba(248, 113, 113, 0.1);
+        }
+        
+        .save-btn:active,
+        .cancel-btn:active,
+        .delete-btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+        
+        /* Responsive for Products Modal */
+        @media (max-width: 992px) {
+            .edit-modal-content {
+                max-width: 95%;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .edit-modal-overlay {
+                padding: 10px;
+            }
+            
+            .edit-modal-content {
+                border-radius: 20px;
+                max-height: 95vh;
+                max-width: 100%;
+            }
+            
+            .edit-modal-header {
+                padding: 20px 15px;
+            }
+            
+            .edit-modal-header h3 {
+                font-size: 1.2rem;
+            }
+            
+            .edit-modal-body {
+                padding: 20px 15px;
+            }
+            
+            .form-section {
+                padding: 15px;
+                border-radius: 12px;
+                margin-bottom: 15px;
+            }
+            
+            .form-section h4 {
+                font-size: 1rem;
+                margin-bottom: 15px;
+            }
+            
+            .form-group label {
+                font-size: 0.85rem;
+                margin-bottom: 6px;
+            }
+            
+            .form-input,
+            .form-select,
+            .form-textarea {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+                border-radius: 10px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                padding: 15px;
+                gap: 8px;
+                border-top: 1px solid #fed7aa;
+            }
+            
+            .save-btn,
+            .cancel-btn,
+            .delete-btn {
+                width: 100%;
+                padding: 11px 16px;
+                font-size: 0.8rem;
+                border-radius: 12px;
+                min-height: 42px;
+                gap: 6px;
+                letter-spacing: 0.5px;
+            }
+            
+            .save-btn i,
+            .cancel-btn i,
+            .delete-btn i {
+                font-size: 0.95rem;
+            }
+            
+            /* Disable hover effects on mobile, use active instead */
+            .save-btn:active {
+                transform: scale(0.97);
+                box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+            }
+            
+            .cancel-btn:active {
+                transform: scale(0.97);
+                box-shadow: 0 2px 8px rgba(148, 163, 184, 0.4);
+            }
+            
+            .delete-btn:active {
+                transform: scale(0.97);
+                box-shadow: 0 2px 8px rgba(248, 113, 113, 0.4);
+            }
+            
+            .spec-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .spec-key,
+            .spec-value {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .remove-spec-btn {
+                width: 100%;
+                height: 38px;
+                border-radius: 8px;
+            }
+            
+            .add-spec-btn {
+                padding: 10px 18px;
+                font-size: 0.85rem;
+                border-radius: 10px;
+            }
+        }
+        
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .edit-modal-overlay {
+                padding: 5px;
+            }
+            
+            .edit-modal-content {
+                border-radius: 15px;
+            }
+            
+            .edit-modal-header {
+                padding: 15px 12px;
+            }
+            
+            .edit-modal-header h3 {
+                font-size: 1.1rem;
+            }
+            
+            .edit-modal-body {
+                padding: 15px 12px;
+            }
+            
+            .form-section {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+            
+            .form-section h4 {
+                font-size: 0.95rem;
+            }
+            
+            .form-actions {
+                padding: 12px;
+                gap: 8px;
+            }
+            
+            .save-btn,
+            .cancel-btn,
+            .delete-btn {
+                padding: 10px 14px;
+                font-size: 0.75rem;
+                min-height: 40px;
+                letter-spacing: 0.3px;
+            }
+            
+            .save-btn i,
+            .cancel-btn i,
+            .delete-btn i {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* ========================================
+           CUTE SEARCH & FILTER STYLES
+           ======================================== */
+        
+        .search-filter-section {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 
+                0 10px 30px rgba(251, 191, 36, 0.2),
+                0 0 0 1px rgba(251, 191, 36, 0.1) inset;
+            animation: slideInFromTop 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .search-filter-section::before {
+            content: '🔍';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 100px;
+            opacity: 0.08;
+            transform: rotate(-15deg);
+            animation: floatBubble 8s ease-in-out infinite;
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-input-wrapper i {
+            position: absolute;
+            left: 20px;
+            color: #f59e0b;
+            font-size: 1.2rem;
+            z-index: 1;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 16px 20px 16px 55px;
+            border: 3px solid #fbbf24;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            background: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.1);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 
+                0 0 0 4px rgba(245, 158, 11, 0.15),
+                0 8px 20px rgba(245, 158, 11, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .search-input::placeholder {
+            color: #d97706;
+            opacity: 0.6;
+        }
+        
+        .search-btn {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3);
+            white-space: nowrap;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5);
+        }
+        
+        .search-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .search-btn i {
+            font-size: 1.1rem;
+        }
+        
+        .filter-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .filter-select {
+            flex: 1;
+            min-width: 180px;
+            padding: 14px 18px;
+            border: 3px solid #fbbf24;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23f59e0b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 45px;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.1);
+        }
+        
+        .filter-select:hover {
+            border-color: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(245, 158, 11, 0.2);
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 
+                0 0 0 4px rgba(245, 158, 11, 0.15),
+                0 8px 20px rgba(245, 158, 11, 0.25);
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+            white-space: nowrap;
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-3px) rotate(180deg);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+        }
+        
+        .refresh-btn:active {
+            transform: translateY(-1px) rotate(180deg);
+        }
+        
+        .refresh-btn i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        @keyframes slideInFromTop {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-filter-section {
+                padding: 20px;
+                border-radius: 20px;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .filter-container {
+                flex-direction: column;
+            }
+            
+            .filter-select {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .refresh-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tab-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+        
+        /* =====================================
+           PRODUCT IMAGE UPLOAD STYLES
+           ===================================== */
+        
+        /* Upload Area Label */
+        .upload-area-label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 12px;
+        }
+        
+        /* Custom File Upload Area */
+        .custom-file-upload {
+            position: relative;
+            border: 3px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+        
+        .custom-file-upload::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .custom-file-upload:hover {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
+        }
+        
+        .custom-file-upload:hover::before {
+            left: 100%;
+        }
+        
+        .custom-file-upload.drag-over {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.2);
+        }
+        
+        /* Hidden File Input */
+        .hidden-file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+        
+        /* Upload Icon */
+        .upload-icon {
+            font-size: 3.5rem;
+            color: #3b82f6;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .custom-file-upload:hover .upload-icon {
+            color: #2563eb;
+            transform: scale(1.1);
+            animation: bounce 0.6s ease;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1.1) translateY(0); }
+            50% { transform: scale(1.1) translateY(-15px); }
+        }
+        
+        .custom-file-upload.drag-over .upload-icon {
+            color: #10b981;
+            animation: pulse 0.6s ease infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        
+        /* Upload Text */
+        .upload-text {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .upload-main-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #334155;
+            margin: 0 0 8px 0;
+        }
+        
+        .upload-browse {
+            color: #3b82f6;
+            text-decoration: underline;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+        
+        .custom-file-upload:hover .upload-browse {
+            color: #2563eb;
+        }
+        
+        .upload-hint {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin: 0;
+            font-style: italic;
+        }
+        
+        /* Current & Preview Images Container */
+        .current-images-container,
+        .image-preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .current-images-container:empty,
+        .image-preview-container:empty {
+            display: none;
+        }
+        
+        /* Image Item Card */
+        .image-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            background: #f1f5f9;
+        }
+        
+        .image-item:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+        
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* Image Remove Button */
+        .image-remove-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 10;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+        }
+        
+        .image-item:hover .image-remove-btn {
+            opacity: 1;
+        }
+        
+        .image-remove-btn:hover {
+            transform: scale(1.15) rotate(90deg);
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.6);
+        }
+        
+        .image-remove-btn:active {
+            transform: scale(0.95) rotate(90deg);
+        }
+        
+        /* Upload Progress */
+        .upload-progress {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-radius: 12px;
+            border: 2px solid #0ea5e9;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.15);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0ea5e9, #06b6d4, #0ea5e9);
+            background-size: 200% 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.6);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .progress-text {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0369a1;
+            display: block;
+            text-align: center;
+            animation: fadeInOut 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Responsive Image Grid */
+        @media (max-width: 768px) {
+            .custom-file-upload {
+                padding: 30px 15px;
+            }
+            
+            .upload-icon {
+                font-size: 2.5rem;
+            }
+            
+            .upload-main-text {
+                font-size: 1rem;
+            }
+            
+            .current-images-container,
+            .image-preview-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 10px;
+            }
+            
+            .filter-container {
+                flex-direction: column;
+            }
+            
+            .filter-select {
+                min-width: 100%;
+            }
+        }
+        
+        /* Product Date Display */
+        .product-date {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .product-date i {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+        
+        /* Stock Status Colors */
+        .stock-count {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .stock-count.out-of-stock {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        
+        .stock-count.low-stock {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fbbf24;
+            animation: pulse-warning 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-warning {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Refresh Button Animation */
+        .refresh-btn i.fa-spin {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .form-hint {
+            display: block;
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 8px;
+            font-style: italic;
+        }
+    </style>
+    
+    <!-- Tab Switcher Script -->
+    <script>
+        // Switch between Products and Users tabs
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            
+            // Update tab content
+            document.getElementById('productsTab').style.display = tabName === 'products' ? 'block' : 'none';
+            document.getElementById('usersTab').style.display = tabName === 'users' ? 'block' : 'none';
+            
+            // Load data if needed
+            if (tabName === 'users') {
+                loadUsers();
+            } else {
+                // Reload products if needed
+                if (typeof loadProducts === 'function') {
+                    loadProducts();
+                }
+            }
+        }
+        
+        // Load users from Firestore
+        async function loadUsers() {
+            const loadingSpinner = document.getElementById('loadingUsersSpinner');
+            const usersList = document.getElementById('usersList');
+            const noUsers = document.getElementById('noUsers');
+            const usersCount = document.getElementById('usersCount');
+            
+            loadingSpinner.style.display = 'block';
+            usersList.innerHTML = '';
+            noUsers.style.display = 'none';
+            
+            try {
+                // Import Firebase modules
+                const { getFirestore, collection, getDocs, query, orderBy } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const db = getFirestore();
+                
+                // Get all users
+                const usersQuery = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(usersQuery);
+                
+                if (querySnapshot.empty) {
+                    noUsers.style.display = 'block';
+                    usersCount.textContent = '0';
+                } else {
+                    const users = [];
+                    querySnapshot.forEach(doc => {
+                        users.push({ id: doc.id, ...doc.data() });
+                    });
+                    
+                    usersCount.textContent = users.length;
+                    renderUsers(users);
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showError('Không thể tải danh sách người dùng: ' + error.message);
+            } finally {
+                loadingSpinner.style.display = 'none';
+            }
+        }
+        
+        // Render users to grid
+        function renderUsers(users) {
+            const usersList = document.getElementById('usersList');
+            
+            usersList.innerHTML = users.map(user => `
+                <div class="user-card">
+                    <div class="user-card-header">
+                        <div class="user-avatar">
+                            ${user.photo || user.photoURL ? `<img src="${user.photo || user.photoURL}" alt="${user.name || user.displayName || 'User'}">` : (user.name || user.displayName || user.email || 'U').charAt(0).toUpperCase()}
+                        </div>
+                        <div class="user-info-header">
+                            <h4 class="user-name">${user.name || user.displayName || 'Chưa có tên'}</h4>
+                            <p class="user-email">${user.email || 'Chưa có email'}</p>
+                        </div>
+                    </div>
+                    <div class="user-card-body">
+                        <div class="user-detail-row">
+                            <span class="user-detail-label">Hạng thành viên:</span>
+                            <span class="membership-badge-card ${user.membershipLevel || 'standard'}">
+                                ${getMembershipIcon(user.membershipLevel)} ${getMembershipName(user.membershipLevel)}
+                            </span>
+                        </div>
+                        <div class="user-detail-row">
+                            <span class="user-detail-label">Điểm tích lũy:</span>
+                            <span class="user-detail-value">${(user.membershipPoints || 0).toLocaleString('vi-VN')}</span>
+                        </div>
+                        <div class="user-detail-row">
+                            <span class="user-detail-label">Vai trò:</span>
+                            <span class="role-badge ${(user.is_admin === true || user.role === 'admin') ? 'admin' : 'user'}">
+                                <i class="fas fa-${(user.is_admin === true || user.role === 'admin') ? 'crown' : 'user'}"></i>
+                                ${(user.is_admin === true || user.role === 'admin') ? 'Admin' : 'Người dùng'}
+                            </span>
+                        </div>
+                        <div class="user-detail-row">
+                            <span class="user-detail-label">Số điện thoại:</span>
+                            <span class="user-detail-value">${user.phone || 'Chưa có'}</span>
+                        </div>
+                    </div>
+                    <div class="user-card-actions">
+                        <button class="user-action-btn edit" onclick="editUser('${user.id}')">
+                            <i class="fas fa-edit"></i> Chỉnh sửa
+                        </button>
+                        <button class="user-action-btn delete" onclick="deleteUser('${user.id}', '${(user.name || user.displayName || user.email || 'User').replace(/'/g, "\\'")}')">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Helper functions
+        function getMembershipIcon(level) {
+            const icons = {
+                'standard': '⭐',
+                'silver': '🥈',
+                'gold': '🥇',
+                'diamond': '💎'
+            };
+            return icons[level] || icons.standard;
+        }
+        
+        function getMembershipName(level) {
+            const names = {
+                'standard': 'Standard',
+                'silver': 'Silver',
+                'gold': 'Gold',
+                'diamond': 'Diamond'
+            };
+            return names[level] || names.standard;
+        }
+        
+        // Edit user
+        async function editUser(userId) {
+            try {
+                console.log('Loading user data for:', userId);
+                
+                // Check if modal exists
+                const modal = document.getElementById('editUserModal');
+                if (!modal) {
+                    console.error('❌ Edit user modal not found in DOM!');
+                    alert('Lỗi: Không tìm thấy modal chỉnh sửa. Vui lòng reload trang.');
+                    return;
+                }
+                console.log('✅ Modal element found:', modal);
+                
+                // Import Firebase modules
+                console.log('Importing Firebase modules...');
+                const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const db = getFirestore();
+                console.log('✅ Firebase modules imported');
+                
+                // Get user data
+                console.log('Fetching user document...');
+                const userDoc = await getDoc(doc(db, 'users', userId));
+                
+                if (!userDoc.exists()) {
+                    console.error('❌ User document not found');
+                    showError('Không tìm thấy người dùng');
+                    return;
+                }
+                
+                const userData = userDoc.data();
+                console.log('✅ User data loaded:', userData);
+                
+                // Fill form with user data
+                console.log('Filling form fields...');
+                document.getElementById('editUserId').value = userId;
+                document.getElementById('editUserName').value = userData.name || userData.displayName || '';
+                document.getElementById('editUserEmail').value = userData.email || '';
+                document.getElementById('editUserPhone').value = userData.phone || '';
+                document.getElementById('editUserPhoto').value = userData.photo || userData.photoURL || '';
+                
+                // Set role based on is_admin or role field
+                let userRole = userData.role || 'user';
+                if (userData.is_admin === true) {
+                    userRole = 'admin';
+                } else if (userData.is_admin === false) {
+                    userRole = 'user';
+                }
+                document.getElementById('editUserRole').value = userRole;
+                console.log('User role set to:', userRole, '(is_admin:', userData.is_admin, ')');
+                
+                document.getElementById('editUserMembership').value = userData.membershipLevel || 'standard';
+                document.getElementById('editUserPoints').value = userData.membershipPoints || 0;
+                console.log('✅ Form fields filled');
+                
+                // Show modal
+                console.log('Showing modal...');
+                modal.style.display = 'flex';
+                modal.style.opacity = '1';
+                modal.style.visibility = 'visible';
+                modal.style.zIndex = '10000';
+                console.log('✅ Modal should be visible now. Current styles:', {
+                    display: modal.style.display,
+                    opacity: modal.style.opacity,
+                    visibility: modal.style.visibility,
+                    zIndex: modal.style.zIndex
+                });
+            } catch (error) {
+                console.error('❌ Error loading user:', error);
+                console.error('Error stack:', error.stack);
+                showError('Không thể tải thông tin người dùng: ' + error.message);
+            }
+        }
+        
+        // Close edit user modal
+        function closeEditUserModal() {
+            document.getElementById('editUserModal').style.display = 'none';
+        }
+        
+        // Save user changes
+        async function saveUserChanges() {
+            try {
+                const userId = document.getElementById('editUserId').value;
+                const name = document.getElementById('editUserName').value.trim();
+                const phone = document.getElementById('editUserPhone').value.trim();
+                const photo = document.getElementById('editUserPhoto').value.trim();
+                const role = document.getElementById('editUserRole').value;
+                const membershipLevel = document.getElementById('editUserMembership').value;
+                const membershipPoints = parseInt(document.getElementById('editUserPoints').value) || 0;
+                
+                if (!name) {
+                    showError('Vui lòng nhập tên người dùng');
+                    return;
+                }
+                
+                console.log('Saving user changes for:', userId);
+                
+                // Import Firebase modules
+                const { getFirestore, doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const db = getFirestore();
+                
+                // Determine is_admin value based on role
+                const isAdmin = (role === 'admin');
+                
+                console.log('Updating user role:', {
+                    userId: userId,
+                    role: role,
+                    is_admin: isAdmin
+                });
+                
+                // Update user document
+                await updateDoc(doc(db, 'users', userId), {
+                    name: name,
+                    displayName: name, // Also update displayName for compatibility
+                    phone: phone,
+                    photo: photo,
+                    photoURL: photo, // Also update photoURL for compatibility
+                    role: role,
+                    is_admin: isAdmin, // Add is_admin field based on role
+                    membershipLevel: membershipLevel,
+                    membershipPoints: membershipPoints,
+                    updatedAt: new Date().toISOString()
+                });
+                
+                console.log('✅ User updated successfully');
+                showSuccess('Cập nhật người dùng thành công!');
+                
+                // Close modal and reload users
+                closeEditUserModal();
+                loadUsers();
+            } catch (error) {
+                console.error('Error updating user:', error);
+                showError('Không thể cập nhật người dùng: ' + error.message);
+            }
+        }
+        
+        // Show success message
+        function showSuccess(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+                z-index: 10001;
+                animation: slideInRight 0.3s ease;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            `;
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // Show error message
+        function showError(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ef4444, #dc2626);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+                z-index: 10001;
+                animation: slideInRight 0.3s ease;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            `;
+            toast.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+        
+        // Add animations
+        const toastStyles = document.createElement('style');
+        toastStyles.textContent = `
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(100px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(100px);
+                }
+            }
+        `;
+        document.head.appendChild(toastStyles);
+        
+        // Delete user
+        async function deleteUser(userId, userName) {
+            if (!confirm(`⚠️ BẠN CÓ CHẮC MUỐN XÓA NGƯỜI DÙNG?\n\nNgười dùng: ${userName}\nID: ${userId}\n\n❗ CẢNH BÁO: Hành động này sẽ:\n- Xóa tài khoản người dùng\n- Xóa toàn bộ lịch sử đơn hàng\n- Xóa dữ liệu giỏ hàng và wishlist\n- KHÔNG THỂ HOÀN TÁC!\n\nNhấn OK để tiếp tục xóa.`)) {
+                return;
+            }
+            
+            try {
+                console.log('Deleting user:', userId);
+                
+                // Import Firebase modules
+                const { getFirestore, doc, deleteDoc, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const db = getFirestore();
+                
+                // Delete user's bills
+                const billsQuery = query(collection(db, 'bills'), where('userId', '==', userId));
+                const billsSnapshot = await getDocs(billsQuery);
+                const billDeletePromises = billsSnapshot.docs.map(billDoc => deleteDoc(billDoc.ref));
+                await Promise.all(billDeletePromises);
+                console.log(`Deleted ${billsSnapshot.size} bills`);
+                
+                // Delete user's cart
+                const cartQuery = query(collection(db, 'carts'), where('userId', '==', userId));
+                const cartSnapshot = await getDocs(cartQuery);
+                const cartDeletePromises = cartSnapshot.docs.map(cartDoc => deleteDoc(cartDoc.ref));
+                await Promise.all(cartDeletePromises);
+                console.log(`Deleted ${cartSnapshot.size} cart items`);
+                
+                // Delete user's wishlist
+                const wishlistQuery = query(collection(db, 'wishlists'), where('userId', '==', userId));
+                const wishlistSnapshot = await getDocs(wishlistQuery);
+                const wishlistDeletePromises = wishlistSnapshot.docs.map(wishDoc => deleteDoc(wishDoc.ref));
+                await Promise.all(wishlistDeletePromises);
+                console.log(`Deleted ${wishlistSnapshot.size} wishlist items`);
+                
+                // Finally, delete user document
+                await deleteDoc(doc(db, 'users', userId));
+                
+                console.log('✅ User and all related data deleted successfully');
+                showSuccess(`Đã xóa người dùng "${userName}" và toàn bộ dữ liệu liên quan`);
+                
+                // Reload users list
+                loadUsers();
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                showError('Không thể xóa người dùng: ' + error.message);
+            }
+        }
+        
+        // Search and filter users
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchUserBtn = document.getElementById('searchUserBtn');
+            const refreshUserBtn = document.getElementById('refreshUserBtn');
+            const userSearchInput = document.getElementById('userSearch');
+            const membershipFilter = document.getElementById('membershipFilter');
+            const roleFilter = document.getElementById('roleFilter');
+            
+            if (searchUserBtn) {
+                searchUserBtn.addEventListener('click', filterUsers);
+            }
+            
+            if (refreshUserBtn) {
+                refreshUserBtn.addEventListener('click', () => {
+                    // Clear filters
+                    userSearchInput.value = '';
+                    membershipFilter.value = '';
+                    roleFilter.value = '';
+                    loadUsers();
+                });
+            }
+            
+            // Search on Enter key
+            if (userSearchInput) {
+                userSearchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        filterUsers();
+                    }
+                });
+            }
+            
+            // Filter on dropdown change
+            if (membershipFilter) {
+                membershipFilter.addEventListener('change', filterUsers);
+            }
+            
+            if (roleFilter) {
+                roleFilter.addEventListener('change', filterUsers);
+            }
+        });
+        
+        // Filter users based on search and filters
+        async function filterUsers() {
+            const searchText = document.getElementById('userSearch').value.toLowerCase().trim();
+            const membershipLevel = document.getElementById('membershipFilter').value;
+            const role = document.getElementById('roleFilter').value;
+            
+            const loadingSpinner = document.getElementById('loadingUsersSpinner');
+            const usersList = document.getElementById('usersList');
+            const noUsers = document.getElementById('noUsers');
+            const usersCount = document.getElementById('usersCount');
+            
+            loadingSpinner.style.display = 'block';
+            usersList.innerHTML = '';
+            noUsers.style.display = 'none';
+            
+            try {
+                // Import Firebase modules
+                const { getFirestore, collection, getDocs, query, orderBy } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const db = getFirestore();
+                
+                // Get all users
+                const usersQuery = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(usersQuery);
+                
+                let users = [];
+                querySnapshot.forEach(doc => {
+                    users.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // Apply filters
+                if (searchText) {
+                    users = users.filter(user => {
+                        const name = (user.name || user.displayName || '').toLowerCase();
+                        const email = (user.email || '').toLowerCase();
+                        const id = (user.id || '').toLowerCase();
+                        const phone = (user.phone || '').toLowerCase();
+                        
+                        return name.includes(searchText) || 
+                               email.includes(searchText) || 
+                               id.includes(searchText) ||
+                               phone.includes(searchText);
+                    });
+                }
+                
+                if (membershipLevel) {
+                    users = users.filter(user => (user.membershipLevel || 'standard') === membershipLevel);
+                }
+                
+                if (role) {
+                    users = users.filter(user => {
+                        // Check both is_admin and role fields
+                        const userRole = (user.is_admin === true || user.role === 'admin') ? 'admin' : 'user';
+                        return userRole === role;
+                    });
+                }
+                
+                // Update UI
+                if (users.length === 0) {
+                    noUsers.style.display = 'block';
+                    usersCount.textContent = '0';
+                } else {
+                    usersCount.textContent = users.length;
+                    renderUsers(users);
+                }
+            } catch (error) {
+                console.error('Error filtering users:', error);
+                showError('Không thể lọc người dùng: ' + error.message);
+            } finally {
+                loadingSpinner.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

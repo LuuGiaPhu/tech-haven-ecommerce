@@ -1,0 +1,1308 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASUS ROG Strix G15 Gaming Laptop - TECH HAVEN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/product_detail.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js"></script>
+    
+    <!-- Comments Section CSS -->
+    <style>
+        /* ===================================== */
+        /* COMMENTS SECTION STYLES */
+        /* ===================================== */
+        
+        .comments-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .comments-header {
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 1rem;
+        }
+        
+        .comments-header h3 {
+            margin: 0 0 0.5rem 0;
+            color: #1e293b;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .comments-header h3::before {
+            content: '💬';
+            margin-right: 0.5rem;
+        }
+        
+        .comments-count {
+            margin: 0;
+            color: #64748b;
+        }
+        
+        .comments-count span {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        /* Comment Form Styles */
+        .comment-form-container {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+        
+        .comment-form-container h4 {
+            margin: 0 0 1rem 0;
+            color: #334155;
+        }
+        
+        .comment-user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 1rem;
+            overflow: hidden;
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #475569;
+        }
+        
+        .comment-input-group {
+            position: relative;
+        }
+        
+        .comment-input-group textarea {
+            width: 100%;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            transition: all 0.2s ease;
+        }
+        
+        .comment-input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .comment-input-group textarea:disabled {
+            background: #f1f5f9;
+            cursor: not-allowed;
+        }
+        
+        .comment-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-comment-cancel,
+        .btn-comment-submit {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-comment-cancel {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+        
+        .btn-comment-cancel:hover {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        
+        .btn-comment-submit {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-comment-submit:hover:not(:disabled) {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+        
+        .btn-comment-submit:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Comments List Styles */
+        .comments-list {
+            margin-top: 2rem;
+            max-height: 200px !important; /* Force max-height để test scroll */
+            overflow-y: scroll !important; /* Force scroll luôn hiển thị */
+            padding: 0; /* Bỏ padding để tránh ảnh hưởng scroll */
+            border: 2px solid #667eea; /* Border rõ hơn để test */
+            border-radius: 10px;
+            background: #fafbfc;
+            position: relative; /* Để hỗ trợ scroll indicator */
+            /* Firefox scrollbar */
+            scrollbar-width: auto; /* Thay đổi từ thin thành auto để dễ thấy hơn */
+            scrollbar-color: #667eea #f1f5f9;
+        }
+        
+        /* Custom scrollbar for comments list */
+        .comments-list::-webkit-scrollbar {
+            width: 16px; /* Tăng thêm để dễ thấy */
+            display: block; /* Force hiển thị */
+        }
+        
+        .comments-list::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+            margin: 5px; /* Thêm margin để scrollbar không sát viền */
+        }
+        
+        .comments-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #667eea, #764ba2); /* Gradient đẹp hơn */
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 2px solid #f1f5f9; /* Border để tạo khoảng cách */
+        }
+        
+        .comments-list::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #5a67d8, #6b46c1);
+            transform: scale(1.1); /* Hiệu ứng hover */
+        }
+        
+        /* Firefox scrollbar - cải thiện - MOVED TO MAIN .comments-list RULE */
+        
+        /* Comments container padding */
+        .comments-list-inner {
+            padding: 1rem;
+            min-height: 100%; /* Đảm bảo content fill container */
+            height: auto; /* Auto height để content tự động expand */
+        }
+        
+        /* Debug styles để test */
+        .comment-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            min-height: 80px; /* Minimum height để dễ test scroll */
+        }
+
+        .comments-placeholder {
+            text-align: center;
+            color: #64748b;
+            padding: 3rem 1rem;
+        }
+        
+        /* Thêm visual indicator khi có thể scroll */
+        .comments-list.has-scroll::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 20px; /* Để tránh scrollbar */
+            height: 20px;
+            background: linear-gradient(transparent, rgba(248, 250, 252, 0.95));
+            pointer-events: none;
+            border-radius: 0 0 10px 10px;
+            z-index: 2;
+        }
+        
+        .comments-list.has-scroll::before {
+            content: '⏬ Cuộn để xem thêm';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #64748b;
+            pointer-events: none;
+            z-index: 3;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+        }
+        
+        .comment-item:hover {
+            border-color: #cbd5e0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Scroll indicator styles */
+        .scroll-indicator {
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Auto-scroll to new comments */
+        .comments-list.new-comment-added {
+            scroll-behavior: smooth;
+        }
+        
+        /* Comment count indicator */
+        .comments-count-indicator {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 0 0 8px 8px;
+            font-size: 12px;
+            text-align: center;
+            margin-bottom: 10px;
+            z-index: 10;
+        }
+        
+        .comment-content {
+            position: relative;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .comment-user {
+            display: flex;
+            align-items: center;
+        }
+        
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+        }
+        
+        .comment-avatar-placeholder {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 0.75rem;
+        }
+        
+        .comment-user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .comment-username {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .comment-time {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        
+        .comment-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-reply-comment,
+        .btn-delete-comment {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-reply-comment:hover {
+            background: #e2e8f0;
+            color: #667eea;
+        }
+        
+        .btn-delete-comment:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .comment-text {
+            line-height: 1.6;
+            color: #334155;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        /* Reply Form Styles */
+        .reply-form {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .reply-input-group {
+            position: relative;
+        }
+        
+        .reply-input-group textarea {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        .reply-input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+        
+        .reply-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        
+        .btn-reply-cancel,
+        .btn-reply-submit {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-reply-cancel {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+        
+        .btn-reply-cancel:hover {
+            background: #e2e8f0;
+        }
+        
+        .btn-reply-submit {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-reply-submit:hover {
+            background: #5a67d8;
+        }
+        
+        /* Replies Styles - Enhanced for nested comments */
+        .comment-replies {
+            margin-top: 1rem;
+            padding-left: 1rem;
+            border-left: 3px solid #e2e8f0;
+        }
+        
+        .comment-reply {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+        
+        .comment-reply:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Nested reply indentation - progressive left margin for deeper nesting */
+        .comment-reply .comment-replies {
+            padding-left: 1.5rem;
+            border-left: 2px solid #cbd5e0;
+        }
+        
+        .comment-reply .comment-reply {
+            background: #f1f5f9;
+            border-color: #cbd5e0;
+        }
+        
+        .comment-reply .comment-reply .comment-replies {
+            padding-left: 2rem;
+            border-left: 2px solid #a0aec0;
+        }
+        
+        .comment-reply .comment-reply .comment-reply {
+            background: #edf2f7;
+            border-color: #a0aec0;
+        }
+        
+        /* Visual indicators for nested levels */
+        .comment-reply::before {
+            content: '';
+            position: absolute;
+            left: -3px;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+            border-radius: 0 3px 3px 0;
+        }
+        
+        .comment-reply .comment-reply::before {
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+        }
+        
+        .comment-reply .comment-reply .comment-reply::before {
+            background: linear-gradient(to bottom, #43e97b, #38f9d7);
+        }
+        
+        /* Load More Button */
+        .load-more-comments {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .btn-load-more {
+            padding: 0.75rem 1.5rem;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .btn-load-more:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e0;
+            transform: translateY(-1px);
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .comments-section {
+                margin-top: 2rem;
+                padding: 1rem;
+                border-radius: 8px;
+            }
+            
+            .comment-form-container {
+                padding: 1rem;
+            }
+            
+            .comment-item {
+                padding: 1rem;
+            }
+            
+            .comment-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .comment-actions {
+                align-self: flex-start;
+            }
+            
+            .comment-replies {
+                padding-left: 0.5rem;
+            }
+            
+            .comment-reply .comment-replies {
+                padding-left: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .comment-user-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .comment-actions {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body class="product-detail-page">
+    <!-- Header with Navigation -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1><a href="/" style="text-decoration: none; color: inherit;">TECH HAVEN</a></h1>
+            </div>
+            
+            <!-- Mobile Menu Toggle -->
+            <div class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="/">TRANG CHỦ</a>
+                <a href="/shop">CỬA HÀNG</a>
+                <div class="admin-dropdown">
+                    <a href="#" class="dropdown-toggle">ADMIN <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-menu">
+                        <a href="/admin/input">INPUT</a>
+                        <a href="/admin/edit">EDIT</a>
+                    </div>
+                </div>
+                <a href="/laptops">LAPTOP</a>
+                <a href="/components">LINH KIỆN</a>
+                <a href="/peripherals">PHỤ KIỆN</a>
+                <a href="/build-pc" class="build-btn">XÂY DỰNG PC</a>
+                <div class="mobile-nav-icons">
+                    <a href="#" onclick="toggleSearch()"><i class="fas fa-search"></i> Tìm kiếm</a>
+                    <a href="#" class="mobile-cart-link"><i class="fas fa-shopping-cart"></i> Giỏ hàng (<span id="cartCount">0</span>)</a>
+                    <a href="#"><i class="fas fa-user"></i> Tài khoản</a>
+                </div>
+            </div>
+            <div class="nav-icons">
+                <i class="fas fa-search" onclick="toggleSearch()"></i>
+                <div class="cart-icon-wrapper">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </div>
+                <i class="fas fa-user"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Product Detail Content -->
+    <div class="product-detail-content">
+        <div class="product-container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="/"><i class="fas fa-home"></i></a>
+                <span class="separator"><i class="fas fa-chevron-right"></i></span>
+                <a href="/shop">Cửa hàng</a>
+                <span class="separator"><i class="fas fa-chevron-right"></i></span>
+                <a href="/shop?category=laptop">laptop</a>
+                <span class="separator"><i class="fas fa-chevron-right"></i></span>
+                <span class="current">ASUS ROG Strix G15 Gaming Laptop</span>
+            </nav>
+
+            <!-- Product Detail Grid -->
+            <div class="product-detail-grid" data-product-id="6">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image">
+                        
+                            <img src="/images/laptop.jpg" alt="ASUS ROG Strix G15 Gaming Laptop">
+                        
+                    </div>
+                    <div class="thumbnail-gallery">
+                        
+                            
+                                <div class="thumbnail">
+                                    <i class="fas fa-laptop"></i>
+                                </div>
+                            
+                                <div class="thumbnail">
+                                    <i class="fas fa-laptop"></i>
+                                </div>
+                            
+                                <div class="thumbnail">
+                                    <i class="fas fa-laptop"></i>
+                                </div>
+                            
+                        
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    
+                        <div class="product-badge">Còn hàng</div>
+                    
+                    
+                    <h1 class="product-title">ASUS ROG Strix G15 Gaming Laptop</h1>
+                    
+                    <div class="product-rating">
+                        <div class="stars">
+                            
+                                
+                                    <i class="fas fa-star"></i>
+                                
+                            
+                                
+                                    <i class="fas fa-star"></i>
+                                
+                            
+                                
+                                    <i class="fas fa-star"></i>
+                                
+                            
+                                
+                                    <i class="fas fa-star"></i>
+                                
+                            
+                                
+                                    <i class="fas fa-star"></i>
+                                
+                            
+                        </div>
+                        <span class="rating-text">(152 đánh giá)</span>
+                    </div>
+                    
+                    <div class="product-price">
+                        <span class="current-price">35.990.000 VNĐ</span>
+                        
+                            <span class="old-price">39.990.000 VNĐ</span>
+                            <span class="discount-badge">
+                                -10%
+                            </span>
+                        
+                    </div>
+                    
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Tình trạng:</span>
+                            <span class="meta-value availability in-stock">
+                                Còn hàng
+                            </span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">SKU:</span>
+                            <span class="meta-value">ASU-ROG-G15-001</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Thương hiệu:</span>
+                            <span class="meta-value">asus</span>
+                        </div>
+                    </div>
+                    
+                    <div class="product-description">
+                        <p>Laptop gaming ASUS ROG Strix G15 với hiệu năng mạnh mẽ, thiết kế đẳng cấp và công nghệ tản nhiệt tiên tiến. Phù hợp cho game thủ và những người làm việc chuyên nghiệp.</p>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <div class="quantity-selector">
+                            <span class="quantity-label">Số lượng:</span>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn decrease">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="99">
+                                <button class="quantity-btn increase">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="add-to-cart-btn">
+                                <i class="fas fa-cart-plus"></i>
+                                Thêm vào giỏ hàng
+                            </button>
+                            <button class="buy-now-btn">
+                                <i class="fas fa-bolt"></i>
+                                Mua ngay
+                            </button>
+                            <button class="wishlist-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Tabs -->
+            <div class="product-tabs">
+                <div class="tab-headers">
+                    <div class="tab-header active">Thông số kỹ thuật</div>
+                    <div class="tab-header">Tính năng nổi bật</div>
+                    <div class="tab-header">Đánh giá</div>
+                </div>
+                
+                <div class="tab-content active">
+                    <div class="specs-grid">
+                        
+                            
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        CPU:
+                                    </span>
+                                    <span class="spec-value">AMD Ryzen 7 6800H (8 nhân, 16 luồng, 3.2GHz up to 4.7GHz)</span>
+                                </div>
+                            
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        Card đồ họa:
+                                    </span>
+                                    <span class="spec-value">NVIDIA GeForce RTX 3060 6GB GDDR6</span>
+                                </div>
+                            
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        RAM:
+                                    </span>
+                                    <span class="spec-value">16GB DDR5-4800MHz (2x8GB, còn trống 2 slot)</span>
+                                </div>
+                            
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        Ổ cứng:
+                                    </span>
+                                    <span class="spec-value">512GB PCIe 4.0 NVMe SSD (còn trống 1 slot M.2)</span>
+                                </div>
+                            
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        Màn hình:
+                                    </span>
+                                    <span class="spec-value">15.6&#34; FHD (1920x1080) IPS, 144Hz, 100% sRGB</span>
+                                </div>
+                            
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        Cổng kết nối:
+                                    </span>
+                                    <span class="spec-value">3x USB-A 3.2, 1x USB-C 3.2, 1x HDMI 2.0b, 1x RJ45</span>
+                                </div>
+                            
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        Âm thanh:
+                                    </span>
+                                    <span class="spec-value">2x 4W speakers với Smart Amp technology</span>
+                                </div>
+                            
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        Bàn phím:
+                                    </span>
+                                    <span class="spec-value">RGB Backlit với Anti-Ghosting</span>
+                                </div>
+                            
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        Pin:
+                                    </span>
+                                    <span class="spec-value">90Wh Li-ion, sạc nhanh 150W</span>
+                                </div>
+                            
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        Hệ điều hành:
+                                    </span>
+                                    <span class="spec-value">Windows 11 Home bản quyền</span>
+                                </div>
+                            
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        Kích thước:
+                                    </span>
+                                    <span class="spec-value">354.9 x 259.9 x 22.69~27.2mm</span>
+                                </div>
+                            
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        Trọng lượng:
+                                    </span>
+                                    <span class="spec-value">2.3kg</span>
+                                </div>
+                            
+                        
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <div class="features-list">
+                        
+                            
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="feature-text">Tản nhiệt Intelligent Cooling với 2 quạt Arc Flow</div>
+                                </div>
+                            
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="feature-text">ROG Keystone II để tùy chỉnh profile game</div>
+                                </div>
+                            
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="feature-text">Armoury Crate để điều khiển RGB và hiệu năng</div>
+                                </div>
+                            
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="feature-text">MUX Switch cho hiệu năng gaming tối ưu</div>
+                                </div>
+                            
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="feature-text">Wi-Fi 6E (802.11ax) tốc độ cao</div>
+                                </div>
+                            
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="feature-text">DTS:X Ultra surround sound</div>
+                                </div>
+                            
+                        
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <div class="reviews-section">
+                        <div class="reviews-summary">
+                            <h3>Đánh giá từ khách hàng</h3>
+                            <div class="rating-summary">
+                                <div class="average-rating">
+                                    <span class="rating-number">5.0</span>
+                                    <div class="stars">
+                                        
+                                            
+                                                <i class="fas fa-star"></i>
+                                            
+                                        
+                                            
+                                                <i class="fas fa-star"></i>
+                                            
+                                        
+                                            
+                                                <i class="fas fa-star"></i>
+                                            
+                                        
+                                            
+                                                <i class="fas fa-star"></i>
+                                            
+                                        
+                                            
+                                                <i class="fas fa-star"></i>
+                                            
+                                        
+                                    </div>
+                                    <span class="review-count">(152 đánh giá)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-placeholder">
+                            <p style="text-align: center; color: #666; padding: 2rem;">
+                                <i class="fas fa-comments" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                                Tính năng đánh giá chi tiết sẽ sớm được cập nhật!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Products -->
+            <div class="related-products">
+                <h2 class="section-title">Sản phẩm liên quan</h2>
+                <div class="related-container">
+                    <button class="nav-btn prev-btn" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="products-wrapper">
+                        <div class="products-track" id="productsTrack">
+                            
+                                
+                                    <div class="product-item" data-product-id="2">
+                                        <div class="product-image">
+                                            
+                                                <img src="/images/laptop.jpg" alt="MSI Katana 17 B13V">
+                                            
+                                        </div>
+                                        <h4 class="product-name">MSI Katana 17 B13V</h4>
+                                        <p class="product-price">
+                                            28.990.000 VNĐ
+                                        </p>
+                                    </div>
+                                
+                                    <div class="product-item" data-product-id="3">
+                                        <div class="product-image">
+                                            
+                                                <img src="/images/laptop.jpg" alt="Acer Predator Helios 300">
+                                            
+                                        </div>
+                                        <h4 class="product-name">Acer Predator Helios 300</h4>
+                                        <p class="product-price">
+                                            32.990.000 VNĐ
+                                        </p>
+                                    </div>
+                                
+                                    <div class="product-item" data-product-id="4">
+                                        <div class="product-image">
+                                            
+                                                <img src="/images/laptop.jpg" alt="HP Omen 16-k0000">
+                                            
+                                        </div>
+                                        <h4 class="product-name">HP Omen 16-k0000</h4>
+                                        <p class="product-price">
+                                            26.990.000 VNĐ
+                                        </p>
+                                    </div>
+                                    <div class="product-item" data-product-id="5">
+                                        <div class="product-image">
+                                            
+                                                <img src="/images/laptop.jpg" alt="HP ">
+                                            
+                                        </div>
+                                        <h4 class="product-name">HP Omen 16-k0000</h4>
+                                        <p class="product-price">
+                                            26.990.000 VNĐ
+                                        </p>
+                                    </div>
+                                    <div class="product-item" data-product-id="6">
+                                        <div class="product-image">
+                                            
+                                                <img src="/images/laptop.jpg" alt="HP ">
+                                            
+                                        </div>
+                                        <h4 class="product-name">HP Omen 16-k0000</h4>
+                                        <p class="product-price">
+                                            26.990.000 VNĐ
+                                        </p>
+                                    </div>
+                                
+                            
+                        </div>
+                    </div>
+                    <button class="nav-btn next-btn" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section">
+                <div class="comments-header">
+                    <h3><i class="fas fa-comments"></i> Bình luận sản phẩm</h3>
+                    <p class="comments-count">Tổng cộng <span id="comments-total">0</span> bình luận</p>
+                </div>
+                
+                <!-- Comment Form -->
+                <div class="comment-form-container">
+                    <h4>Chia sẻ ý kiến của bạn</h4>
+                    <form class="comment-form" id="commentForm">
+                        <div class="comment-user-info">
+                            <div class="user-avatar" id="commentUserAvatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-name" id="commentUserName">
+                                Vui lòng đăng nhập để bình luận
+                            </div>
+                        </div>
+                        
+                        <div class="comment-input-group">
+                            <textarea 
+                                id="commentText" 
+                                placeholder="Vui lòng đăng nhập để bình luận..." 
+                                rows="4" 
+                                disabled
+                            ></textarea>
+                            <div class="comment-actions">
+                                <button type="button" class="btn-comment-cancel" onclick="clearComment()">
+                                    Hủy
+                                </button>
+                                <button type="submit" class="btn-comment-submit" disabled>
+                                    <i class="fas fa-paper-plane"></i>
+                                    Gửi bình luận
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Comments List -->
+                <div class="comments-list" id="commentsList">
+                    <div class="comments-placeholder">
+                        <p style="text-align: center; color: #666; padding: 3rem 1rem;">
+                            <i class="fas fa-comment-dots" style="font-size: 3rem; margin-bottom: 1rem; display: block; color: #667eea;"></i>
+                            Chưa có bình luận nào cho sản phẩm này.<br>
+                            Hãy là người đầu tiên chia sẻ ý kiến của bạn!
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Load More Button -->
+                <div class="load-more-comments" style="display: none;">
+                    <button class="btn-load-more" onclick="loadMoreComments()">
+                        <i class="fas fa-chevron-down"></i>
+                        Xem thêm bình luận
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <i class="fas fa-microchip"></i>
+                    <span>TECH HAVEN</span>
+                </div>
+                <p>Điểm đến tin cậy cho mọi nhu cầu công nghệ của bạn. Chất lượng hàng đầu, dịch vụ tận tâm.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Sản phẩm</h4>
+                <ul>
+                    <li><a href="/desktops">Máy tính để bàn</a></li>
+                    <li><a href="/laptops">Laptop</a></li>
+                    <li><a href="/components">Linh kiện</a></li>
+                    <li><a href="/peripherals">Phụ kiện</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Dịch vụ</h4>
+                <ul>
+                    <li><a href="/build-pc">Xây dựng PC</a></li>
+                    <li><a href="#">Bảo hành</a></li>
+                    <li><a href="#">Hỗ trợ kỹ thuật</a></li>
+                    <li><a href="#">Giao hàng</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Liên hệ</h4>
+                <div class="contact-info">
+                    <p><i class="fas fa-phone"></i> 1800-1234</p>
+                    <p><i class="fas fa-envelope"></i> info@techhaven.vn</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Tech Street, Hà Nội</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Tech Haven. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </footer>
+
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-container">
+            <div class="search-header">
+                <h3>Tìm kiếm sản phẩm</h3>
+                <button class="search-close" onclick="toggleSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Nhập từ khóa tìm kiếm...">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div class="search-suggestions" id="searchSuggestions">
+                <!-- Search suggestions will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Giỏ Hàng</h3>
+            <button class="cart-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                <p>Giỏ hàng của bạn đang trống</p>
+                <small>Thêm sản phẩm để bắt đầu mua sắm</small>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>Tổng: <span id="cartTotal">0 VNĐ</span></strong>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn" onclick="proceedToCheckout()" disabled>
+                <i class="fas fa-credit-card"></i> Thanh Toán
+            </button>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+
+    <!-- Checkout Modal -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-credit-card"></i> Thanh Toán Đơn Hàng</h3>
+                <button class="close-modal" onclick="closeCheckoutModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="checkout-form">
+                    <div class="form-section">
+                        <h4><i class="fas fa-user"></i> Thông Tin Khách Hàng</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Họ và tên *</label>
+                                <input type="text" id="customerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Số điện thoại *</label>
+                                <input type="tel" id="customerPhone" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="customerEmail" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-map-marker-alt"></i> Địa Chỉ Giao Hàng</h4>
+                        <div class="form-group">
+                            <label>Địa chỉ chi tiết *</label>
+                            <textarea id="shippingAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Thành phố *</label>
+                                <select id="shippingCity" required>
+                                    <option value="">Chọn thành phố</option>
+                                    <option value="hanoi">Hà Nội</option>
+                                    <option value="hcm">TP. Hồ Chí Minh</option>
+                                    <option value="danang">Đà Nẵng</option>
+                                    <option value="haiphong">Hải Phòng</option>
+                                    <option value="cantho">Cần Thơ</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Quận/Huyện *</label>
+                                <input type="text" id="shippingDistrict" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4><i class="fas fa-credit-card"></i> Phương Thức Thanh Toán</h4>
+                        <div class="payment-methods">
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="cod" checked>
+                                <span class="payment-icon"><i class="fas fa-money-bill-wave"></i></span>
+                                <span>Thanh toán khi nhận hàng (COD)</span>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="banking">
+                                <span class="payment-icon"><i class="fas fa-university"></i></span>
+                                <span>Chuyển khoản ngân hàng</span>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="momo">
+                                <span class="payment-icon"><i class="fas fa-mobile-alt"></i></span>
+                                <span>Ví MoMo</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-summary">
+                    <h4><i class="fas fa-receipt"></i> Tóm Tắt Đơn Hàng</h4>
+                    <div class="order-items" id="orderSummaryItems"></div>
+                    <div class="order-totals">
+                        <div class="total-line">
+                            <span>Tạm tính:</span>
+                            <span id="subtotalAmount">0 VNĐ</span>
+                        </div>
+                        <div class="total-line">
+                            <span>Phí vận chuyển:</span>
+                            <span>50.000 VNĐ</span>
+                        </div>
+                        <div class="total-line total">
+                            <span>Tổng cộng:</span>
+                            <span id="finalTotal">0 VNĐ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeCheckoutModal()">Hủy</button>
+                <button class="btn-primary" onclick="completeOrder()">Hoàn Tất Đơn Hàng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/script.js"></script>
+    <script src="/js/product_detail.js"></script>
+    <script src="/js/rate_comment.js"></script>
+    
+    <!-- Firebase Configuration and Services -->
+    <script type="module" src="/js/firebase-config.js"></script>
+    <script type="module" src="/js/firebase-services.js"></script>
+    
+    <!-- Initialize Comment System -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize comment system when page loads
+            if (typeof initializeCommentSystem === 'function') {
+                initializeCommentSystem();
+            }
+        });
+    </script>
+</body>
+</html>

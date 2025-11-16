@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>Cửa Hàng - TECH HAVEN | PC Tùy Chỉnh &amp; Linh Kiện Cao Cấp</title>
+    <!-- Google Fonts for Vietnamese Support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/shop.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js"></script>
+    <style>
+        /* Override loading screen CSS for shop page */
+        body.shop-page.loading, 
+        html.loading body.shop-page {
+            overflow: auto !important;
+            height: auto !important;
+        }
+        
+        /* Prevent loading screen from hiding content on shop page */
+        body.shop-page > .header,
+        body.shop-page > .shop-header,
+        body.shop-page > .shop-content,
+        body.shop-page > .footer {
+            display: block !important;
+            visibility: visible !important;
+        }
+        
+        /* Ensure header doesn't clip mobile menu */
+        body.shop-page .header,
+        body.shop-page .navbar {
+            overflow: visible !important;
+        }
+        
+        /* Keep modals and overlays properly hidden when not active */
+        .search-overlay:not(.active),
+        .cart-sidebar:not(.active),
+        .cart-overlay:not(.active),
+        .modal-overlay:not(.active) {
+            display: none !important;
+            visibility: hidden !important;
+        }
+        
+        /* Fix specific inline elements that shouldn't be forced to block */
+        body.shop-page span,
+        body.shop-page i,
+        body.shop-page a,
+        body.shop-page button,
+        body.shop-page input,
+        body.shop-page select,
+        body.shop-page textarea {
+            display: initial !important;
+        }
+        
+        /* Restore flex layouts (except nav-menu which has special mobile handling) */
+        body.shop-page .navbar,
+        body.shop-page .nav-icons,
+        body.shop-page .shop-toolbar,
+        body.shop-page .toolbar-left,
+        body.shop-page .toolbar-right,
+        body.shop-page .sort-options,
+        body.shop-page .view-options,
+        body.shop-page .product-price,
+        body.shop-page .breadcrumb,
+        body.shop-page .filter-header,
+        body.shop-page .filter-option,
+        body.shop-page .rating-filter,
+        body.shop-page .cart-header,
+        body.shop-page .cart-footer,
+        body.shop-page .modal-header,
+        body.shop-page .modal-footer,
+        body.shop-page .form-row,
+        body.shop-page .footer-content,
+        body.shop-page .social-icons {
+            display: flex !important;
+        }
+        
+        /* Restore grid layouts */
+        body.shop-page .shop-layout,
+        body.shop-page .products-grid {
+            display: grid !important;
+        }
+        
+        /* Restore inline-flex elements */
+        body.shop-page .cart-icon-wrapper,
+        body.shop-page .mobile-menu-toggle {
+            display: inline-flex !important;
+        }
+        
+        /* Special handling for nav-menu mobile behavior */
+        @media (min-width: 1025px) {
+            body.shop-page .nav-menu {
+                display: flex !important;
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            body.shop-page .nav-menu {
+                display: none !important;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(17, 24, 39, 0.98);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding: 5rem 2rem 2rem 2rem;
+                gap: 1.5rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 99999 !important;
+                overflow-y: auto;
+                box-sizing: border-box;
+            }
+            
+            body.shop-page .nav-menu.active {
+                display: flex !important;
+                transform: translateY(0) !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            
+            body.shop-page .nav-menu a {
+                color: white !important;
+                text-decoration: none;
+                font-size: 1.2rem;
+                font-weight: 500;
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                width: 200px;
+                text-align: center;
+                box-sizing: border-box;
+                display: block !important;
+            }
+            
+            body.shop-page .nav-menu a:hover,
+            body.shop-page .nav-menu a.active {
+                background: rgba(102, 126, 234, 0.2);
+                color: #fbbf24 !important;
+            }
+            
+            body.shop-page .mobile-nav-icons {
+                display: flex !important;
+                flex-direction: column;
+                gap: 1rem;
+                margin-top: 2rem;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            body.shop-page .mobile-nav-icons a {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                font-size: 1rem;
+                width: 100% !important;
+                padding: 1rem !important;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+            }
+            
+            /* Admin Dropdown Mobile Styles */
+            body.shop-page .admin-dropdown {
+                position: relative;
+                display: block !important;
+            }
+            
+            body.shop-page .admin-dropdown .dropdown-toggle {
+                display: block !important;
+                color: white !important;
+                text-decoration: none;
+                font-size: 1.2rem;
+                font-weight: 500;
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                width: 200px;
+                text-align: center;
+                box-sizing: border-box;
+            }
+            
+            body.shop-page .admin-dropdown .dropdown-toggle:hover {
+                background: rgba(102, 126, 234, 0.2);
+                color: #fbbf24 !important;
+            }
+            
+            body.shop-page .admin-dropdown .dropdown-menu {
+                position: static !important;
+                background: rgba(255, 255, 255, 0.1) !important;
+                box-shadow: none !important;
+                margin-top: 0.5rem !important;
+                border-radius: 8px !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: none !important;
+                display: none !important;
+                border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                z-index: 1000001 !important;
+                flex-direction: column !important;
+            }
+            
+            body.shop-page .admin-dropdown.active .dropdown-menu {
+                display: flex !important;
+                animation: fadeIn 0.3s ease;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            body.shop-page .admin-dropdown .dropdown-menu a {
+                display: block !important;
+                color: white !important;
+                padding: 0.75rem 1rem !important;
+                font-size: 1rem !important;
+                width: auto !important;
+                text-align: center !important;
+                background: transparent !important;
+            }
+            
+            body.shop-page .admin-dropdown .dropdown-menu a:hover {
+                background: rgba(255, 255, 255, 0.2) !important;
+                color: #fbbf24 !important;
+            }
+            
+            body.shop-page .mobile-menu-toggle {
+                display: flex !important;
+                cursor: pointer;
+                background: rgba(255, 255, 255, 0.1);
+                border: none;
+                padding: 0.5rem;
+                border-radius: 6px;
+                transition: all 0.3s ease;
+                min-width: 44px;
+                min-height: 44px;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+                z-index: 1000000 !important;
+            }
+            
+            body.shop-page .mobile-menu-toggle:hover {
+                background: rgba(255, 255, 255, 0.2);
+            }
+            
+            body.shop-page .mobile-menu-toggle i {
+                font-size: 1.3rem;
+                color: white;
+                transition: all 0.3s ease;
+            }
+        }
+    </style>
+</head>
+<body class="shop-page">
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1><a href="/" style="text-decoration: none; color: inherit;">TECH HAVEN</a></h1>
+            </div>
+            
+            <!-- Mobile Menu Toggle -->
+            <div class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="/">TRANG CHỦ</a>
+                <a href="/shop" class="active">CỬA HÀNG</a>
+                <div class="admin-dropdown">
+                    <a href="#" class="dropdown-toggle">ADMIN <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-menu">
+                        <a href="/admin/input">INPUT</a>
+                        <a href="/admin/edit">EDIT</a>
+                    </div>
+                </div>
+                <a href="/laptops">LAPTOP</a>
+                <a href="/components">LINH KIỆN</a>
+                <a href="/peripherals">PHỤ KIỆN</a>
+                <a href="/build-pc" class="build-btn">XÂY DỰNG PC</a>
+                <div class="mobile-nav-icons">
+                    <a href="#" onclick="toggleSearch()"><i class="fas fa-search"></i> Tìm kiếm</a>
+                    <a href="#" onclick="toggleCart()"><i class="fas fa-shopping-cart"></i> Giỏ hàng (<span id="cartCount">0</span>)</a>
+                    <a href="#"><i class="fas fa-user"></i> Tài khoản</a>
+                </div>
+            </div>
+            <div class="nav-icons">
+                <i class="fas fa-search" onclick="toggleSearch()"></i>
+                <div class="cart-icon-wrapper" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </div>
+                <i class="fas fa-user"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
+                <button class="search-close" onclick="toggleSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-suggestions" id="searchSuggestions">
+                <div class="suggestion-item" data-category="laptop">
+                    <i class="fas fa-laptop"></i>
+                    <span>Laptop Gaming</span>
+                </div>
+                <div class="suggestion-item" data-category="cpu">
+                    <i class="fas fa-microchip"></i>
+                    <span>CPU Intel & AMD</span>
+                </div>
+                <div class="suggestion-item" data-category="gpu">
+                    <i class="fas fa-memory"></i>
+                    <span>Card Đồ Họa</span>
+                </div>
+                <div class="suggestion-item" data-category="monitor">
+                    <i class="fas fa-desktop"></i>
+                    <span>Màn Hình Gaming</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shop Header -->
+    <div class="shop-header">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/"><i class="fas fa-home"></i></a>
+                <span>/</span>
+                <span>Cửa Hàng</span>
+            </div>
+            <h1 class="shop-title">
+                <i class="fas fa-store"></i>
+                Cửa Hàng TECH HAVEN
+            </h1>
+            <p class="shop-subtitle">Khám phá hàng nghìn sản phẩm công nghệ chất lượng cao</p>
+        </div>
+    </div>
+
+    <!-- Shop Content -->
+    <div class="shop-content">
+        <div class="container">
+            <div class="shop-layout">
+                <!-- Filter Sidebar -->
+                <div class="filter-sidebar" id="filterSidebar">
+                    <div class="filter-header">
+                        <h3><i class="fas fa-filter"></i> Bộ Lọc Sản Phẩm</h3>
+                        <button class="filter-close" onclick="toggleFilters()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="filter-section">
+                        <h4><i class="fas fa-tags"></i> Danh Mục</h4>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" value="all" id="categoryAll" checked>
+                                <span class="checkmark"></span>
+                                Tất Cả Sản Phẩm
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="laptop" class="category-filter">
+                                <span class="checkmark"></span>
+                                Laptop Gaming
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="cpu" class="category-filter">
+                                <span class="checkmark"></span>
+                                Vi Xử Lý (CPU)
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="gpu" class="category-filter">
+                                <span class="checkmark"></span>
+                                Card Đồ Họa (GPU)
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="ram" class="category-filter">
+                                <span class="checkmark"></span>
+                                RAM
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="storage" class="category-filter">
+                                <span class="checkmark"></span>
+                                Ổ Cứng & SSD
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="monitor" class="category-filter">
+                                <span class="checkmark"></span>
+                                Màn Hình
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="peripheral" class="category-filter">
+                                <span class="checkmark"></span>
+                                Phụ Kiện Gaming
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Price Range Filter -->
+                    <div class="filter-section">
+                        <h4><i class="fas fa-dollar-sign"></i> Khoảng Giá</h4>
+                        <div class="price-range">
+                            <div class="price-inputs">
+                                <input type="number" id="minPrice" placeholder="Từ" min="0">
+                                <span>-</span>
+                                <input type="number" id="maxPrice" placeholder="Đến" min="0">
+                            </div>
+                            <div class="price-suggestions">
+                                <button class="price-tag" data-min="0" data-max="5000000">Dưới 5 triệu</button>
+                                <button class="price-tag" data-min="5000000" data-max="15000000">5 - 15 triệu</button>
+                                <button class="price-tag" data-min="15000000" data-max="30000000">15 - 30 triệu</button>
+                                <button class="price-tag" data-min="30000000" data-max="999999999">Trên 30 triệu</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Brand Filter -->
+                    <div class="filter-section">
+                        <h4><i class="fas fa-building"></i> Thương Hiệu</h4>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" value="asus" class="brand-filter">
+                                <span class="checkmark"></span>
+                                ASUS
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="msi" class="brand-filter">
+                                <span class="checkmark"></span>
+                                MSI
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="intel" class="brand-filter">
+                                <span class="checkmark"></span>
+                                Intel
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="amd" class="brand-filter">
+                                <span class="checkmark"></span>
+                                AMD
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="nvidia" class="brand-filter">
+                                <span class="checkmark"></span>
+                                NVIDIA
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="corsair" class="brand-filter">
+                                <span class="checkmark"></span>
+                                Corsair
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="samsung" class="brand-filter">
+                                <span class="checkmark"></span>
+                                Samsung
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" value="lg" class="brand-filter">
+                                <span class="checkmark"></span>
+                                LG
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Rating Filter -->
+                    <div class="filter-section">
+                        <h4><i class="fas fa-star"></i> Đánh Giá</h4>
+                        <div class="rating-filters">
+                            <label class="rating-filter">
+                                <input type="radio" name="rating" value="5">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span>5 sao</span>
+                            </label>
+                            <label class="rating-filter">
+                                <input type="radio" name="rating" value="4">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <span>4 sao trở lên</span>
+                            </label>
+                            <label class="rating-filter">
+                                <input type="radio" name="rating" value="3">
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <span>3 sao trở lên</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Clear Filters -->
+                    <div class="filter-actions">
+                        <button class="clear-filters-btn" onclick="clearAllFilters()">
+                            <i class="fas fa-refresh"></i>
+                            Xóa Bộ Lọc
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="shop-main">
+                    <!-- Toolbar -->
+                    <div class="shop-toolbar">
+                        <div class="toolbar-left">
+                            <button class="filter-toggle" onclick="toggleFilters()">
+                                <i class="fas fa-filter"></i>
+                                Bộ Lọc
+                            </button>
+                            <span class="result-count" id="resultCount">Hiển thị tất cả sản phẩm</span>
+                        </div>
+                        <div class="toolbar-right">
+                            <div class="sort-options">
+                                <label>Sắp xếp:</label>
+                                <select id="sortSelect">
+                                    <option value="default">Mặc định</option>
+                                    <option value="name-asc">Tên A-Z</option>
+                                    <option value="name-desc">Tên Z-A</option>
+                                    <option value="price-asc">Giá tăng dần</option>
+                                    <option value="price-desc">Giá giảm dần</option>
+                                    <option value="rating-desc">Đánh giá cao nhất</option>
+                                    <option value="newest">Mới nhất</option>
+                                </select>
+                            </div>
+                            <div class="view-options">
+                                <button class="view-btn grid-view active" data-view="grid">
+                                    <i class="fas fa-th"></i>
+                                </button>
+                                <button class="view-btn list-view" data-view="list">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div class="products-grid" id="productsGrid">
+                        <!-- Products will be loaded here -->
+                    </div>
+
+                    <!-- Load More Button -->
+                    <div class="load-more-section">
+                        <button class="load-more-btn" id="loadMoreBtn" onclick="loadMoreProducts()">
+                            <i class="fas fa-plus"></i>
+                            Xem Thêm Sản Phẩm
+                        </button>
+                    </div>
+
+                    <!-- No Results -->
+                    <div class="no-results" id="noResults" style="display: none;">
+                        <div class="no-results-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Không tìm thấy sản phẩm</h3>
+                        <p>Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+                        <button class="clear-filters-btn" onclick="clearAllFilters()">
+                            Xóa Bộ Lọc
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Giỏ Hàng</h3>
+            <button class="close-cart" onclick="toggleCart()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #ccc;"></i>
+                <p>Giỏ hàng của bạn đang trống</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>Tổng cộng: <span id="cartTotal">0 VNĐ</span></strong>
+            </div>
+            <button class="checkout-btn" onclick="proceedToCheckout()" id="checkoutBtn" disabled>
+                <i class="fas fa-credit-card"></i> THANH TOÁN
+            </button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-credit-card"></i> Thanh Toán Đơn Hàng</h3>
+                <button class="close-modal" onclick="closeCheckoutModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="checkout-form">
+                    <div class="form-section">
+                        <h4><i class="fas fa-user"></i> Thông Tin Khách Hàng</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Họ và tên *</label>
+                                <input type="text" id="customerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Số điện thoại *</label>
+                                <input type="tel" id="customerPhone" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="customerEmail" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-map-marker-alt"></i> Địa Chỉ Giao Hàng</h4>
+                        <div class="form-group">
+                            <label>Địa chỉ chi tiết *</label>
+                            <textarea id="shippingAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Thành phố *</label>
+                                <select id="shippingCity" required>
+                                    <option value="">Chọn thành phố</option>
+                                    <option value="hanoi">Hà Nội</option>
+                                    <option value="hcm">TP. Hồ Chí Minh</option>
+                                    <option value="danang">Đà Nẵng</option>
+                                    <option value="haiphong">Hải Phòng</option>
+                                    <option value="cantho">Cần Thơ</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Quận/Huyện *</label>
+                                <input type="text" id="shippingDistrict" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4><i class="fas fa-credit-card"></i> Phương Thức Thanh Toán</h4>
+                        <div class="payment-methods">
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="cod" checked>
+                                <span class="payment-icon"><i class="fas fa-money-bill-wave"></i></span>
+                                <span>Thanh toán khi nhận hàng (COD)</span>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="banking">
+                                <span class="payment-icon"><i class="fas fa-university"></i></span>
+                                <span>Chuyển khoản ngân hàng</span>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="momo">
+                                <span class="payment-icon"><i class="fas fa-mobile-alt"></i></span>
+                                <span>Ví MoMo</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-summary">
+                    <h4><i class="fas fa-receipt"></i> Tóm Tắt Đơn Hàng</h4>
+                    <div class="order-items" id="orderSummaryItems"></div>
+                    <div class="order-totals">
+                        <div class="total-line">
+                            <span>Tạm tính:</span>
+                            <span id="subtotalAmount">0 VNĐ</span>
+                        </div>
+                        <div class="total-line">
+                            <span>Phí vận chuyển:</span>
+                            <span>50.000 VNĐ</span>
+                        </div>
+                        <div class="total-line total">
+                            <span>Tổng cộng:</span>
+                            <span id="finalTotal">0 VNĐ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeCheckoutModal()">Hủy</button>
+                <button class="btn-primary" onclick="completeOrder()">Hoàn Tất Đơn Hàng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>VỀ CHÚNG TÔI</h4>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Tuyển dụng</a></li>
+                    <li><a href="#">Tin tức</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>HỖ TRỢ KHÁCH HÀNG</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách bảo hành</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>CHÍNH SÁCH</h4>
+                <ul>
+                    <li><a href="#">Chính sách bảo mật</a></li>
+                    <li><a href="#">Điều khoản sử dụng</a></li>
+                    <li><a href="#">Chính sách vận chuyển</a></li>
+                    <li><a href="#">Chính sách thanh toán</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>TÀI KHOẢN CỦA TÔI</h4>
+                <ul>
+                    <li><a href="#">Đăng nhập</a></li>
+                    <li><a href="#">Đăng ký</a></li>
+                    <li><a href="#">Theo dõi đơn hàng</a></li>
+                    <li><a href="#">Lịch sử mua hàng</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>THEO DÕI CHÚNG TÔI</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="contact-info">
+                    <p><i class="fas fa-phone"></i> Hotline: 1800-1234</p>
+                    <p><i class="fas fa-envelope"></i> info@techhaven.vn</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 TECH HAVEN. Tất cả quyền được bảo lưu</p>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+    <script src="/js/shop.js"></script>
+    
+    <!-- Firebase Configuration and Services -->
+    <script type="module" src="/js/firebase-config.js"></script>
+    <script type="module" src="/js/firebase-services.js"></script>
+</body>
+</html>

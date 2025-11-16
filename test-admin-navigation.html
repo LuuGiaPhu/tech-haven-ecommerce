@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Admin Navigation</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+</head>
+<body>
+    <h1>Test Admin Navigation</h1>
+    
+    <div id="status">Loading...</div>
+    <button id="loginBtn" onclick="login()">Login với Google</button>
+    <button id="testAdminBtn" onclick="testAdminAccess()" style="display:none;">Test Admin Access</button>
+    
+    <div id="result"></div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAy5vJr5n1ZgKKQFNfCt2hGuwbHKGrJz6M",
+            authDomain: "tech-haven-5368b.firebaseapp.com",
+            projectId: "tech-haven-5368b",
+            storageBucket: "tech-haven-5368b.firebasestorage.app",
+            messagingSenderId: "442337591630",
+            appId: "1:442337591630:web:2a5346b4ef0c9e8ea6b66b",
+            measurementId: "G-PRZMSR9RKW"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.login = async function() {
+            try {
+                const provider = new GoogleAuthProvider();
+                const result = await signInWithPopup(auth, provider);
+                console.log('Login successful:', result.user.email);
+            } catch (error) {
+                console.error('Login error:', error);
+                document.getElementById('result').innerHTML = `<p style="color:red;">Login failed: ${error.message}</p>`;
+            }
+        };
+
+        window.testAdminAccess = async function() {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    document.getElementById('result').innerHTML = '<p style="color:red;">Please login first</p>';
+                    return;
+                }
+
+                const idToken = await user.getIdToken();
+                
+                // Test navigating to admin page with token
+                const adminUrl = `https://app-tb7nq3o2qq-uc.a.run.app/admin/input?token=${encodeURIComponent(idToken)}`;
+                
+                document.getElementById('result').innerHTML = `
+                    <p>Testing admin access...</p>
+                    <p>Token: ${idToken.substring(0, 50)}...</p>
+                    <p><a href="${adminUrl}" target="_blank">Click here to test admin page</a></p>
+                `;
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('status').textContent = `Logged in as: ${user.email}`;
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('testAdminBtn').style.display = 'block';
+            } else {
+                document.getElementById('status').textContent = 'Not logged in';
+                document.getElementById('loginBtn').style.display = 'block';
+                document.getElementById('testAdminBtn').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

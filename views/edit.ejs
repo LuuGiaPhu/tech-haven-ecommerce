@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>Chỉnh Sửa Sản Phẩm - TECH HAVEN Admin</title>
+    <!-- Google Fonts for Vietnamese Support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js"></script>
+</head>
+<body class="admin-edit-page">
+    <!-- Back to Home Button -->
+    <a href="/" class="back-to-home">
+        <i class="fas fa-arrow-left"></i> Về Trang Chủ
+    </a>
+
+    <div class="admin-edit-container">
+        <!-- Admin Header -->
+        <div class="admin-header edit-header">
+            <div class="header-icon">
+                <i class="fas fa-edit"></i>
+            </div>
+            <h1>CHỈNH SỬA SẢN PHẨM</h1>
+            <p>Quản lý kho hàng TECH HAVEN - Cập nhật thông tin sản phẩm</p>
+        </div>
+
+        <!-- Search & Filter Section -->
+        <div class="search-filter-section">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="productSearch" class="search-input" placeholder="Tìm kiếm sản phẩm theo tên, ID, hoặc danh mục...">
+                </div>
+                <button id="searchBtn" class="search-btn">
+                    <i class="fas fa-search"></i> Tìm Kiếm
+                </button>
+            </div>
+            
+            <div class="filter-container">
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">Tất cả danh mục</option>
+                    <option value="laptop">Laptop</option>
+                    <option value="pc">PC</option>
+                    <option value="gpu">Card Đồ Họa</option>
+                    <option value="cpu">Bộ Vi Xử Lý</option>
+                    <option value="ram">Bộ Nhớ RAM</option>
+                    <option value="storage">Ổ Cứng</option>
+                    <option value="motherboard">Bo Mạch Chủ</option>
+                    <option value="psu">Nguồn</option>
+                    <option value="case">Vỏ Case</option>
+                    <option value="keyboard">Bàn Phím</option>
+                    <option value="mouse">Chuột</option>
+                    <option value="headset">Tai Nghe</option>
+                    <option value="monitor">Màn Hình</option>
+                    <option value="speaker">Loa</option>
+                    <option value="webcam">Webcam</option>
+                    <option value="other">Khác</option>
+                </select>
+                
+                <select id="statusFilter" class="filter-select">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="in-stock">Còn hàng</option>
+                    <option value="out-of-stock">Hết hàng</option>
+                    <option value="pre-order">Đặt trước</option>
+                </select>
+                
+                <button id="refreshBtn" class="refresh-btn">
+                    <i class="fas fa-sync-alt"></i> Làm Mới
+                </button>
+            </div>
+        </div>
+
+        <!-- Products List Section -->
+        <div class="products-list-section">
+            <div class="products-header">
+                <h3><i class="fas fa-box"></i> Danh Sách Sản Phẩm</h3>
+                <div class="products-count">
+                    <span id="productsCount">0</span> sản phẩm
+                </div>
+            </div>
+            
+            <div id="loadingSpinner" class="loading-spinner-list" style="display: none;">
+                <div class="spinner"></div>
+                <p>Đang tải danh sách sản phẩm...</p>
+            </div>
+            
+            <div id="noProducts" class="no-products" style="display: none;">
+                <i class="fas fa-inbox"></i>
+                <h4>Không tìm thấy sản phẩm nào</h4>
+                <p>Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+            </div>
+            
+            <div id="productsList" class="products-grid">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div id="successMessage" class="message success" style="display: none;">
+            <i class="fas fa-check-circle"></i>
+            <span>Thao tác thành công!</span>
+        </div>
+        
+        <div id="errorMessage" class="message error" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText">Có lỗi xảy ra!</span>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="edit-modal-overlay">
+        <div class="edit-modal-content">
+            <div class="edit-modal-header">
+                <h3><i class="fas fa-edit"></i> Chỉnh Sửa Sản Phẩm</h3>
+                <button class="close-modal" onclick="closeEditModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="edit-modal-body">
+                <form id="editForm" class="edit-form">
+                    <input type="hidden" id="editProductId">
+                    
+                    <!-- Basic Information -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-info-circle"></i> Thông Tin Cơ Bản</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Tên Sản Phẩm *</label>
+                                <input type="text" id="editProductName" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Danh Mục *</label>
+                                <select id="editProductCategory" class="form-select" required>
+                                    <option value="">Chọn danh mục</option>
+                                    <option value="laptop">Laptop</option>
+                                    <option value="pc">PC</option>
+                                    <option value="gpu">Card Đồ Họa</option>
+                                    <option value="cpu">Bộ Vi Xử Lý</option>
+                                    <option value="ram">Bộ Nhớ RAM</option>
+                                    <option value="storage">Ổ Cứng</option>
+                                    <option value="motherboard">Bo Mạch Chủ</option>
+                                    <option value="psu">Nguồn</option>
+                                    <option value="case">Vỏ Case</option>
+                                    <option value="keyboard">Bàn Phím</option>
+                                    <option value="mouse">Chuột</option>
+                                    <option value="headset">Tai Nghe</option>
+                                    <option value="monitor">Màn Hình</option>
+                                    <option value="speaker">Loa</option>
+                                    <option value="webcam">Webcam</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Thương Hiệu *</label>
+                                <input type="text" id="editProductBrand" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Mã Sản Phẩm (SKU)</label>
+                                <input type="text" id="editProductSku" class="form-input">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Mô Tả Chi Tiết</label>
+                            <textarea id="editProductDescription" class="form-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Pricing & Stock -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-dollar-sign"></i> Giá Cả & Tồn Kho</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Giá Bán (VNĐ) *</label>
+                                <input type="number" id="editProductPrice" class="form-input" required min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Giá Cũ (VNĐ)</label>
+                                <input type="number" id="editProductOldPrice" class="form-input" min="0">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Số Lượng Tồn Kho *</label>
+                                <input type="number" id="editProductStock" class="form-input" required min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Trạng Thái *</label>
+                                <select id="editProductAvailability" class="form-select" required>
+                                    <option value="">Chọn trạng thái</option>
+                                    <option value="in-stock">Còn hàng</option>
+                                    <option value="out-of-stock">Hết hàng</option>
+                                    <option value="pre-order">Đặt trước</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Đánh Giá (1-5 sao)</label>
+                                <input type="number" id="editProductRating" class="form-input" min="1" max="5" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>Số Lượt Đánh Giá</label>
+                                <input type="number" id="editProductReviews" class="form-input" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technical Specifications -->
+                    <div class="form-section specs-section">
+                        <h4><i class="fas fa-cogs"></i> Thông Số Kỹ Thuật</h4>
+                        
+                        <div id="editSpecInputs" class="spec-inputs">
+                            <!-- Spec rows will be added dynamically -->
+                        </div>
+                        
+                        <button type="button" class="add-spec-btn" onclick="addEditSpecRow()">
+                            <i class="fas fa-plus"></i> Thêm Thông Số
+                        </button>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="form-actions">
+                        <button type="submit" class="save-btn">
+                            <i class="fas fa-save"></i> LƯU THAY ĐỔI
+                        </button>
+                        <button type="button" class="cancel-btn" onclick="closeEditModal()">
+                            <i class="fas fa-times"></i> HỦY BỎ
+                        </button>
+                        <button type="button" class="delete-btn" onclick="confirmDeleteProduct()">
+                            <i class="fas fa-trash"></i> XÓA SẢN PHẨM
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="delete-modal-overlay">
+        <div class="delete-modal-content">
+            <div class="delete-modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Xác Nhận Xóa</h3>
+            </div>
+            <div class="delete-modal-body">
+                <p>Bạn có chắc chắn muốn xóa sản phẩm này?</p>
+                <p class="product-name-delete" id="deleteProductName"></p>
+                <p><strong>Hành động này không thể hoàn tác!</strong></p>
+            </div>
+            <div class="delete-modal-actions">
+                <button id="confirmDeleteBtn" class="confirm-delete-btn">
+                    <i class="fas fa-trash"></i> XÓA SẢN PHẨM
+                </button>
+                <button class="cancel-delete-btn" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i> HỦY BỎ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="/js/firebase-config.js"></script>
+    <script type="module" src="/js/edit-admin.js"></script>
+</body>
+</html>

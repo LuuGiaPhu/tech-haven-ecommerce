@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Cart Integration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .cart-badge {
+            background-color: #ff6b35;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 10px;
+            display: inline-block;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .test-product {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .console-output {
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .navbar-mockup {
+            background: #333;
+            padding: 10px 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+        #cartBadge {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background: #ff6b35;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mockup Navigation Bar -->
+    <div class="navbar-mockup">
+        <div>🛍️ TechHaven Test</div>
+        <div class="cart-icon">
+            🛒 Giỏ hàng 
+            <span id="cartBadge">0</span>
+            <span>(<span id="mobileCartCount">0</span>)</span>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>🧪 Test Cart Integration</h2>
+        <p>Test để kiểm tra xem cart badge có update ngay lập tức khi thêm sản phẩm không.</p>
+        
+        <!-- Mock User Login -->
+        <div id="userStatus">
+            <p>👤 Trạng thái: <span id="loginStatus">Chưa đăng nhập</span></p>
+            <button onclick="mockLogin()">Mock Login</button>
+            <button onclick="mockLogout()">Mock Logout</button>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h3>📦 Test Products</h3>
+        
+        <div class="test-product">
+            <h4>Gaming Laptop RTX 4060</h4>
+            <p>Giá: 25,990,000đ</p>
+            <button onclick="testAddToCart('Gaming Laptop RTX 4060', '25990000', 'laptop_001', 'laptop.jpg')">
+                Thêm vào giỏ hàng
+            </button>
+        </div>
+
+        <div class="test-product">
+            <h4>Gaming Keyboard RGB</h4>
+            <p>Giá: 1,500,000đ</p>
+            <button onclick="testAddToCart('Gaming Keyboard RGB', '1500000', 'keyboard_001', 'keyboard.jpg')">
+                Thêm vào giỏ hàng
+            </button>
+        </div>
+
+        <div class="test-product">
+            <h4>RTX 4070 Graphics Card</h4>
+            <p>Giá: 18,990,000đ</p>
+            <button onclick="testAddToCart('RTX 4070 Graphics Card', '18990000', 'gpu_001', 'gpu.jpg')">
+                Thêm vào giỏ hàng
+            </button>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h3>🔧 Test Functions</h3>
+        <button onclick="testGlobalUpdateCartBadge()">Test globalUpdateCartBadge()</button>
+        <button onclick="testCartBadgeElements()">Test Cart Badge Elements</button>
+        <button onclick="clearConsoleOutput()">Clear Console</button>
+        <button onclick="testQuantityButtons()">Test +/- Buttons</button>
+    </div>
+
+    <div class="test-container">
+        <h3>📊 Console Output</h3>
+        <div id="consoleOutput" class="console-output">
+            Console output will appear here...
+        </div>
+    </div>
+
+    <script>
+        // Mock console output to display on page
+        const originalConsoleLog = console.log;
+        const consoleOutput = document.getElementById('consoleOutput');
+        
+        console.log = function(...args) {
+            originalConsoleLog(...args);
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            consoleOutput.textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+
+        // Mock user system
+        window.currentUser = null;
+
+        function mockLogin() {
+            window.currentUser = {
+                uid: 'test_user_123',
+                email: 'test@example.com',
+                provider: 'manual'
+            };
+            document.getElementById('loginStatus').textContent = 'Đã đăng nhập (test@example.com)';
+            console.log('🔑 Mocked user login:', window.currentUser);
+        }
+
+        function mockLogout() {
+            window.currentUser = null;
+            document.getElementById('loginStatus').textContent = 'Chưa đăng nhập';
+            console.log('🚪 User logged out');
+        }
+
+        // Mock globalUpdateCartBadge function (same as in shop.ejs)
+        window.globalUpdateCartBadge = function(totalItems = null) {
+            console.log('🎯 globalUpdateCartBadge called with totalItems:', totalItems);
+            
+            // If no totalItems provided, calculate from current cart
+            if (totalItems === null && window.cart && Array.isArray(window.cart)) {
+                totalItems = window.cart.reduce((sum, item) => sum + item.quantity, 0);
+                console.log('📊 Calculated totalItems from cart:', totalItems);
+            } else if (totalItems === null) {
+                totalItems = 0;
+                console.log('⚠️ No cart data available, defaulting to 0');
+            }
+            
+            // Update desktop cart badge
+            const cartBadge = document.getElementById('cartBadge');
+            if (cartBadge) {
+                cartBadge.textContent = totalItems;
+                cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+                console.log('✅ Updated desktop cartBadge:', totalItems);
+            } else {
+                console.log('❌ Desktop cartBadge element not found');
+            }
+            
+            // Update mobile cart count
+            const mobileCartCount = document.getElementById('mobileCartCount');
+            if (mobileCartCount) {
+                mobileCartCount.textContent = totalItems;
+                console.log('✅ Updated mobileCartCount:', totalItems);
+            } else {
+                console.log('❌ Mobile mobileCartCount element not found');
+            }
+            
+            console.log('🎯 globalUpdateCartBadge completed');
+        };
+
+        // Mock cart array
+        window.cart = [];
+
+        // Mock addToCart function (simplified version of script.js)
+        window.addToCart = async function(productName, productPrice, productId = null, productImage = null) {
+            console.log('🛒 addToCart called:', { productName, productPrice, productId, productImage });
+            
+            if (!window.currentUser) {
+                console.log('⚠️ No user logged in');
+                alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
+                return;
+            }
+
+            try {
+                // Simulate API call
+                console.log('📡 Simulating API call to /api/cart...');
+                await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
+                
+                // Add to mock cart
+                const existingItem = window.cart.find(item => item.productId === productId);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                    console.log('📊 Updated existing item quantity:', existingItem.quantity);
+                } else {
+                    window.cart.push({
+                        productId: productId,
+                        productName: productName,
+                        productPrice: productPrice,
+                        productImage: productImage,
+                        quantity: 1
+                    });
+                    console.log('📦 Added new item to cart');
+                }
+                
+                console.log('🛍️ Current cart:', window.cart);
+                
+                // Call globalUpdateCartBadge
+                if (typeof window.globalUpdateCartBadge === 'function') {
+                    console.log('🎯 Calling globalUpdateCartBadge from addToCart');
+                    window.globalUpdateCartBadge();
+                } else {
+                    console.log('❌ globalUpdateCartBadge function not found');
+                }
+                
+                console.log('✅ addToCart completed successfully');
+                
+            } catch (error) {
+                console.error('❌ Error in addToCart:', error);
+            }
+        };
+
+        // Test functions
+        function testAddToCart(productName, productPrice, productId, productImage) {
+            console.log('🧪 Starting addToCart test...');
+            window.addToCart(productName, productPrice, productId, productImage);
+        }
+
+        function testGlobalUpdateCartBadge() {
+            console.log('🧪 Testing globalUpdateCartBadge directly...');
+            window.globalUpdateCartBadge(5);
+        }
+
+        function testCartBadgeElements() {
+            console.log('🧪 Testing cart badge elements...');
+            const cartBadge = document.getElementById('cartBadge');
+            const mobileCartCount = document.getElementById('mobileCartCount');
+            
+            console.log('Desktop cartBadge element:', cartBadge);
+            console.log('Mobile mobileCartCount element:', mobileCartCount);
+            
+            if (cartBadge) {
+                console.log('✅ cartBadge found:', cartBadge.textContent);
+            } else {
+                console.log('❌ cartBadge not found');
+            }
+            
+            if (mobileCartCount) {
+                console.log('✅ mobileCartCount found:', mobileCartCount.textContent);
+            } else {
+                console.log('❌ mobileCartCount not found');
+            }
+        }
+
+        function clearConsoleOutput() {
+            consoleOutput.textContent = 'Console cleared...\n';
+        }
+
+        function testQuantityButtons() {
+            console.log('🧪 Testing quantity buttons...');
+            console.log('Note: This test page focuses on badge updates.');
+            console.log('For quantity buttons, test on actual shop.ejs page');
+        }
+
+        // Initialize test
+        console.log('🚀 Cart Integration Test Page Loaded');
+        console.log('Please click "Mock Login" first, then test adding products to cart');
+        testCartBadgeElements();
+    </script>
+</body>
+</html>

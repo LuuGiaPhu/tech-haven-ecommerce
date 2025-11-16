@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST - Trang Đơn Giản</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .title {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .info-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .test-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        .test-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .timestamp {
+            font-size: 0.9em;
+            color: #999;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🧪 TRANG TEST ĐƠNG GIẢN</h1>
+        <p class="subtitle">Đây là trang test để kiểm tra server hoạt động</p>
+        
+        <div class="info-box">
+            <h3>📋 Thông tin test:</h3>
+            <p><strong>Server:</strong> Express.js đơn giản</p>
+            <p><strong>Port:</strong> 3001</p>
+            <p><strong>Template:</strong> HTML thuần (không dùng EJS)</p>
+            <p><strong>Mục đích:</strong> Kiểm tra caching và rendering</p>
+        </div>
+
+        <button class="test-btn" onclick="testAPI()">🔧 Test API Server</button>
+        <button class="test-btn" onclick="reloadPage()">🔄 Reload Trang</button>
+        
+        <div id="result" class="result">
+            <!-- Kết quả sẽ hiển thị ở đây -->
+        </div>
+
+        <div class="timestamp">
+            <p>⏰ Trang được tải lúc: <span id="loadTime"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Hiển thị thời gian tải trang
+        document.getElementById('loadTime').textContent = new Date().toLocaleString('vi-VN');
+
+        // Test API server
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<p>⏳ Đang test API...</p>';
+            
+            try {
+                const response = await fetch('/api/test');
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h4>✅ API Test Thành Công!</h4>
+                        <p><strong>Message:</strong> ${data.message}</p>
+                        <p><strong>Server Time:</strong> ${new Date(data.time).toLocaleString('vi-VN')}</p>
+                    `;
+                } else {
+                    throw new Error('API trả về lỗi');
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.style.background = '#f8d7da';
+                resultDiv.style.border = '1px solid #f5c6cb';
+                resultDiv.style.color = '#721c24';
+                resultDiv.innerHTML = `
+                    <h4>❌ API Test Thất Bại!</h4>
+                    <p><strong>Lỗi:</strong> ${error.message}</p>
+                `;
+            }
+        }
+
+        // Reload trang
+        function reloadPage() {
+            window.location.reload(true); // Force reload
+        }
+
+        // Log để debug
+        console.log('🧪 TEST PAGE LOADED');
+        console.log('📍 Current URL:', window.location.href);
+        console.log('⏰ Load time:', new Date().toLocaleString('vi-VN'));
+    </script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Authentication Demo</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .user-info {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border-left: 5px solid #28a745;
+            display: none;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: block;
+            border: 4px solid #667eea;
+        }
+        
+        .user-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .user-email {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .user-id {
+            font-size: 12px;
+            color: #999;
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        
+        .login-section {
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            min-width: 200px;
+        }
+        
+        .btn-google {
+            background: #4285f4;
+            color: white;
+        }
+        
+        .btn-google:hover {
+            background: #3367d6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(66, 133, 244, 0.3);
+        }
+        
+        .btn-logout {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-logout:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
+        }
+        
+        .btn-test {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-test:hover {
+            background: #138496;
+        }
+        
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .loading {
+            display: none;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .token-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: monospace;
+            font-size: 12px;
+            color: #666;
+            display: none;
+        }
+        
+        .google-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .debug-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🔥 Firebase Authentication</h1>
+        <p class="subtitle">Modern authentication với Firebase Auth SDK</p>
+        
+        <!-- Loading state -->
+        <div id="loading" class="loading">
+            <p>🔄 Đang khởi tạo Firebase...</p>
+        </div>
+        
+        <!-- Login section (shown when not authenticated) -->
+        <div id="loginSection" class="login-section" style="display: none;">
+            <h3 style="margin-bottom: 20px;">Đăng nhập để tiếp tục</h3>
+            <p style="color: #666; margin-bottom: 20px;">
+                Sử dụng Firebase Authentication với Google Sign-In
+            </p>
+            
+            <button id="googleSignIn" class="btn btn-google">
+                <svg class="google-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Đăng nhập với Google
+            </button>
+        </div>
+        
+        <!-- User info section (shown when authenticated) -->
+        <div id="userSection" class="user-info" style="display: none;">
+            <img id="userPhoto" src="" alt="User Photo" class="user-avatar" style="display: none;">
+            <div id="userName" class="user-name"></div>
+            <div id="userEmail" class="user-email"></div>
+            <div id="userUID" class="user-id"></div>
+            
+            <div style="margin-top: 20px;">
+                <button id="signOut" class="btn btn-logout">
+                    👋 Đăng xuất
+                </button>
+                <button id="testAPI" class="btn btn-test">
+                    🔍 Test API
+                </button>
+            </div>
+        </div>
+        
+        <!-- Status messages -->
+        <div id="statusMessage" style="display: none;"></div>
+        
+        <!-- Token info for debugging -->
+        <div id="tokenInfo" class="token-info" style="display: none;">
+            <strong>ID Token (for debugging):</strong><br>
+            <div id="tokenContent"></div>
+        </div>
+        
+        <!-- Debug info -->
+        <div id="debugInfo" class="debug-info">
+            <strong>Debug Info:</strong><br>
+            <div id="debugContent">Initializing...</div>
+        </div>
+        
+        <div class="footer">
+            <strong>Firebase Auth Demo</strong><br>
+            JWT Token authentication với Firebase Functions<br>
+            <small>Token tự động refresh, không cần quản lý session</small>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDpzgsxZ1Jfs5hWAfS-gDbYfgkVte_jXoA",
+            authDomain: "tech-haven-5368b.firebaseapp.com",
+            projectId: "tech-haven-5368b",
+            storageBucket: "tech-haven-5368b.firebasestorage.app",
+            messagingSenderId: "442337591630",
+            appId: "1:442337591630:web:7005525c7664f513a55e1f"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // DOM elements
+        const loading = document.getElementById('loading');
+        const loginSection = document.getElementById('loginSection');
+        const userSection = document.getElementById('userSection');
+        const statusMessage = document.getElementById('statusMessage');
+        const tokenInfo = document.getElementById('tokenInfo');
+        const debugInfo = document.getElementById('debugContent');
+
+        // Show status message
+        function showStatus(message, type = 'info') {
+            statusMessage.className = `status status-${type}`;
+            statusMessage.textContent = message;
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // Update debug info
+        function updateDebugInfo(info) {
+            debugInfo.innerHTML = info;
+        }
+
+        // Update UI based on auth state
+        function updateUI(user) {
+            loading.style.display = 'none';
+            
+            if (user) {
+                // User is signed in
+                loginSection.style.display = 'none';
+                userSection.style.display = 'block';
+                
+                // Update user info
+                document.getElementById('userName').textContent = user.displayName || 'No name';
+                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('userUID').textContent = `UID: ${user.uid}`;
+                
+                if (user.photoURL) {
+                    const photo = document.getElementById('userPhoto');
+                    photo.src = user.photoURL;
+                    photo.style.display = 'block';
+                }
+                
+                // Get and show ID token
+                user.getIdToken().then(token => {
+                    console.log('🔑 ID Token:', token.substring(0, 50) + '...');
+                    document.getElementById('tokenContent').textContent = token.substring(0, 100) + '...';
+                    tokenInfo.style.display = 'block';
+                    
+                    updateDebugInfo(`
+                        ✅ Authenticated: ${user.email}<br>
+                        🆔 UID: ${user.uid}<br>
+                        🔑 Has Token: Yes<br>
+                        📱 Provider: ${user.providerData[0]?.providerId || 'unknown'}<br>
+                        ⏰ Last Sign In: ${new Date(user.metadata.lastSignInTime).toLocaleString()}
+                    `);
+                });
+                
+                showStatus('✅ Đăng nhập thành công!', 'success');
+            } else {
+                // User is signed out
+                userSection.style.display = 'none';
+                loginSection.style.display = 'block';
+                tokenInfo.style.display = 'none';
+                
+                updateDebugInfo('❌ Not authenticated');
+                showStatus('⚠️ Chưa đăng nhập', 'warning');
+            }
+        }
+
+        // Auth state observer
+        auth.onAuthStateChanged(user => {
+            console.log('🔄 Auth state changed:', user ? user.email : 'No user');
+            updateUI(user);
+        });
+
+        // Google Sign-In
+        document.getElementById('googleSignIn').addEventListener('click', async () => {
+            try {
+                showStatus('🔄 Đang đăng nhập...', 'info');
+                
+                const provider = new firebase.auth.GoogleAuthProvider();
+                provider.addScope('email');
+                provider.addScope('profile');
+                
+                const result = await auth.signInWithPopup(provider);
+                console.log('✅ Google sign-in successful:', result.user.email);
+                
+            } catch (error) {
+                console.error('❌ Google sign-in error:', error);
+                showStatus(`❌ Lỗi đăng nhập: ${error.message}`, 'warning');
+            }
+        });
+
+        // Sign out
+        document.getElementById('signOut').addEventListener('click', async () => {
+            try {
+                await auth.signOut();
+                console.log('👋 Sign out successful');
+                showStatus('👋 Đăng xuất thành công', 'info');
+            } catch (error) {
+                console.error('❌ Sign out error:', error);
+                showStatus(`❌ Lỗi đăng xuất: ${error.message}`, 'warning');
+            }
+        });
+
+        // Test API with token
+        document.getElementById('testAPI').addEventListener('click', async () => {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    showStatus('❌ Chưa đăng nhập', 'warning');
+                    return;
+                }
+
+                showStatus('🔄 Đang test API...', 'info');
+                
+                const token = await user.getIdToken();
+                
+                const response = await fetch('/api/user', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                console.log('📡 API Response:', data);
+
+                if (data.success && data.authenticated) {
+                    showStatus(`✅ API Success: ${data.user.name}`, 'success');
+                } else {
+                    showStatus('❌ API: Not authenticated', 'warning');
+                }
+
+            } catch (error) {
+                console.error('❌ API test error:', error);
+                showStatus(`❌ API Error: ${error.message}`, 'warning');
+            }
+        });
+
+        // Initial loading
+        updateDebugInfo('🔄 Initializing Firebase...');
+        loading.style.display = 'block';
+    </script>
+</body>
+</html>

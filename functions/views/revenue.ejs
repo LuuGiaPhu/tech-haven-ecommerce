@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống Kê Doanh Thu - TECH HAVEN</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/revenue.css">
+</head>
+<body class="revenue-page">
+    <!-- Cute Loading Animation -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="cute-loader">
+            <div class="loader-heart">💖</div>
+            <div class="loader-text">Đang tải dữ liệu...</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>TECH HAVEN</h1>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="/">TRANG CHỦ</a>
+                <a href="/shop">CỬA HÀNG</a>
+                <div class="admin-dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">ADMIN <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-menu">
+                        <a href="javascript:void(0)" onclick="navigateToAdmin('/admin/input'); return false;">INPUT</a>
+                        <a href="javascript:void(0)" onclick="navigateToAdmin('/admin/edit'); return false;">EDIT</a>
+                        <a href="javascript:void(0)" onclick="navigateToAdmin('/admin/coupon'); return false;">COUPON</a>
+                        <a href="javascript:void(0)" onclick="navigateToAdmin('/admin/bill'); return false;">BILL</a>
+                        <a href="javascript:void(0)" onclick="navigateToAdmin('/admin/revenue'); return false;" class="active">REVENUE</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-icons">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="/" class="back-home">
+                    <i class="fas fa-home"></i>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="revenue-container">
+        <!-- Page Title -->
+        <div class="page-header">
+            <div class="page-title">
+                <i class="fas fa-chart-line"></i>
+                <h1>Thống Kê Doanh Thu</h1>
+            </div>
+            <div class="page-subtitle">
+                <p>📊 Theo dõi và phân tích doanh thu của bạn</p>
+            </div>
+        </div>
+
+        <!-- Time Period Selector -->
+        <div class="period-selector">
+            <button class="period-btn active" data-period="week">
+                <i class="fas fa-calendar-week"></i>
+                <span>Tuần</span>
+            </button>
+            <button class="period-btn" data-period="month">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Tháng</span>
+            </button>
+            <button class="period-btn" data-period="quarter">
+                <i class="fas fa-calendar"></i>
+                <span>Quý</span>
+            </button>
+            <button class="period-btn" data-period="year">
+                <i class="fas fa-calendar-check"></i>
+                <span>Năm</span>
+            </button>
+        </div>
+
+        <!-- Date Range Picker -->
+        <div class="date-range-picker">
+            <div class="date-input-group">
+                <label>
+                    <i class="fas fa-calendar-day"></i>
+                    Từ ngày
+                </label>
+                <input type="date" id="startDate" class="date-input">
+            </div>
+            <div class="date-input-group">
+                <label>
+                    <i class="fas fa-calendar-day"></i>
+                    Đến ngày
+                </label>
+                <input type="date" id="endDate" class="date-input">
+            </div>
+            <button class="apply-date-btn" onclick="applyDateFilter()">
+                <i class="fas fa-search"></i>
+                Áp dụng
+            </button>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card card-pink">
+                <div class="card-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="totalRevenue">0 VNĐ</h3>
+                    <p>Tổng Doanh Thu</p>
+                </div>
+                <div class="card-sparkle">✨</div>
+            </div>
+
+            <div class="summary-card card-purple">
+                <div class="card-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="totalOrders">0</h3>
+                    <p>Tổng Đơn Hàng</p>
+                </div>
+                <div class="card-sparkle">💜</div>
+            </div>
+
+            <div class="summary-card card-blue">
+                <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="avgOrderValue">0 VNĐ</h3>
+                    <p>Giá Trị TB/Đơn</p>
+                </div>
+                <div class="card-sparkle">💙</div>
+            </div>
+
+            <div class="summary-card card-gradient">
+                <div class="card-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="topProduct">---</h3>
+                    <p>Sản Phẩm Bán Chạy</p>
+                </div>
+                <div class="card-sparkle">🏆</div>
+            </div>
+
+            <div class="summary-card card-green">
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="totalUsers">0</h3>
+                    <p>Tổng Người Dùng</p>
+                </div>
+                <div class="card-sparkle">👥</div>
+            </div>
+
+            <div class="summary-card card-orange">
+                <div class="card-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="card-content">
+                    <h3 id="newUsers">0</h3>
+                    <p>Người Dùng Mới</p>
+                </div>
+                <div class="card-sparkle">🆕</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <!-- Revenue Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>
+                        <i class="fas fa-chart-area"></i>
+                        Biểu Đồ Doanh Thu
+                    </h3>
+                    <div class="chart-legend" id="revenueLegend"></div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Orders Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>
+                        <i class="fas fa-chart-bar"></i>
+                        Biểu Đồ Đơn Hàng
+                    </h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="ordersChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Statistics -->
+        <div class="product-stats-section">
+            <div class="section-header">
+                <h3>
+                    <i class="fas fa-box"></i>
+                    Thống Kê Sản Phẩm
+                </h3>
+            </div>
+            
+            <div class="stats-grid">
+                <!-- Top Products Chart -->
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h4>
+                            <i class="fas fa-star"></i>
+                            Top 5 Sản Phẩm Bán Chạy
+                        </h4>
+                    </div>
+                    <div class="chart-container-small">
+                        <canvas id="topProductsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Category Distribution -->
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h4>
+                            <i class="fas fa-pie-chart"></i>
+                            Phân Bố Theo Danh Mục
+                        </h4>
+                    </div>
+                    <div class="chart-container-small">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Table -->
+        <div class="table-section">
+            <div class="section-header">
+                <h3>
+                    <i class="fas fa-table"></i>
+                    Chi Tiết Đơn Hàng
+                </h3>
+                <button class="export-btn" onclick="exportToCSV()">
+                    <i class="fas fa-download"></i>
+                    Xuất CSV
+                </button>
+            </div>
+            
+            <div class="table-container">
+                <table class="revenue-table" id="revenueTable">
+                    <thead>
+                        <tr>
+                            <th>Mã Đơn</th>
+                            <th>Ngày</th>
+                            <th>Khách Hàng</th>
+                            <th>Sản Phẩm</th>
+                            <th>Số Lượng</th>
+                            <th>Tổng Tiền</th>
+                            <th>Trạng Thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="7" class="loading-row">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                Đang tải dữ liệu...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Cute Footer Decorations -->
+        <div class="footer-decorations">
+            <div class="decoration">💖</div>
+            <div class="decoration">⭐</div>
+            <div class="decoration">💜</div>
+            <div class="decoration">✨</div>
+            <div class="decoration">💙</div>
+        </div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDpzgsxZ1Jfs5hWAfS-gDbYfgkVte_jXoA",
+            authDomain: "tech-haven-5368b.firebaseapp.com",
+            projectId: "tech-haven-5368b",
+            storageBucket: "tech-haven-5368b.appspot.com",
+            messagingSenderId: "442337591630",
+            appId: "1:442337591630:web:5d4977cc5c3cb44b7c3b8c"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        
+        // Make auth available globally for revenue.js
+        window.firebaseAuth = auth;
+        
+        // Add debug styles for mobile dropdown
+        const style = document.createElement('style');
+        style.textContent = `
+            @media (max-width: 768px) {
+                .admin-dropdown.open .dropdown-menu {
+                    display: block !important;
+                    opacity: 1 !important;
+                    visibility: visible !important;
+                    max-height: 500px !important;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        console.log('📱 Added debug styles for mobile dropdown');
+        
+        // Check admin status on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('📊 Revenue page loaded, checking admin status...');
+            
+            // Check if user has admin token from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const tokenFromUrl = urlParams.get('token');
+            
+            // Store token if provided
+            if (tokenFromUrl) {
+                localStorage.setItem('idToken', tokenFromUrl);
+                console.log('🔑 Token saved from URL');
+            }
+            
+            // Get stored token
+            const storedToken = localStorage.getItem('idToken');
+            
+            if (!storedToken) {
+                console.log('⚠️ No token found, redirecting to home...');
+                alert('⚠️ Vui lòng đăng nhập để truy cập trang này');
+                window.location.href = '/';
+                return;
+            }
+            
+            // Check admin status from API (fresh data)
+            try {
+                console.log('🔍 Verifying admin status from server...');
+                const response = await fetch('/api/user', {
+                    headers: {
+                        'Authorization': `Bearer ${storedToken}`,
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'include'
+                });
+                
+                if (!response.ok) {
+                    console.error('❌ API verification failed:', response.status);
+                    alert('⚠️ Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+                    window.location.href = '/';
+                    return;
+                }
+                
+                const data = await response.json();
+                console.log('👤 User from API:', data.user?.name, '- Admin:', data.user?.is_admin);
+                
+                const isAdmin = data.user && (data.user.is_admin === true || data.user.isAdmin === true);
+                
+                if (!isAdmin) {
+                    console.log('⚠️ User not admin, redirecting to home...');
+                    alert('⚠️ Bạn không có quyền admin để truy cập trang này');
+                    window.location.href = '/';
+                    return;
+                }
+                
+                // Store user data with admin status for future use
+                if (data.user) {
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    window.currentUser = data.user;
+                    console.log('💾 User data saved to localStorage');
+                }
+                
+                console.log('✅ Admin access confirmed');
+                
+            } catch (error) {
+                console.error('❌ Error verifying admin:', error);
+                alert('⚠️ Không thể xác thực quyền truy cập. Vui lòng thử lại.');
+                window.location.href = '/';
+            }
+        });
+    </script>
+
+    <!-- Scripts -->
+    <script src="/js/revenue.js?v=<%= Date.now() %>"></script>
+</body>
+</html>

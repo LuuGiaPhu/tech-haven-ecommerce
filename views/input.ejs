@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>Thêm Sản Phẩm - TECH HAVEN Admin</title>
+    <!-- Google Fonts for Vietnamese Support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js"></script>
+</head>
+<body class="admin-input-page">
+    <!-- Back to Home Button -->
+    <a href="/" class="back-to-home">
+        <i class="fas fa-arrow-left"></i> Về Trang Chủ
+    </a>
+
+    <div class="admin-input-container">
+        <!-- Admin Header -->
+        <div class="admin-header">
+            <div class="header-icon">
+                <i class="fas fa-plus-circle"></i>
+            </div>
+            <h1>THÊM SẢN PHẨM MỚI</h1>
+            <p>Quản lý kho hàng TECH HAVEN - Thêm sản phẩm công nghệ mới</p>
+        </div>
+
+        <!-- Main Form Container -->
+        <div class="admin-form-container">
+            <form id="productForm" class="product-form" enctype="multipart/form-data">
+                <!-- Messages -->
+                <div id="successMessage" class="message success" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Sản phẩm đã được thêm thành công!</span>
+                </div>
+                
+                <div id="errorMessage" class="message error" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText">Có lỗi xảy ra!</span>
+                </div>
+
+                <!-- Basic Information Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-info-circle"></i> Thông Tin Cơ Bản</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tên Sản Phẩm *</label>
+                            <input type="text" id="productName" class="form-input" placeholder="VD: ASUS ROG Strix G15 Gaming Laptop" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Danh Mục *</label>
+                            <select id="productCategory" class="form-select" required>
+                                <option value="">Chọn danh mục</option>
+                                <option value="laptop">Laptop</option>
+                                <option value="pc">PC</option>
+                                <option value="gpu">Card Đồ Họa</option>
+                                <option value="cpu">Bộ Vi Xử Lý</option>
+                                <option value="ram">Bộ Nhớ RAM</option>
+                                <option value="storage">Ổ Cứng</option>
+                                <option value="motherboard">Bo Mạch Chủ</option>
+                                <option value="psu">Nguồn</option>
+                                <option value="case">Vỏ Case</option>
+                                <option value="keyboard">Bàn Phím</option>
+                                <option value="mouse">Chuột</option>
+                                <option value="headset">Tai Nghe</option>
+                                <option value="monitor">Màn Hình</option>
+                                <option value="speaker">Loa</option>
+                                <option value="webcam">Webcam</option>
+                                <option value="other">Khác</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Thương Hiệu *</label>
+                            <input type="text" id="productBrand" class="form-input" placeholder="VD: ASUS, MSI, Intel, AMD..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mã Sản Phẩm (SKU)</label>
+                            <input type="text" id="productSku" class="form-input" placeholder="VD: G513QM-HN015T">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mô Tả Chi Tiết</label>
+                        <textarea id="productDescription" class="form-textarea" placeholder="Nhập mô tả chi tiết về sản phẩm..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Pricing & Stock Section -->
+                <div class="form-section">
+                    <h3><i class="fas fa-dollar-sign"></i> Giá Cả & Tồn Kho</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Giá Bán (VNĐ) *</label>
+                            <input type="number" id="productPrice" class="form-input" placeholder="VD: 35990000" required min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Giá Cũ (để tạo nhãn giảm giá)</label>
+                            <input type="number" id="productOldPrice" class="form-input" placeholder="VD: 39990000 (để tạo nhãn giảm giá)" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Số Lượng Tồn Kho *</label>
+                            <input type="number" id="productStock" class="form-input" placeholder="VD: 50" required min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Trạng Thái *</label>
+                            <select id="productAvailability" class="form-select" required>
+                                <option value="">Chọn trạng thái</option>
+                                <option value="in-stock">Còn hàng</option>
+                                <option value="out-of-stock">Hết hàng</option>
+                                <option value="pre-order">Đặt trước</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Đánh Giá (1-5 sao)</label>
+                            <input type="number" id="productRating" class="form-input" placeholder="VD: 4.5" min="1" max="5" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label>Số Lượt Đánh Giá</label>
+                            <input type="number" id="productReviews" class="form-input" placeholder="VD: 152" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image Upload Section -->
+                <div class="form-section image-upload-section">
+                    <h3><i class="fas fa-images"></i> Hình Ảnh Sản Phẩm</h3>
+                    
+                    <div class="image-upload-area" onclick="document.getElementById('imageInput').click()">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-text">
+                            <h4>Tải lên hình ảnh sản phẩm</h4>
+                            <p>Kéo thả hoặc click để chọn ảnh (tối đa 10 ảnh, mỗi ảnh ≤ 5MB)</p>
+                        </div>
+                        <input type="file" id="imageInput" accept="image/*" multiple style="display: none;">
+                    </div>
+                    
+                    <div id="imagePreview" class="image-preview" style="display: none;"></div>
+                    
+                    <div id="uploadProgress" class="upload-progress" style="display: none;">
+                        <div id="progressFill" class="progress-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <!-- Technical Specifications Section -->
+                <div class="form-section specs-section">
+                    <h3><i class="fas fa-cogs"></i> Thông Số Kỹ Thuật</h3>
+                    
+                    <div id="specInputs" class="spec-inputs">
+                        <!-- Spec rows will be added dynamically -->
+                    </div>
+                    
+                    <button type="button" class="add-spec-btn" onclick="addSpecRow()">
+                        <i class="fas fa-plus"></i> Thêm Thông Số
+                    </button>
+                </div>
+
+                <!-- Submit Section -->
+                <div class="submit-section">
+                    <button type="submit" id="submitBtn" class="submit-btn">
+                        <i class="fas fa-save"></i> THÊM SẢN PHẨM
+                    </button>
+                    <div id="loadingSpinner" class="loading-spinner" style="display: none;"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="/js/firebase-config.js"></script>
+    <script type="module" src="/js/input-admin.js"></script>
+</body>
+</html>

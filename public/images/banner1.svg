@@ -1,0 +1,6 @@
+<!-- Placeholder for banner images -->
+<!-- You can replace these with actual product images -->
+<svg width="350" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="350" height="300" fill="rgba(255,255,255,0.1)"/>
+  <text x="175" y="150" font-family="Arial" font-size="24" fill="white" text-anchor="middle">RTX 4090</text>
+</svg>

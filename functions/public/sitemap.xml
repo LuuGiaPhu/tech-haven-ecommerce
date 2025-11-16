@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Homepage -->
+  <url>
+    <loc>https://tech-haven-5368b.web.app/</loc>
+    <lastmod>2024-10-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- Shop Page -->
+  <url>
+    <loc>https://tech-haven-5368b.web.app/shop</loc>
+    <lastmod>2024-10-26</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Product Pages -->
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/0qy8hHw2GCxEohVcoWNA</loc>
+    <lastmod>2024-10-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761463521876_0_Hiroyamasaki_a_anime_picture_size_2560x1440_of_a_handsome_men.webp?alt=media&amp;token=52f7d413-b2ee-41c4-8f01-c9b0dfaee16a</image:loc>
+      <image:title>test</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/2EoqHFjhDqMGcSFZxcPe</loc>
+    <lastmod>2024-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2Fvariants%2F1761204202974_v1_0_Hiroyamasaki_a_anime_picture_of_a_handsome_men_kissing_a_beauti.png?alt=media&amp;token=800ae653-85dd-4170-adbb-0e4944055c3f</image:loc>
+      <image:title>test 5 - Biến thể 1</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/5fWikDhXtNxoCdJnV5LW</loc>
+    <lastmod>2024-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761245424803_0_Hiroyamasaki_a_anime_picture_size_2560x1440_of_a_handsome_men.png?alt=media&amp;token=63d9cb54-79da-4a52-ac3f-bbb1c105f875</image:loc>
+      <image:title>test 6</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/8QIVKzp6R2YwBZtKpO6j</loc>
+    <lastmod>2024-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761245865096_0_Hiroyamasaki_a_anime_picture_of_a_handsome_men_kissing_a_beauti_.png?alt=media&amp;token=ce74c9fa-d3a2-45c6-9dbe-d64482c2d692</image:loc>
+      <image:title>test 9</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/AHeh2ioQVjdeYTKVwcTN</loc>
+    <lastmod>2024-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761246224068_0_Hiroyamasaki_a_picture_anime_of_two_beautiful_young_men_kissing_.png?alt=media&amp;token=47b4a37e-6c00-4c54-94d3-c8c55948852d</image:loc>
+      <image:title>test 12</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/Agpo9u2TKN2MH6mGkqLK</loc>
+    <lastmod>2024-10-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761464895236_0_YuuTa_an_anime_picture_of_a_fairy_handsome_man_kissing_a_handso.webp?alt=media&amp;token=e0c624a2-2398-4c47-a63c-534b6d125fd5</image:loc>
+      <image:title>test 14</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/CytfpJWqiKNkoJueCenN</loc>
+    <lastmod>2024-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1758009362989_0_boy%20love.png?alt=media&amp;token=acd2de3f-03a9-4f17-bb7b-e9760bacd849</image:loc>
+      <image:title>phu</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/EAk03HT7tRNCJbQ5GiL9</loc>
+    <lastmod>2024-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761245837824_0_phu_a_anime_picture_of_a_handsome_men_hugging_a_beautiful_men_.png?alt=media&amp;token=2cb143a0-5e6a-458e-a924-0b51788441b6</image:loc>
+      <image:title>test 8</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/JFEwGoHD5tzwb4ESIgfV</loc>
+    <lastmod>2024-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761204188336_0_boy%20love.png?alt=media&amp;token=fa47a381-0c6a-43dd-a42e-a805e08ac4fd</image:loc>
+      <image:title>test 5</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761204190322_1_OIG3.99lgWyofqD.jpeg?alt=media&amp;token=35234769-8443-417b-bd5d-a6257c6aeba3</image:loc>
+      <image:title>test 5</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761204191121_2_OIG3.SghoSFHnG0yTmSc6.jpeg?alt=media&amp;token=e7430ebe-418b-4761-a926-9bb21edeea4d</image:loc>
+      <image:title>test 5</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/K8lbqOj5YyhYOBc5A52A</loc>
+    <lastmod>2024-10-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1759393997406_0_OIG3.SghoSFHnG0yTmSc6.jpeg?alt=media&amp;token=934c46f8-d610-4c48-87aa-7b3902c4516b</image:loc>
+      <image:title>test 4</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/Q819ZX4epKg3EyEQoRd9</loc>
+    <lastmod>2024-10-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/QRUSiDUJnWoPZUlhnvvm</loc>
+    <lastmod>2024-10-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761245947146_0_Hiroyamasaki_a_picture_anime_of_two_beautiful_young_men_kissing_.png?alt=media&amp;token=dc807bef-9a75-475f-bdbc-2c60dc035b79</image:loc>
+      <image:title>test 10</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/UUInlLhupbVzM0IWVeBq</loc>
+    <lastmod>2024-10-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1759393997406_0_OIG3.SghoSFHnG0yTmSc6.jpeg?alt=media&amp;token=934c46f8-d610-4c48-87aa-7b3902c4516b</image:loc>
+      <image:title>test 4 - Biến thể 1</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/X6Fpd47NROJ5qbD4005n</loc>
+    <lastmod>2024-10-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/bf65raBsGWxDIQ6opMN3</loc>
+    <lastmod>2024-10-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761464172527_0_Hiroyamasaki_a_anime_picture_of_a_handsome_man_is_lying_next_to.webp?alt=media&amp;token=04ebd80a-c100-4c95-8e9c-8f73b91594c0</image:loc>
+      <image:title>test 13</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/jOHAveOGM2nKt94acPLg</loc>
+    <lastmod>2024-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761204013731_0_boy%20love.png?alt=media&amp;token=d63aefc1-f075-4a36-a47b-7719a2f7a841</image:loc>
+      <image:title>test 5</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761204017079_1_OIG3.99lgWyofqD.jpeg?alt=media&amp;token=b43f28af-9639-4983-a50a-3310667e12e6</image:loc>
+      <image:title>test 5</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761204018527_2_OIG3.SghoSFHnG0yTmSc6.jpeg?alt=media&amp;token=4cc8287b-ad93-444e-9d0c-914a4ee12752</image:loc>
+      <image:title>test 5</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/jQBa5YMsH8tetiwiSj1s</loc>
+    <lastmod>2024-09-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1757877506563_0_boy%20love.png?alt=media&amp;token=0a14c95b-7682-4cdc-938e-c9e860be1ab1</image:loc>
+      <image:title>test 1</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/npVItq219hqk5Vc6K80B</loc>
+    <lastmod>2024-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/rHLgTxjz2LbdiQt9hmRY</loc>
+    <lastmod>2024-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761245424803_0_Hiroyamasaki_a_anime_picture_size_2560x1440_of_a_handsome_men.png?alt=media&amp;token=63d9cb54-79da-4a52-ac3f-bbb1c105f875</image:loc>
+      <image:title>test 6 - Biến thể 1</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/vt8TLeaFWq6HAD7ynkaq</loc>
+    <lastmod>2024-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1761246094268_0_phu_a_anime_picture_of_a_handsome_men_hugging_a_beautiful_men.png?alt=media&amp;token=f0f1be16-a038-407f-8242-d393663e5676</image:loc>
+      <image:title>test 11</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/x4Z8MJZhTEJ7Mk05e0AO</loc>
+    <lastmod>2024-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1759393361947_0_OIG3.SghoSFHnG0yTmSc6.jpeg?alt=media&amp;token=a5db24db-ec4d-47ae-a251-5f34cb86d67a</image:loc>
+      <image:title>test 4</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/product/zzJEimIFLT4XPnVUrhaC</loc>
+    <lastmod>2024-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://firebasestorage.googleapis.com/v0/b/tech-haven-5368b.firebasestorage.app/o/products%2F1757910674462_0_OIG3.99lgWyofqD.jpeg?alt=media&amp;token=f3142f71-42d9-4e35-88c3-de7d2a50d2bc</image:loc>
+      <image:title>phu2</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/shop?category=laptop</loc>
+    <lastmod>2024-10-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/shop?category=pc</loc>
+    <lastmod>2024-10-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/shop?category=components</loc>
+    <lastmod>2024-10-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tech-haven-5368b.web.app/shop?category=accessories</loc>
+    <lastmod>2024-10-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>

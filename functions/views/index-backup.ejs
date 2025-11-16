@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>TECH HAVEN - PC Tùy Chỉnh &amp; Linh Kiện Cao Cấp</title>
+    <!-- Google Fonts for Vietnamese Support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/user-profile.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Server-side Google OAuth - Đơn giản và an toàn -->
+    <script>
+        console.log('🔐 Sử dụng server-side Google OAuth với Passport.js');
+        
+        // Debug: Kiểm tra user data từ server
+        console.log('🔍 Checking user data from server...');
+        console.log('🔍 typeof user:', typeof user);
+        <% if (user) { %>
+        console.log('✅ SERVER: User data exists!');
+        console.log('✅ SERVER: User name:', '<%= user.name %>');
+        console.log('✅ SERVER: User email:', '<%= user.email %>');
+        console.log('✅ SERVER: User ID:', '<%= user.id %>');
+        console.log('✅ SERVER: User photo:', '<%= user.photo || "No photo" %>');
+        <% } else { %>
+        console.log('❌ SERVER: No user data received');
+        <% } %>
+        
+        // Hàm xử lý click vào user icon
+        function handleUserIconClick() {
+            console.log('👤 User icon clicked!');
+            
+            if (window.currentUser) {
+                console.log('✅ User is logged in, opening profile panel');
+                openUserProfile();
+            } else {
+                console.log('❌ User not logged in, opening login modal');
+                openLoginModal();
+            }
+        }
+        
+        // Hàm đăng nhập Google (redirect to server)
+        window.handleGoogleLogin = function() {
+            console.log('🚀 Chuyển hướng đến Google OAuth...');
+            window.location.href = '/auth/google';
+        };
+        
+        // Hàm đăng xuất
+        window.handleLogout = function() {
+            console.log('👋 Đăng xuất...');
+            window.location.href = '/logout';
+        };
+        
+        // Initialize user data from DOM
+        window.currentUser = null;
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🌐 DOM loaded, checking user data...');
+            
+            const userDataElement = document.getElementById('user-data');
+            if (userDataElement && userDataElement.textContent) {
+                try {
+                    window.currentUser = JSON.parse(userDataElement.textContent);
+                    console.log('✅ FRONTEND: Người dùng đã đăng nhập:', window.currentUser);
+                    console.log('✅ FRONTEND: User name:', window.currentUser.name);
+                    console.log('✅ FRONTEND: User email:', window.currentUser.email);
+                    
+                    // Gọi API để kiểm tra thêm
+                    checkUserStatus();
+                } catch (e) {
+                    console.log('❌ FRONTEND: Error parsing user data:', e);
+                    console.log('❌ FRONTEND: Raw user data:', userDataElement.textContent);
+                }
+            } else {
+                console.log('❌ FRONTEND: No user data element found');
+                
+                // Kiểm tra trực tiếp từ server
+                checkUserStatus();
+            }
+        });
+        
+        // Kiểm tra trạng thái user từ API
+        async function checkUserStatus() {
+            try {
+                console.log('🔍 Checking user status from API...');
+                const response = await fetch('/api/user');
+                const data = await response.json();
+                
+                console.log('📡 API Response:', data);
+                
+                if (data.authenticated && data.user) {
+                    console.log('✅ API: User is authenticated!');
+                    console.log('✅ API: User data:', data.user);
+                    window.currentUser = data.user;
+                    updateUIBasedOnAuthStatus();
+                } else {
+                    console.log('❌ API: User not authenticated');
+                }
+            } catch (error) {
+                console.error('❌ Error checking user status:', error);
+            }
+        }
+    </script>
+    
+    <!-- Hidden user data (improved debugging) -->
+    <script type="application/json" id="user-data"><%- 
+        JSON.stringify(typeof user !== 'undefined' && user ? {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            photo: user.photo || '',
+            provider: user.provider,
+            role: user.role,
+            status: user.status
+        } : null)
+    %></script>
+    
+    <!-- Main JavaScript -->
+    <script>
+        // Lấy user data từ server
+        const userDataElement = document.getElementById('user-data');
+        const userData = userDataElement ? JSON.parse(userDataElement.textContent) : null;
+        window.currentUser = userData;
+        
+        if (window.currentUser) {
+            console.log('✅ Người dùng đã đăng nhập:', window.currentUser);
+        } else {
+            console.log('❌ Chưa đăng nhập');
+        }
+        
+        // Cập nhật giao diện dựa trên trạng thái đăng nhập
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUIBasedOnAuthStatus();
+        });
+        
+        async function updateUIBasedOnAuthStatus() {
+            console.log('🔄 Updating UI based on auth status...');
+            
+            try {
+                // Gọi API để lấy user icon HTML
+                const iconResponse = await fetch('/api/user-icon');
+                const iconData = await iconResponse.json();
+                
+                if (iconData.success) {
+                    const userIconContainer = document.getElementById('userIconContainer');
+                    if (userIconContainer) {
+                        userIconContainer.innerHTML = iconData.html;
+                    }
+                }
+                
+                // Update user profile panel
+                updateUserProfilePanel();
+                
+            } catch (error) {
+                console.error('❌ Error updating UI:', error);
+            }
+        }
+        
+        // Function để mở user profile panel
+        function openUserProfile() {
+            console.log('👤 Opening user profile panel');
+            const userProfilePanel = document.getElementById('userProfilePanel');
+            if (userProfilePanel) {
+                userProfilePanel.classList.add('active');
+                console.log('✅ User profile panel opened');
+            } else {
+                console.log('❌ User profile panel not found');
+            }
+        }
+        
+        // Function để đóng user profile panel
+        function closeUserProfile() {
+            console.log('❌ Closing user profile panel');
+            const userProfilePanel = document.getElementById('userProfilePanel');
+            if (userProfilePanel) {
+                userProfilePanel.classList.remove('active');
+                console.log('✅ User profile panel closed');
+            }
+        }
+        
+        // Function để cập nhật thông tin trong user profile panel
+        function updateUserProfilePanel() {
+            if (!window.currentUser) return;
+
+            const userAvatar = document.querySelector('.user-avatar img');
+            const userNameElement = document.querySelector('.user-info h3');
+            const userEmailElement = document.querySelector('.user-info p');
+
+            if (userAvatar && window.currentUser.photo) {
+                userAvatar.src = window.currentUser.photo;
+                userAvatar.alt = window.currentUser.name;
+            }
+
+            if (userNameElement) {
+                userNameElement.textContent = window.currentUser.name;
+            }
+
+            if (userEmailElement) {
+                userEmailElement.textContent = window.currentUser.email;
+            }
+
+            // Cập nhật ngày tham gia
+            const joinDateElement = document.getElementById('joinDate');
+            if (joinDateElement) {
+                const today = new Date();
+                joinDateElement.textContent = today.toLocaleDateString('vi-VN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+        }
+        
+        // Các function cho user profile management
+        function editUserProfile() {
+            console.log('✏️ Edit user profile clicked');
+            alert('Chức năng chỉnh sửa hồ sơ đang được phát triển!');
+        }
+        
+        function viewOrderHistory() {
+            console.log('📋 View order history clicked');
+            alert('Chức năng xem lịch sử đơn hàng đang được phát triển!');
+        }
+        
+        async function showUserMenu() {
+            try {
+                // Gọi API để lấy user menu HTML
+                const menuResponse = await fetch('/api/user-menu');
+                const menuData = await menuResponse.json();
+                
+                if (menuData.success && menuData.html) {
+                    // Remove existing dropdown
+                    const existing = document.getElementById('userDropdown');
+                    if (existing) existing.remove();
+                    
+                    // Add new dropdown
+                    document.body.insertAdjacentHTML('beforeend', menuData.html);
+                    
+                    // Close on click outside
+                    setTimeout(() => {
+                        document.addEventListener('click', function closeDropdown(e) {
+                            if (!e.target.closest('#userDropdown')) {
+                                const dropdown = document.getElementById('userDropdown');
+                                if (dropdown) dropdown.remove();
+                                document.removeEventListener('click', closeDropdown);
+                            }
+                        });
+                    }, 100);
+                }
+            } catch (error) {
+                console.error('❌ Error loading user menu:', error);
+            }
+        }
+        
+        // Wrapper function for login modal (compatibility with script.js)
+        function openModal() {
+            if (typeof openLoginModal === 'function') {
+                openLoginModal();
+            } else {
+                console.error('❌ openLoginModal function not found');
+                alert('Chức năng đăng nhập đang được tải...');
+            }
+        }
+    </script>
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js"></script>
+</head>
+<body class="index-page">
+    <!-- Cute Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-container">
+            <!-- Cute Robot Mascot -->
+            <div class="cute-mascot">
+                <div class="robot-head">
+                    <div class="robot-eyes">
+                        <div class="eye left-eye">
+                            <div class="eye-pupil"></div>
+                        </div>
+                        <div class="eye right-eye">
+                            <div class="eye-pupil"></div>
+                        </div>
+                    </div>
+                    <div class="robot-mouth"></div>
+                    <div class="robot-antennas">
+                        <div class="antenna antenna-1">
+                            <div class="antenna-tip"></div>
+                        </div>
+                        <div class="antenna antenna-2">
+                            <div class="antenna-tip"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="robot-body">
+                    <div class="robot-screen">
+                        <div class="screen-line"></div>
+                        <div class="screen-line"></div>
+                        <div class="screen-line"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Brand Text -->
+            <div class="brand-section">
+                <h1 class="cute-title">TECH HAVEN</h1>
+                <p class="cute-subtitle">🎮 Đang chuẩn bị công nghệ tuyệt vời... 🚀</p>
+            </div>
+            
+            <!-- Cute Progress Bar -->
+            <div class="cute-progress">
+                <div class="progress-wrapper">
+                    <div class="cute-progress-bar">
+                        <div class="progress-fill" id="progressFill">
+                            <div class="progress-sparkle"></div>
+                        </div>
+                    </div>
+                    <div class="progress-percentage" id="progressPercentage">0%</div>
+                </div>
+                <div class="cute-message" id="progressText">🤖 Robot đang khởi động...</div>
+            </div>
+            
+            <!-- Floating Hearts & Stars -->
+            <div class="cute-decorations">
+                <div class="decoration heart">💖</div>
+                <div class="decoration star">⭐</div>
+                <div class="decoration heart">💜</div>
+                <div class="decoration star">✨</div>
+                <div class="decoration heart">💙</div>
+                <div class="decoration rocket">🚀</div>
+                <div class="decoration gaming">🎮</div>
+                <div class="decoration tech">💻</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>TECH HAVEN</h1>
+            </div>
+            
+            <!-- Mobile Menu Toggle -->
+            <div class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="/">TRANG CHỦ</a>
+                <a href="/shop">CỬA HÀNG</a>
+                <div class="admin-dropdown">
+                    <a href="#" class="dropdown-toggle">ADMIN <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-menu">
+                        <a href="/admin/input">INPUT</a>
+                        <a href="/admin/edit">EDIT</a>
+                    </div>
+                </div>
+                <a href="/laptops">LAPTOP</a>
+                <a href="/components">LINH KIỆN</a>
+                <a href="/peripherals">PHỤ KIỆN</a>
+                <a href="/build-pc" class="build-btn">XÂY DỰNG PC</a>
+                <div class="mobile-nav-icons">
+                    <a href="#" onclick="toggleSearch()"><i class="fas fa-search"></i> Tìm kiếm</a>
+                    <a href="#" onclick="toggleCart()"><i class="fas fa-shopping-cart"></i> Giỏ hàng (<span id="cartCount">0</span>)</a>
+                    <a href="#" onclick="console.log('Mobile user link clicked!'); openLoginModal();"><i class="fas fa-user"></i> Tài khoản</a>
+                    <a href="/shop"><i class="fas fa-store"></i> Cửa Hàng</a>
+                </div>
+            </div>
+            <div class="nav-icons">
+                <i class="fas fa-search" onclick="toggleSearch()"></i>
+                <div class="cart-icon-wrapper" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </div>
+                <!-- User icon - sẽ được cập nhật bằng JavaScript dựa vào trạng thái đăng nhập -->
+                <div id="userIconContainer" class="user-icon-container">
+                    <i class="fas fa-user" id="defaultUserIcon" onclick="handleUserIconClick();" style="cursor: pointer;"></i>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Banner Carousel -->
+    <section class="banner-section">
+        <div class="banner-container">
+            <div class="banner-slides">
+                <!-- Slide 1 -->
+                <div class="banner-slide active" data-slide="0">
+                    <div class="banner-bg bg-gradient-1"></div>
+                    <div class="banner-content">
+                        <div class="banner-left">
+                            <h1 class="banner-title">RTX 4090 SERIES MỚI</h1>
+                            <p class="banner-subtitle">Trải nghiệm hiệu suất gaming đỉnh cao với công nghệ đồ họa tiên tiến nhất</p>
+                            <button class="banner-button">MUA RTX SERIES</button>
+                        </div>
+                        <div class="banner-right">
+                            <div class="banner-image-container">
+                                <img src="/images/banner-rtx.svg" alt="RTX 4090" class="banner-image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="banner-slide" data-slide="1">
+                    <div class="banner-bg bg-gradient-2"></div>
+                    <div class="banner-content">
+                        <div class="banner-left">
+                            <h1 class="banner-title">XÂY DỰNG GAMING TÙY CHỈNH</h1>
+                            <p class="banner-subtitle">Dịch vụ lắp ráp PC chuyên nghiệp với linh kiện cao cấp và lắp ráp chuyên gia</p>
+                            <button class="banner-button">XÂY DỰNG NGAY</button>
+                        </div>
+                        <div class="banner-right">
+                            <div class="banner-image-container">
+                                <img src="/images/banner-pc.svg" alt="Gaming Build" class="banner-image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="banner-slide" data-slide="2">
+                    <div class="banner-bg bg-gradient-3"></div>
+                    <div class="banner-content">
+                        <div class="banner-left">
+                            <h1 class="banner-title">SIÊU SALE CUỐI NĂM</h1>
+                            <p class="banner-subtitle">Giảm giá lên đến 50% cho các phụ kiện gaming và linh kiện cao cấp được chọn lọc</p>
+                            <button class="banner-button">MUA NGAY</button>
+                        </div>
+                        <div class="banner-right">
+                            <div class="banner-image-container">
+                                <img src="/images/banner-sale.svg" alt="Holiday Sale" class="banner-image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <button class="banner-nav banner-prev" aria-label="Previous slide">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="banner-nav banner-next" aria-label="Next slide">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <!-- Indicators -->
+            <div class="banner-indicators">
+                <button class="banner-dot active" data-slide="0"></button>
+                <button class="banner-dot" data-slide="1"></button>
+                <button class="banner-dot" data-slide="2"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h2>GIẢI PHÓNG SỨC MẠNH CỦA BẠN.</h2>
+                <p>PC Tùy Chỉnh & Linh Kiện Cao Cấp</p>
+                <button class="shop-btn" onclick="window.location.href='/shop'">MUA NGAY</button>
+            </div>
+            <div class="hero-image">
+                <img src="/images/pc-hero.png" alt="Gaming PC">
+            </div>
+        </div>
+    </section>
+
+    <!-- Sản Phẩm Mới -->
+    <section class="new-products">
+        <div class="section-header">
+            <h3>🆕 SẢN PHẨM MỚI</h3>
+            <div class="nav-arrows">
+                <button class="nav-arrow prev" data-section="new-products">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-arrow next" data-section="new-products">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="products-container" id="new-products-container">
+            <div class="product-card" onclick="goToProductDetail(6)">
+                <div class="product-image">
+                    <i class="fas fa-microchip" style="font-size: 3rem; color: #a855f7;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>Intel Core i9-14900K</h4>
+                    <div class="product-price">
+                        <span>15.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('Intel Core i9-14900K', '15.990.000 VNĐ', '6')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card" onclick="goToProductDetail(10)">
+                <div class="product-image">
+                    <i class="fas fa-memory" style="font-size: 3rem; color: #ec4899;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>ASUS ROG Strix RTX 4080</h4>
+                    <div class="product-price">
+                        <span>29.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('ASUS ROG Strix RTX 4080', '29.990.000 VNĐ', '10')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card" onclick="goToProductDetail(17)">
+                <div class="product-image">
+                    <i class="fas fa-hdd" style="font-size: 3rem; color: #10b981;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <h4>Samsung 980 PRO 2TB NVMe</h4>
+                    <div class="product-price">
+                        <span>6.490.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('Samsung 980 PRO 2TB NVMe', '6.490.000 VNĐ', '17')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card" onclick="goToProductDetail(14)">
+                <div class="product-image">
+                    <i class="fas fa-memory" style="font-size: 3rem; color: #f59e0b;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>Corsair Dominator 32GB DDR5</h4>
+                    <div class="product-price">
+                        <span>8.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('Corsair Dominator 32GB DDR5', '8.990.000 VNĐ', '14')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bán Chạy Nhất -->
+    <section class="best-sellers">
+        <div class="section-header">
+            <h3>🏆 BÁN CHẠY NHẤT</h3>
+            <div class="nav-arrows">
+                <button class="nav-arrow prev" data-section="best-sellers">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-arrow next" data-section="best-sellers">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="products-container" id="best-sellers-container">
+            <div class="product-card" onclick="goToProductDetail(1)">
+                <div class="product-image">
+                    <i class="fas fa-laptop" style="font-size: 3rem; color: #3b82f6;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>ASUS ROG Strix G15 Gaming</h4>
+                    <div class="product-price">
+                        <span>35.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('ASUS ROG Strix G15 Gaming', '35.990.000 VNĐ', '1')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-keyboard" style="font-size: 3rem; color: #8b5cf6;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>Razer Huntsman V3 Pro</h4>
+                    <div class="product-price">
+                        <span>4.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('Razer Huntsman V3 Pro', '4.990.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-mouse" style="font-size: 3rem; color: #ef4444;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <h4>Logitech G Pro X Superlight</h4>
+                    <div class="product-price">
+                        <span>3.290.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('Logitech G Pro X Superlight', '3.290.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-headset" style="font-size: 3rem; color: #f59e0b;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>SteelSeries Arctis 7P+</h4>
+                    <div class="product-price">
+                        <span>4.590.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('SteelSeries Arctis 7P+', '4.590.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Laptop Gaming -->
+    <section class="laptops-section">
+        <div class="section-header">
+            <h3>💻 LAPTOP GAMING</h3>
+            <div class="nav-arrows">
+                <button class="nav-arrow prev" data-section="laptops">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-arrow next" data-section="laptops">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="products-container" id="laptops-container">
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-laptop" style="font-size: 3rem; color: #dc2626;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>MSI Katana 17 B13V</h4>
+                    <div class="product-price">
+                        <span>28.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('MSI Katana 17 B13V', '28.990.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-laptop" style="font-size: 3rem; color: #059669;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <h4>Acer Predator Helios 300</h4>
+                    <div class="product-price">
+                        <span>32.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('Acer Predator Helios 300', '32.990.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-laptop" style="font-size: 3rem; color: #7c3aed;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>Alienware m15 R7</h4>
+                    <div class="product-price">
+                        <span>45.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('Alienware m15 R7', '45.990.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-laptop" style="font-size: 3rem; color: #0891b2;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>HP Omen 16-k0000</h4>
+                    <div class="product-price">
+                        <span>26.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('HP Omen 16-k0000', '26.990.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Màn Hình Gaming -->
+    <section class="monitors-section">
+        <div class="section-header">
+            <h3>🖥️ MÀN HÌNH GAMING</h3>
+            <div class="nav-arrows">
+                <button class="nav-arrow prev" data-section="monitors">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-arrow next" data-section="monitors">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="products-container" id="monitors-container">
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-desktop" style="font-size: 3rem; color: #f59e0b;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>ASUS TUF VG27AQ 27" 144Hz</h4>
+                    <div class="product-price">
+                        <span>7.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('ASUS TUF VG27AQ 27inch 144Hz', '7.990.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-desktop" style="font-size: 3rem; color: #ef4444;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <h4>MSI Optix G32CQ4 32" Curved</h4>
+                    <div class="product-price">
+                        <span>9.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('MSI Optix G32CQ4 32inch Curved', '9.990.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-desktop" style="font-size: 3rem; color: #8b5cf6;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>LG UltraGear 34GP83A-B</h4>
+                    <div class="product-price">
+                        <span>18.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('LG UltraGear 34GP83A-B', '18.990.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-desktop" style="font-size: 3rem; color: #059669;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <h4>Acer Predator X34 GS</h4>
+                    <div class="product-price">
+                        <span>22.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('Acer Predator X34 GS', '22.990.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ổ Cứng & Lưu Trữ -->
+    <section class="storage-section">
+        <div class="section-header">
+            <h3>💾 Ổ CỨNG & LUU TRỮ</h3>
+            <div class="nav-arrows">
+                <button class="nav-arrow prev" data-section="storage">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-arrow next" data-section="storage">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="products-container" id="storage-container">
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-hdd" style="font-size: 3rem; color: #3b82f6;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>WD Black SN850X 1TB NVMe</h4>
+                    <div class="product-price">
+                        <span>3.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('WD Black SN850X 1TB NVMe', '3.990.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-save" style="font-size: 3rem; color: #dc2626;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <h4>Seagate FireCuda 530 2TB</h4>
+                    <div class="product-price">
+                        <span>7.490.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('Seagate FireCuda 530 2TB', '7.490.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-database" style="font-size: 3rem; color: #059669;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>Crucial MX4 4TB SSD</h4>
+                    <div class="product-price">
+                        <span>12.990.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('Crucial MX4 4TB SSD', '12.990.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <i class="fas fa-server" style="font-size: 3rem; color: #7c3aed;"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <h4>Kingston Fury Renegade 1TB</h4>
+                    <div class="product-price">
+                        <span>4.290.000 VNĐ</span>
+                        <button class="add-to-cart" onclick="addToCart('Kingston Fury Renegade 1TB', '4.290.000 VNĐ')">THÊM VÀO GIỎ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Build Your Dream PC -->
+    <section class="build-section">
+        <h3>🔧 XÂY DỰNG PC MƠ ƯỚC CỦA BẠN</h3>
+        <div class="build-options">
+            <div class="build-option" data-component="cpu">
+                <div class="build-icon">
+                    <i class="fas fa-microchip"></i>
+                    <span>CPU</span>
+                </div>
+            </div>
+            <div class="build-option" data-component="gpu">
+                <div class="build-icon">
+                    <i class="fas fa-memory"></i>
+                    <span>GPU</span>
+                </div>
+            </div>
+            <div class="build-option" data-component="ram">
+                <div class="build-icon">
+                    <i class="fas fa-memory"></i>
+                    <span>RAM</span>
+                </div>
+            </div>
+            <div class="build-option" data-component="storage">
+                <div class="build-icon">
+                    <i class="fas fa-hdd"></i>
+                    <span>Ổ CỨNG</span>
+                </div>
+            </div>
+            <div class="build-option" data-component="motherboard">
+                <div class="build-icon">
+                    <i class="fas fa-th-large"></i>
+                    <span>MAINBOARD</span>
+                </div>
+            </div>
+            <div class="build-option" data-component="psu">
+                <div class="build-icon">
+                    <i class="fas fa-plug"></i>
+                    <span>NGUỒN</span>
+                </div>
+            </div>
+        </div>
+        <button class="build-complete-btn" onclick="proceedToBuild()">BẮT ĐẦU XÂY DỰNG PC</button>
+    </section>
+
+    <!-- Mua Nhanh Không Cần Đăng Ký -->
+    <section class="quick-purchase">
+        <div class="quick-purchase-content">
+            <h3>🛒 MUA HÀNG NHANH CHÓNG</h3>
+            <div class="purchase-benefits">
+                <div class="benefit-item">
+                    <i class="fas fa-shipping-fast"></i>
+                    <h4>Không Cần Đăng Ký</h4>
+                    <p>Mua hàng ngay lập tức mà không cần tạo tài khoản</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-user-plus"></i>
+                    <h4>Tự Động Tạo Tài Khoản</h4>
+                    <p>Hệ thống sẽ tự động tạo tài khoản cho bạn sau khi mua hàng</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-history"></i>
+                    <h4>Theo Dõi Đơn Hàng</h4>
+                    <p>Xem lại lịch sử mua hàng khi đăng nhập lần sau</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-credit-card"></i>
+                    <h4>Thanh Toán An Toàn</h4>
+                    <p>Nhiều phương thức thanh toán bảo mật</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shopping Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Giỏ Hàng</h3>
+            <button class="close-cart" onclick="toggleCart()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart" style="font-size: 3rem; color: #ccc;"></i>
+                <p>Giỏ hàng của bạn đang trống</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>Tổng cộng: <span id="cartTotal">0 VNĐ</span></strong>
+            </div>
+            <button class="checkout-btn" onclick="proceedToCheckout()" id="checkoutBtn" disabled>
+                <i class="fas fa-credit-card"></i> THANH TOÁN
+            </button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-credit-card"></i> Thanh Toán Đơn Hàng</h3>
+                <button class="close-modal" onclick="closeCheckoutModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="checkout-form">
+                    <div class="form-section">
+                        <h4><i class="fas fa-user"></i> Thông Tin Khách Hàng</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Họ và tên *</label>
+                                <input type="text" id="customerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Số điện thoại *</label>
+                                <input type="tel" id="customerPhone" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="customerEmail" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-map-marker-alt"></i> Địa Chỉ Giao Hàng</h4>
+                        <div class="form-group">
+                            <label>Địa chỉ chi tiết *</label>
+                            <textarea id="shippingAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Thành phố *</label>
+                                <select id="shippingCity" required>
+                                    <option value="">Chọn thành phố</option>
+                                    <option value="hanoi">Hà Nội</option>
+                                    <option value="hcm">TP. Hồ Chí Minh</option>
+                                    <option value="danang">Đà Nẵng</option>
+                                    <option value="haiphong">Hải Phòng</option>
+                                    <option value="cantho">Cần Thơ</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Quận/Huyện *</label>
+                                <input type="text" id="shippingDistrict" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4><i class="fas fa-credit-card"></i> Phương Thức Thanh Toán</h4>
+                        <div class="payment-methods">
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="cod" checked>
+                                <span class="payment-icon"><i class="fas fa-money-bill-wave"></i></span>
+                                <span>Thanh toán khi nhận hàng (COD)</span>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="banking">
+                                <span class="payment-icon"><i class="fas fa-university"></i></span>
+                                <span>Chuyển khoản ngân hàng</span>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="momo">
+                                <span class="payment-icon"><i class="fas fa-mobile-alt"></i></span>
+                                <span>Ví MoMo</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="order-summary">
+                    <h4><i class="fas fa-receipt"></i> Tóm Tắt Đơn Hàng</h4>
+                    <div class="order-items" id="orderSummaryItems"></div>
+                    <div class="order-totals">
+                        <div class="total-line">
+                            <span>Tạm tính:</span>
+                            <span id="subtotalAmount">0 VNĐ</span>
+                        </div>
+                        <div class="total-line">
+                            <span>Phí vận chuyển:</span>
+                            <span>50.000 VNĐ</span>
+                        </div>
+                        <div class="total-line total">
+                            <span>Tổng cộng:</span>
+                            <span id="finalTotal">0 VNĐ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeCheckoutModal()">Hủy</button>
+                <button class="btn-primary" onclick="completeOrder()">Hoàn Tất Đơn Hàng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>VỀ CHÚNG TÔI</h4>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Tuyển dụng</a></li>
+                    <li><a href="#">Tin tức</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>HỖ TRỢ KHÁCH HÀNG</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách bảo hành</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>CHÍNH SÁCH</h4>
+                <ul>
+                    <li><a href="#">Chính sách bảo mật</a></li>
+                    <li><a href="#">Điều khoản sử dụng</a></li>
+                    <li><a href="#">Chính sách vận chuyển</a></li>
+                    <li><a href="#">Chính sách thanh toán</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>TÀI KHOẢN CỦA TÔI</h4>
+                <ul>
+                    <li><a href="#">Đăng nhập</a></li>
+                    <li><a href="#">Đăng ký</a></li>
+                    <li><a href="#">Theo dõi đơn hàng</a></li>
+                    <li><a href="#">Lịch sử mua hàng</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>THEO DÕI CHÚNG TÔI</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="contact-info">
+                    <p><i class="fas fa-phone"></i> Hotline: 1800-1234</p>
+                    <p><i class="fas fa-envelope"></i> info@techhaven.vn</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 TECH HAVEN. Tất cả quyền được bảo lưu</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal - Hiển thị khi chưa đăng nhập -->
+    <% if (!user) { %>
+    <div class="login-modal-overlay" id="loginModal">
+        <div class="login-modal">
+            <div class="login-modal-header">
+                <h3 id="modalTitle">Đăng Nhập</h3>
+                <button class="close-login-modal" onclick="closeLoginModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="login-modal-content">
+                <!-- Login Form -->
+                <div class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="Nhập email của bạn" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Mật khẩu</label>
+                        <input type="password" id="loginPassword" placeholder="Nhập mật khẩu" required>
+                    </div>
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="rememberMe">
+                            <span>Ghi nhớ đăng nhập</span>
+                        </label>
+                        <a href="#" class="forgot-password">Quên mật khẩu?</a>
+                    </div>
+                    <button class="login-btn" onclick="handleLogin()">
+                        <i class="fas fa-sign-in-alt"></i> Đăng Nhập
+                    </button>
+                </div>
+
+                <!-- Register Form -->
+                <div class="register-form" id="registerForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="registerName">Họ và tên</label>
+                        <input type="text" id="registerName" placeholder="Nhập họ và tên" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" placeholder="Nhập email của bạn" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Mật khẩu</label>
+                        <input type="password" id="registerPassword" placeholder="Nhập mật khẩu" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Xác nhận mật khẩu</label>
+                        <input type="password" id="confirmPassword" placeholder="Nhập lại mật khẩu" required>
+                    </div>
+                    <div class="form-options">
+                        <label class="agree-terms">
+                            <input type="checkbox" id="agreeTerms" required>
+                            <span>Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a></span>
+                        </label>
+                    </div>
+                    <button class="register-btn" onclick="handleRegister()">
+                        <i class="fas fa-user-plus"></i> Đăng Ký
+                    </button>
+                </div>
+
+                <!-- Social Login -->
+                <div class="social-login">
+                    <div class="divider">
+                        <span>hoặc</span>
+                    </div>
+                    <a href="/auth/google" class="google-signin-btn">
+                        <i class="fab fa-google"></i>
+                        Đăng nhập với Google
+                    </a>
+                </div>
+
+                <!-- Toggle between Login/Register -->
+                <div class="modal-footer">
+                    <p id="toggleText">Chưa có tài khoản? <a href="#" onclick="toggleAuthMode()">Đăng ký ngay</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+
+    <!-- User Profile Panel - Hiển thị khi đã đăng nhập -->
+    <% if (user) { %>
+    <div class="user-profile-panel" id="userProfilePanel">
+        <div class="user-profile-container">
+            <div class="user-profile-header">
+                <div class="user-avatar">
+                    <% if (user.photo) { %>
+                        <img src="<%= user.photo %>" alt="<%= user.name %>">
+                    <% } else { %>
+                        <div class="avatar-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="user-info">
+                    <h3><%= user.name %></h3>
+                    <p><%= user.email %></p>
+                    <span class="user-badge">
+                        <% if (user.id && user.id.startsWith('google_')) { %>
+                            <i class="fab fa-google"></i> Google User
+                        <% } else { %>
+                            <i class="fas fa-user"></i> ID: <%= user.numericId || 'N/A' %>
+                        <% } %>
+                    </span>
+                </div>
+                <button class="close-profile-btn" onclick="closeUserProfile()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="user-profile-content">
+                <div class="profile-section">
+                    <h4><i class="fas fa-user-edit"></i> Thông Tin Cá Nhân</h4>
+                    <div class="profile-info">
+                        <div class="info-row">
+                            <label>Họ và tên:</label>
+                            <span><%= user.name %></span>
+                        </div>
+                        <div class="info-row">
+                            <label>Email:</label>
+                            <span><%= user.email %></span>
+                        </div>
+                        <div class="info-row">
+                            <label>Loại tài khoản:</label>
+                            <span>
+                                <% if (user.id && user.id.startsWith('google_')) { %>
+                                    <i class="fab fa-google text-danger"></i> Google OAuth
+                                <% } else { %>
+                                    <i class="fas fa-shield-alt text-success"></i> Tài khoản thường
+                                <% } %>
+                            </span>
+                        </div>
+                        <div class="info-row">
+                            <label>Ngày tham gia:</label>
+                            <span id="joinDate">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h4><i class="fas fa-shopping-bag"></i> Đơn Hàng Gần Đây</h4>
+                    <div class="recent-orders" id="recentOrders">
+                        <div class="loading-orders">
+                            <i class="fas fa-spinner fa-spin"></i> Đang tải đơn hàng...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h4><i class="fas fa-heart"></i> Sản Phẩm Yêu Thích</h4>
+                    <div class="favorite-products" id="favoriteProducts">
+                        <div class="loading-favorites">
+                            <i class="fas fa-spinner fa-spin"></i> Đang tải sản phẩm yêu thích...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="btn btn-primary" onclick="editUserProfile()">
+                        <i class="fas fa-edit"></i> Chỉnh Sửa Hồ Sơ
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewOrderHistory()">
+                        <i class="fas fa-history"></i> Lịch Sử Đơn Hàng
+                    </button>
+                    <button class="btn btn-danger" onclick="handleLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Đăng Xuất
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+                    <div class="form-options">
+                        <label class="agree-terms">
+                            <input type="checkbox" id="agreeTerms" required>
+                            <span>Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a></span>
+                        </label>
+                    </div>
+                    <button class="register-btn" onclick="handleRegister()">
+                        <i class="fas fa-user-plus"></i> Đăng Ký
+                    </button>
+                </div>
+
+                <!-- Social Login -->
+                <div class="social-login">
+                    <div class="divider">
+                        <span>hoặc</span>
+                    </div>
+                    <a href="/auth/google" 
+                       class="google-signin-btn" 
+                       style="text-decoration: none; display: inline-block; width: 100%; text-align: center;"
+                       onclick="console.log('🚀 Google link clicked!'); return true;">
+                        <i class="fab fa-google"></i>
+                        Đăng nhập với Google
+                    </a>
+                    
+                    <!-- Backup direct link for testing -->
+                    <div style="margin-top: 10px; text-align: center;">
+                        <a href="/auth/google" style="color: #4285f4; font-size: 14px;">
+                            🔗 Link trực tiếp (nếu nút không hoạt động)
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Toggle between Login/Register -->
+                <div class="modal-footer">
+                    <p id="toggleText">
+                        Chưa có tài khoản? 
+                        <a href="#" onclick="toggleAuthMode()">Đăng ký ngay</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Panel CSS -->
+    <style>
+        /* User Profile Panel Styles */
+        .user-profile-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: #fff;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .user-profile-panel.active {
+            right: 0;
+        }
+        
+        .user-profile-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+        
+        .user-avatar img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        
+        .avatar-placeholder {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+        
+        .user-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 20px;
+        }
+        
+        .user-info p {
+            margin: 0 0 8px 0;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .user-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .close-profile-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+        
+        .close-profile-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .user-profile-content {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .profile-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .profile-section:last-child {
+            border-bottom: none;
+        }
+        
+        .profile-section h4 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .profile-info .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 8px 0;
+        }
+        
+        .profile-info label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .profile-info span {
+            color: #333;
+        }
+        
+        .text-danger { color: #dc3545; }
+        .text-success { color: #28a745; }
+        
+        .recent-orders, .favorite-products {
+            min-height: 60px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .loading-orders, .loading-favorites {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .profile-actions .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        @media (max-width: 768px) {
+            .user-profile-panel {
+                width: 100vw;
+                right: -100vw;
+            }
+        }
+        
+        /* User Icon Container Styles */
+        .user-icon-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .user-icon-authenticated {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 8px 12px;
+            color: white;
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .user-icon-authenticated:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .user-avatar-small {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            margin-right: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .user-name-display {
+            font-size: 14px;
+            font-weight: 500;
+            max-width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        @media (max-width: 768px) {
+            .user-name-display {
+                display: none;
+            }
+            .user-avatar-small {
+                margin-right: 0;
+            }
+        }
+    </style>
+
+    <script src="/js/script.js"></script>
+    <script src="/js/auth.js"></script>
+    <script type="module" src="/js/user-profile.js"></script>
+</body>
+</html>
