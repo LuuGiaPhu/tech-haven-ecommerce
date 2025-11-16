@@ -40,15 +40,25 @@ if (!isLocal) {
 
 // Initialize Firebase Admin
 if (!admin.apps.length) {
-  const serviceAccountPath = isLocal 
-    ? path.join(__dirname, 'serviceAccountKey.json')
-    : './serviceAccountKey.json';
+  try {
+    const serviceAccountPath = isLocal 
+      ? path.join(__dirname, 'serviceAccountKey.json')
+      : './serviceAccountKey.json';
     
-  admin.initializeApp({
-    credential: admin.credential.cert(require(serviceAccountPath)),
-    projectId: 'tech-haven-5368b'
-  });
-  console.log('✅ Firebase Admin SDK initialized');
+    const serviceAccount = require(serviceAccountPath);
+    
+    console.log('🔑 Service Account Email:', serviceAccount.client_email);
+    console.log('🆔 Project ID:', serviceAccount.project_id);
+    
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+      projectId: serviceAccount.project_id
+    });
+    console.log('✅ Firebase Admin SDK initialized');
+  } catch (error) {
+    console.error('❌ Firebase Admin initialization failed:', error.message);
+    throw error;
+  }
 }
 
 const db = admin.firestore();

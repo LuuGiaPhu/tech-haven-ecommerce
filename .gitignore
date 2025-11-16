@@ -69,5 +69,11 @@ node_modules/
 *-github-actions-key.json
 firebase-admin-github-actions-key.json
 
+# Service Account Keys (SENSITIVE - NEVER COMMIT!)
+serviceAccountKey.json
+serviceAccountKey-*.json
+functions/serviceAccountKey.json
+functions/serviceAccountKey-*.json
+
 # dataconnect generated files
 .dataconnect
