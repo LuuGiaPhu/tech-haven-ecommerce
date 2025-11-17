@@ -1092,31 +1092,38 @@
                 console.log('🔐 Method 1: Trying getFirebaseAuthToken helper...');
                 idToken = await getFirebaseAuthToken();
                 
-                // Method 2: Try direct Firebase v8 Auth
+                // Method 2: Try direct Firebase v8 Auth with FORCE REFRESH
                 if (!idToken && typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
                     try {
-                        idToken = await firebase.auth().currentUser.getIdToken(true);
-                        console.log('🔑 Method 2: Got fresh Firebase token (v8) for recent products');
+                        idToken = await firebase.auth().currentUser.getIdToken(true); // true = force refresh
+                        console.log('🔑 Method 2: Got FRESH Firebase token (v8) for recent products');
                     } catch (error) {
                         console.warn('⚠️ Method 2 failed:', error.message);
                     }
                 }
                 
-                // Method 3: Try Firebase compat
+                // Method 3: Try Firebase compat with FORCE REFRESH
                 if (!idToken && window.firebaseCompatAuth && window.firebaseCompatAuth.currentUser) {
                     try {
-                        idToken = await window.firebaseCompatAuth.currentUser.getIdToken(true);
-                        console.log('🔑 Method 3: Got fresh Firebase token (compat) for recent products');
+                        idToken = await window.firebaseCompatAuth.currentUser.getIdToken(true); // true = force refresh
+                        console.log('🔑 Method 3: Got FRESH Firebase token (compat) for recent products');
                     } catch (error) {
                         console.warn('⚠️ Method 3 failed:', error.message);
                     }
                 }
                 
-                // Method 4: Fallback to localStorage (should be avoided as token may be expired)
+                // Method 4: Check if cached token is still valid (within 50 minutes)
                 if (!idToken) {
-                    idToken = localStorage.getItem('firebaseIdToken');
-                    if (idToken) {
-                        console.log('⚠️ Method 4: Using cached token from localStorage (may be expired)');
+                    const cachedToken = localStorage.getItem('firebaseIdToken');
+                    const tokenTime = parseInt(localStorage.getItem('firebaseIdTokenTime') || '0');
+                    const tokenAge = Date.now() - tokenTime;
+                    const fiftyMinutes = 50 * 60 * 1000; // 50 minutes in milliseconds
+                    
+                    if (cachedToken && tokenAge < fiftyMinutes) {
+                        idToken = cachedToken;
+                        console.log(`⚠️ Method 4: Using cached token (age: ${Math.floor(tokenAge / 60000)} minutes)`);
+                    } else if (cachedToken) {
+                        console.warn(`❌ Cached token too old (age: ${Math.floor(tokenAge / 60000)} minutes), need fresh login`);
                     }
                 }
                 
