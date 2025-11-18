@@ -1,2 +1,9 @@
 https://tech-haven-5368b.web.app/
 https://tech-haven-5368b.web.app/shop
+https://tech-haven-5368b.web.app/laptops
+https://tech-haven-5368b.web.app/components
+https://tech-haven-5368b.web.app/peripherals
+https://tech-haven-5368b.web.app/build-pc
+https://tech-haven-5368b.web.app/admin/input
+https://tech-haven-5368b.web.app/admin/edit
+https://tech-haven-5368b.web.app/admin/coupon

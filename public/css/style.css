@@ -1,4 +1,44 @@
 /* =====================================
+   GLOBAL STYLES AND TOUCH IMPROVEMENTS
+   ===================================== */
+
+/* Global touch-friendly improvements for tablets and touch devices */
+@media (hover: none) and (pointer: coarse) {
+    /* Better touch targets for all interactive elements */
+    button, .btn, a[role="button"], .nav-menu a, .mobile-nav-icons a {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 0.8rem 1.2rem;
+    }
+    
+    /* Improve focus states for touch navigation */
+    *:focus {
+        outline: 2px solid #6b46c1;
+        outline-offset: 2px;
+    }
+}
+
+/* Improve general touch responsiveness */
+* {
+    -webkit-tap-highlight-color: rgba(107, 70, 193, 0.2);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Allow text selection for content */
+p, span, h1, h2, h3, h4, h5, h6, .product-name, .product-description {
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+/* =====================================
    CUTE LOADING SCREEN
    ===================================== */
 
@@ -1001,11 +1041,29 @@ body {
 
 /* Mobile responsive styles for admin dropdown */
 @media (max-width: 768px) {
+    /* Ensure header doesn't clip dropdown */
+    .header {
+        overflow: visible;
+    }
+    
+    .navbar {
+        overflow: visible;
+    }
+    
+    .nav-menu {
+        overflow: visible; /* Allow dropdown to extend beyond */
+    }
+    
+    .nav-menu.active {
+        overflow-y: auto; /* But allow scrolling for the menu itself */
+    }
+    
     /* Admin dropdown mobile positioning */
     .admin-dropdown {
         position: relative;
         display: block;
         width: 100%;
+        z-index: 10000; /* Very high z-index */
     }
     
     .admin-dropdown .dropdown-toggle {
@@ -1045,10 +1103,11 @@ body {
     }
     
     .admin-dropdown.active .dropdown-menu {
-        max-height: 200px;
+        max-height: 400px; /* Increased from 200px to fit all items */
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
+        overflow-y: auto; /* Allow scrolling if needed */
     }
     
     .admin-dropdown .dropdown-menu a {
@@ -1057,6 +1116,10 @@ body {
         font-size: 1rem;
         font-weight: 500;
         transition: all 0.2s ease;
+        pointer-events: auto;
+        position: relative;
+        z-index: 10003;
+        cursor: pointer;
     }
     
     .admin-dropdown .dropdown-menu a:last-child {
@@ -1116,6 +1179,151 @@ body {
     flex-wrap: nowrap;
 }
 
+/* Tablet and Large Device Responsive (768px - 1366px) */
+@media (min-width: 768px) and (max-width: 1400px) {
+    /* Show mobile menu toggle on tablet for better touch interaction */
+    .mobile-menu-toggle {
+        display: flex !important;
+        flex-direction: column;
+        cursor: pointer;
+        padding: 0.8rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        /* Larger touch target for tablet */
+        min-width: 48px;
+        min-height: 48px;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .mobile-menu-toggle:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
+    }
+    
+    .mobile-menu-toggle i {
+        font-size: 1.8rem;
+        color: #6b46c1;
+        transition: all 0.3s ease;
+    }
+    
+    .mobile-menu-toggle:hover i {
+        color: #8b5cf6;
+    }
+    
+    /* Tablet navigation menu */
+    .nav-menu {
+        transition: all 0.3s ease;
+        transform: translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 1rem;
+        right: 1rem;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .nav-menu.active {
+        display: flex;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    .nav-menu a {
+        padding: 1rem 1.5rem;
+        text-align: center;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+        /* Better touch targets for tablet */
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .nav-menu a:hover {
+        background: rgba(107, 70, 193, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    /* Show mobile nav icons on tablet */
+    .mobile-nav-icons {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(107, 70, 193, 0.2);
+    }
+    
+    .mobile-nav-icons a {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        color: #6b46c1;
+        text-decoration: none;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        /* Better touch targets for tablet */
+        min-height: 48px;
+        font-size: 1.1rem;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .mobile-nav-icons a:hover {
+        background: rgba(107, 70, 193, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    .mobile-nav-icons i {
+        font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+    
+    /* Fix cart count spacing in mobile nav */
+    .mobile-nav-icons #cartCount {
+        display: inline;
+        margin: 0;
+        padding: 0;
+        font-size: inherit;
+        line-height: inherit;
+    }
+    
+    /* Hide desktop nav icons on tablet */
+    .nav-icons {
+        display: none !important;
+    }
+    
+    /* Hero section adjustments for tablet */
+    .hero-text h2 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-text p {
+        font-size: 1.2rem;
+    }
+}
+
 /* Mobile Menu Animation - only apply on mobile */
 @media (max-width: 768px) {
     /* Show mobile menu toggle on mobile */
@@ -1166,6 +1374,50 @@ body {
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         border: 1px solid rgba(255, 255, 255, 0.3);
         gap: 0.5rem;
+        
+        /* Enhanced scrolling for all devices */
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        scrollbar-width: thin;
+        scrollbar-color: rgba(107, 70, 193, 0.3) transparent;
+        
+        /* Force hardware acceleration */
+        will-change: scroll-position, transform;
+        transform: translate3d(0, -10px, 0);
+        -webkit-transform: translate3d(0, -10px, 0);
+        
+        /* Touch scrolling optimization */
+        touch-action: pan-y;
+        overscroll-behavior-y: contain;
+        scroll-behavior: smooth;
+        
+        /* Ensure minimum content height for scrolling */
+        min-height: auto;
+        
+        /* Webkit specific touch improvements */
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Custom scrollbar styling */
+    .nav-menu::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .nav-menu::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+    }
+
+    .nav-menu::-webkit-scrollbar-thumb {
+        background: rgba(107, 70, 193, 0.3);
+        border-radius: 3px;
+    }
+
+    .nav-menu::-webkit-scrollbar-thumb:hover {
+        background: rgba(107, 70, 193, 0.5);
     }
 
     .nav-menu.active {
@@ -1184,6 +1436,7 @@ body {
         text-align: center;
         font-weight: 600;
         transition: all 0.3s ease;
+        flex-shrink: 0; /* Prevent items from shrinking */
     }
     
     .nav-menu a:hover {
@@ -1192,7 +1445,172 @@ body {
         transform: translateY(-2px);
         box-shadow: 0 4px 15px rgba(107, 70, 193, 0.2);
     }
+
+    /* Admin dropdown in mobile menu */
+    .nav-menu .admin-dropdown {
+        width: 100%;
+        margin: 0.25rem 0;
+        flex-shrink: 0;
+    }
+
+    .nav-menu .admin-dropdown .dropdown-toggle {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-menu .admin-dropdown .dropdown-menu {
+        position: static;
+        display: none;
+        width: 100%;
+        background: rgba(107, 70, 193, 0.1);
+        border-radius: 8px;
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        box-shadow: none;
+        border: 1px solid rgba(107, 70, 193, 0.2);
+    }
+
+    .nav-menu .admin-dropdown.active .dropdown-menu {
+        display: block;
+    }
+
+    .nav-menu .admin-dropdown .dropdown-menu a {
+        margin: 0.25rem 0;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        font-size: 0.9rem;
+    }
+
+    /* Mobile nav icons styling */
+    .nav-menu .mobile-nav-icons {
+        width: 100%;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(107, 70, 193, 0.2);
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .nav-menu .mobile-nav-icons a {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0.75rem 1rem;
+        margin: 0.25rem 0;
+        text-align: left;
+        background: rgba(107, 70, 193, 0.05);
+        border: 1px solid rgba(107, 70, 193, 0.1);
+    }
+
+    .nav-menu .mobile-nav-icons a i {
+        margin-right: 0.75rem;
+        width: 20px;
+        text-align: center;
+        color: #6b46c1;
+    }
+
+    .nav-menu .mobile-nav-icons a:hover {
+        background: rgba(107, 70, 193, 0.15);
+        transform: translateX(5px);
+    }
+
+    /* Build button styling in mobile */
+    .nav-menu .build-btn {
+        background: linear-gradient(135deg, #6b46c1, #8b5cf6);
+        color: white;
+        border: none;
+        font-weight: bold;
+        margin: 0.5rem 0;
+        box-shadow: 0 4px 15px rgba(107, 70, 193, 0.3);
+        flex-shrink: 0;
+    }
+
+    .nav-menu .build-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(107, 70, 193, 0.4);
+    }
+
+    /* Scroll indicator for better UX */
+    .nav-menu::after {
+        content: '';
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 10px;
+        background: linear-gradient(to top, rgba(255,255,255,0.8) 0%, transparent 100%);
+        pointer-events: none;
+        border-radius: 0 0 15px 15px;
+    }
+    
+    /* Force scroll behavior for problematic devices */
+    .nav-menu.active {
+        /* Ensure scrolling works on all devices */
+        height: auto;
+        max-height: calc(100vh - 120px);
+        overflow-y: scroll !important;
+        -webkit-overflow-scrolling: touch !important;
+        
+        /* Additional scroll fixes for iOS Safari */
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        
+        /* Force momentum scrolling */
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+        
+        /* Ensure content is scrollable */
+        min-height: calc(100vh - 120px);
+        padding-bottom: 2rem; /* Extra space at bottom */
+    }
 }
+
+/* Special fixes for devices with scroll issues */
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+    @media (max-width: 768px) {
+        .nav-menu.active {
+            overflow-y: scroll !important;
+            -webkit-overflow-scrolling: touch !important;
+            transform: translate3d(0, 0, 0) !important;
+            will-change: scroll-position !important;
+        }
+    }
+}
+
+/* Android Chrome specific fixes */
+@media (max-width: 768px) and (-webkit-min-device-pixel-ratio: 1) {
+    .nav-menu.active {
+        overscroll-behavior: contain;
+        scroll-snap-type: none;
+        touch-action: pan-y manipulation;
+    }
+}
+
+/* Samsung Internet and other mobile browsers */
+@media (max-width: 768px) {
+    .nav-menu.active .mobile-nav-icons {
+        margin-bottom: 1rem; /* Ensure last items are accessible */
+        padding-bottom: 1rem;
+    }
+    
+    /* Force scrollbar visibility on some devices */
+    .nav-menu.active::-webkit-scrollbar {
+        width: 8px !important;
+        display: block !important;
+    }
+    
+    .nav-menu.active::-webkit-scrollbar-thumb {
+        background: rgba(107, 70, 193, 0.5) !important;
+        border-radius: 4px !important;
+    }
+}
+
 .mobile-menu-toggle {
     display: none;
     flex-direction: column;
@@ -1211,9 +1629,187 @@ body {
 }
 
 /* Hide mobile nav icons on desktop only */
+@media (min-width: 769px) {
+    .mobile-nav-icons {
+        display: none !important;
+    }
+}
+
+/* Hide mobile menu toggle on large desktop screens */
+@media (min-width: 1401px) {
+    .mobile-menu-toggle {
+        display: none !important;
+    }
+}
+
+/* Specific media queries for Surface Duo and Nest Hub */
+/* Surface Duo (540x720) - Portrait mode */
+@media (min-width: 540px) and (max-width: 540px) and (min-height: 720px) {
+    .nav-menu {
+        max-height: calc(100vh - 80px);
+        padding: 0.75rem;
+    }
+    
+    .nav-menu a {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    .nav-menu .mobile-nav-icons a {
+        padding: 0.6rem 0.8rem;
+    }
+}
+
+/* Nest Hub (1024x600) - Landscape mode */
+@media (min-width: 1024px) and (max-width: 1024px) and (max-height: 600px) {
+    .nav-menu {
+        max-height: calc(100vh - 100px);
+        left: 2rem;
+        right: 2rem;
+        padding: 1.25rem;
+    }
+    
+    .nav-menu a {
+        padding: 0.8rem 1.2rem;
+        font-size: 1rem;
+    }
+    
+    .nav-menu .mobile-nav-icons {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+    }
+    
+    .nav-menu .mobile-nav-icons a {
+        padding: 0.8rem 1.2rem;
+    }
+}
+
+/* General tablet optimization for scrollable menu */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .nav-menu {
+        max-height: calc(100vh - 90px);
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+    
+    .nav-menu::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .nav-menu::-webkit-scrollbar-thumb {
+        background: rgba(107, 70, 193, 0.4);
+        border-radius: 4px;
+    }
+}
 @media (min-width: 1401px) {
     .mobile-nav-icons {
         display: none;
+    }
+}
+
+/* =====================================
+   LARGE TABLET NAVIGATION (iPad Pro, Surface Pro)
+   ===================================== */
+@media (min-width: 1025px) and (max-width: 1400px) {
+    /* Show mobile menu toggle for large tablets with touch interface */
+    .mobile-menu-toggle {
+        display: flex !important;
+        flex-direction: column;
+        cursor: pointer;
+        padding: 0.8rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        min-width: 48px;
+        min-height: 48px;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .mobile-menu-toggle:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
+    }
+    
+    .mobile-menu-toggle i {
+        font-size: 1.8rem;
+        color: #6b46c1;
+        transition: all 0.3s ease;
+    }
+    
+    .mobile-menu-toggle:hover i {
+        color: #8b5cf6;
+    }
+    
+    /* Large tablet navigation menu */
+    .nav-menu {
+        transition: all 0.3s ease;
+        transform: translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 1rem;
+        right: 1rem;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .nav-menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    /* Show mobile nav icons on large tablets */
+    .mobile-nav-icons {
+        display: flex !important;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(107, 70, 193, 0.2);
+    }
+    
+    .mobile-nav-icons a {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        color: #6b46c1;
+        text-decoration: none;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        min-height: 48px;
+        font-size: 1.1rem;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .mobile-nav-icons a:hover {
+        background: rgba(107, 70, 193, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    .mobile-nav-icons i {
+        font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+    
+    /* Hide desktop nav icons on large tablets */
+    .nav-icons {
+        display: none !important;
     }
 }
 
@@ -1388,6 +1984,10 @@ body {
     display: flex;
     gap: 10px;
     z-index: 20;
+    /* Prevent touch zoom and improve mobile interaction */
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .banner-dot {
@@ -1398,6 +1998,10 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     border: 2px solid transparent;
+    /* Prevent touch zoom on mobile */
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .banner-dot.active {
@@ -1447,9 +2051,21 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .banner-section {
+        /* Prevent zoom and improve mobile performance */
+        touch-action: manipulation;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
     .banner-container {
         height: 300px;
         margin: 15px 0;
+        /* Enhanced mobile touch handling */
+        touch-action: manipulation;
+        -webkit-overflow-scrolling: touch;
     }
     
     .banner-slide {
@@ -1499,11 +2115,46 @@ body {
     
     .banner-indicators {
         bottom: 15px;
+        gap: 8px;
+        /* Enhanced mobile touch prevention */
+        touch-action: manipulation;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        pointer-events: auto;
     }
     
     .banner-dot {
         width: 10px;
         height: 10px;
+        /* Disable transform scale on mobile to prevent unwanted zoom */
+        transform: none !important;
+        /* Enhanced mobile touch prevention */
+        touch-action: manipulation;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+    }
+    
+    .banner-dot.active {
+        /* Use border instead of scale for active state on mobile */
+        border: 2px solid white;
+        background: #00d4ff;
+        transform: none !important;
+        /* No scale, no zoom on mobile */
+        -webkit-transform: none !important;
+        -moz-transform: none !important;
+        -ms-transform: none !important;
+    }
+    
+    .banner-dot:hover {
+        /* Disable hover effects on mobile */
+        background: rgba(255, 255, 255, 0.5);
+        transform: none !important;
     }
 }
 
@@ -1824,7 +2475,15 @@ body {
 
 .footer-social {
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.footer-social h4 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
 }
 
 .footer-social i {
@@ -1970,6 +2629,7 @@ body {
         align-items: center;
         position: relative;
         flex-wrap: nowrap;
+        z-index: 9998;
     }
     
     .nav-brand {
@@ -2003,10 +2663,32 @@ body {
         gap: 1rem;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         display: none;
+        z-index: 9999;
+        pointer-events: none;
     }
     
     .nav-menu.active {
         display: flex;
+        pointer-events: auto;
+        max-height: 80vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(107, 70, 193, 0.3) transparent;
+    }
+    
+    /* Enhanced scrollbar for nav-menu on mobile */
+    .nav-menu.active::-webkit-scrollbar {
+        width: 4px;
+    }
+    
+    .nav-menu.active::-webkit-scrollbar-thumb {
+        background: rgba(107, 70, 193, 0.3);
+        border-radius: 2px;
+    }
+    
+    .nav-menu.active::-webkit-scrollbar-track {
+        background: transparent;
     }
     
     .nav-menu a {
@@ -2014,6 +2696,9 @@ body {
         text-align: center;
         border-radius: 10px;
         transition: all 0.3s ease;
+        pointer-events: auto;
+        position: relative;
+        z-index: 10000;
     }
     
     .nav-menu a:hover {
@@ -2034,6 +2719,9 @@ body {
         margin-top: 1rem;
         padding-top: 1rem;
         border-top: 1px solid rgba(107, 70, 193, 0.2);
+        pointer-events: auto;
+        position: relative;
+        z-index: 10001;
     }
     
     .mobile-nav-icons a {
@@ -2045,6 +2733,11 @@ body {
         text-decoration: none;
         border-radius: 10px;
         transition: all 0.3s ease;
+        min-width: 0; /* Allow flex item to shrink */
+        pointer-events: auto;
+        position: relative;
+        z-index: 10002;
+        cursor: pointer;
     }
     
     .mobile-nav-icons a:hover {
@@ -2053,6 +2746,15 @@ body {
     
     .mobile-nav-icons i {
         font-size: 1.1rem;
+        flex-shrink: 0; /* Keep icon size fixed */
+    }
+    
+    .mobile-nav-icons a span,
+    .mobile-nav-icons a:not(:has(span)) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
     }
 
     .hero-content {
@@ -2089,6 +2791,38 @@ body {
     .footer-content {
         flex-direction: column;
         gap: 1rem;
+        text-align: center;
+    }
+    
+    .footer-social {
+        max-width: 100%;
+        overflow: hidden;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .footer-social h4 {
+        margin-bottom: 1rem;
+        font-size: 1rem;
+    }
+    
+    .social-icons {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .contact-info {
+        align-items: center;
+        max-width: 100%;
+    }
+    
+    .contact-info p {
+        justify-content: center;
+        flex-wrap: wrap;
+        font-size: 0.9rem;
+        max-width: 100%;
         text-align: center;
     }
 
@@ -2603,6 +3337,20 @@ body {
     color: white;
 }
 
+.quantity-btn:disabled {
+    background: #f3f4f6;
+    border-color: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.quantity-btn:disabled:hover {
+    background: #f3f4f6;
+    border-color: #e5e7eb;
+    color: #9ca3af;
+}
+
 .cart-item-quantity {
     min-width: 30px;
     text-align: center;
@@ -2622,6 +3370,17 @@ body {
 
 .remove-item:hover {
     background: rgba(239, 68, 68, 0.1);
+}
+
+.remove-item:disabled {
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.remove-item:disabled:hover {
+    background: none;
+    color: #9ca3af;
 }
 
 .cart-footer {
@@ -2705,6 +3464,8 @@ body {
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
 .modal-overlay.active {
@@ -2722,6 +3483,8 @@ body {
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
     transform: scale(0.8);
     transition: transform 0.3s ease;
+    position: relative;
+    margin: 0 auto;
 }
 
 .modal-overlay.active .modal-content {
@@ -3012,34 +3775,52 @@ body {
 .social-icons {
     display: flex;
     gap: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    justify-content: flex-start;
+    flex-wrap: wrap;
 }
 
 .social-icons a {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
     color: white;
     text-decoration: none;
     transition: all 0.3s ease;
+    font-size: 1.2rem;
 }
 
 .social-icons a:hover {
     background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
 }
 
 .contact-info p {
-    margin: 0.5rem 0;
-    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.8rem;
+    line-height: 1.4;
+}
+
+.contact-info p i {
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 /* Mobile Responsive */
@@ -3239,11 +4020,23 @@ body {
     border-bottom: none;
 }
 
+.search-suggestions .suggestion-item:hover,
 .suggestion-item:hover {
-    background: #667eea;
-    color: white;
+    background: #667eea !important;
+    background-color: #667eea !important;
+    transition: all 0.2s ease !important;
 }
 
+.suggestion-item:hover .suggestion-text h4,
+.suggestion-item:hover .suggestion-text p {
+    color: white !important;
+}
+
+.suggestion-item:hover .suggestion-text h4 mark {
+    background: #fbbf24 !important;
+    color: #92400e !important;
+}
+div.suggestion-item:hover
 .suggestion-item i {
     font-size: 1.2rem;
     color: #667eea;
@@ -3251,7 +4044,7 @@ body {
 }
 
 .suggestion-item:hover i {
-    color: white;
+    color: rgb(255, 255, 255);
 }
 
 .suggestion-text {
@@ -4956,7 +5749,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 999999; /* Increased z-index to be above loading screen */
+    z-index: 9000; /* Reduced z-index to allow notifications to show above */
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
@@ -5467,4 +6260,542 @@ body {
     .cart-icon-wrapper .fas.fa-shopping-cart {
         font-size: 16px;
     }
+}
+
+/* =====================================
+   TABLET DEVICES - Show mobile-nav-icons on tablets
+   ===================================== */
+
+/* Nest Hub Max (1280 x 800) */
+@media (min-width: 769px) and (max-width: 1366px) and (max-height: 1024px) {
+    .mobile-nav-icons {
+        display: flex !important;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(107, 70, 193, 0.2);
+        pointer-events: auto;
+        position: relative;
+        z-index: 10001;
+    }
+    
+    .mobile-nav-icons a {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.8rem 1rem;
+        color: #6b46c1;
+        text-decoration: none;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        min-width: 0;
+        pointer-events: auto;
+        position: relative;
+        z-index: 10002;
+        font-size: 0.9rem;
+    }
+    
+    .mobile-nav-icons a:hover {
+        background: rgba(107, 70, 193, 0.1);
+        transform: translateX(5px);
+    }
+    
+    .mobile-nav-icons i {
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+    }
+}
+
+/* iPad Pro Portrait and similar (769px - 1024px width) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .nav-menu .mobile-nav-icons {
+        display: flex !important;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(107, 70, 193, 0.2);
+    }
+    
+    .nav-menu .mobile-nav-icons a {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.8rem 1rem;
+        color: #6b46c1;
+        text-decoration: none;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+    
+    .nav-menu .mobile-nav-icons a:hover {
+        background: rgba(107, 70, 193, 0.1);
+        transform: translateX(5px);
+    }
+}
+
+/* Surface Pro and iPad Air Portrait (825px - 912px width) */
+@media (min-width: 825px) and (max-width: 912px) and (orientation: portrait) {
+    .mobile-nav-icons {
+        display: flex !important;
+    }
+    
+    .nav-menu .mobile-nav-icons {
+        display: flex !important;
+    }
+}
+
+/* Asus Zenbook Fold (853 x 1280) */
+@media (min-width: 853px) and (max-width: 853px) {
+    .mobile-nav-icons {
+        display: flex !important;
+    }
+    
+    .nav-menu .mobile-nav-icons {
+        display: flex !important;
+    }
+}
+
+/* Large tablets and touch devices */
+@media (min-width: 769px) and (max-width: 1366px) and (pointer: coarse) {
+    .mobile-nav-icons {
+        display: flex !important;
+    }
+    
+    .nav-menu .mobile-nav-icons {
+        display: flex !important;
+    }
+}
+
+/* Nest Hub Max and similar landscape devices (1280x800) */
+@media (min-width: 1024px) and (max-width: 1366px) and (max-height: 900px) {
+    .mobile-nav-icons {
+        display: flex !important;
+    }
+    
+    .nav-menu .mobile-nav-icons {
+        display: flex !important;
+    }
+    
+    .nav-menu.active {
+        max-height: 80vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    .nav-menu {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
+    }
+}
+
+/* Specific for Nest Hub Max (1280x800) */
+@media (width: 1280px) and (height: 800px) {
+    .mobile-nav-icons {
+        display: flex !important;
+    }
+    
+    .nav-menu .mobile-nav-icons {
+        display: flex !important;
+    }
+    
+    .nav-menu.active {
+        max-height: 600px !important;
+        overflow-y: scroll !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+}
+
+/* All touch devices regardless of size */
+@media (pointer: coarse) {
+    .mobile-nav-icons {
+        display: flex !important;
+    }
+    
+    .nav-menu .mobile-nav-icons {
+        display: flex !important;
+    }
+}
+
+/* Fix cart count spacing globally */
+#cartCount {
+    display: inline;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+}
+
+/* Fix parentheses spacing in cart text */
+.mobile-nav-icons a,
+.nav-icons a {
+    white-space: nowrap;
+}
+
+.mobile-nav-icons a span,
+.nav-icons a span {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+/* =====================================
+   VARIANT SELECTION MODAL STYLES
+   ===================================== */
+
+/* Variant Selection Container */
+.variant-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.main-product-info {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.variant-info-text {
+    background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+    border-left: 4px solid #0ea5e9;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin: 0;
+    font-size: 0.95rem;
+    color: #0c4a6e;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    line-height: 1.5;
+}
+
+.variant-info-text i {
+    font-size: 1.1rem;
+    color: #0ea5e9;
+    flex-shrink: 0;
+}
+
+/* Variant Options Grid */
+.variant-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 100%;
+}
+
+.variant-option {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.variant-option:hover {
+    border-color: #a855f7;
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.1);
+    transform: translateY(-2px);
+}
+
+.variant-option.main-product {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+}
+
+.variant-option.main-product:hover {
+    border-color: #059669;
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+}
+
+/* Variant Option Image */
+.variant-option-image {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.variant-option-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.variant-option:hover .variant-option-image img {
+    transform: scale(1.05);
+}
+
+/* Variant Option Info */
+.variant-option-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.variant-option-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.variant-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.variant-badge.main {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.variant-badge.variant {
+    background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+    color: white;
+}
+
+.variant-option-price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #dc2626;
+    margin: 0.25rem 0;
+}
+
+.variant-option-price .old-price {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #9ca3af;
+    text-decoration: line-through;
+}
+
+.variant-option-desc {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin: 0.25rem 0;
+}
+
+.variant-option-desc strong {
+    color: #374151;
+}
+
+.variant-option-stock {
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    display: inline-block;
+    width: fit-content;
+}
+
+.variant-option-stock.in-stock {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.variant-option-stock.out-of-stock {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Variant Select Button */
+.variant-select-btn {
+    background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.variant-select-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+}
+
+.variant-select-btn i {
+    font-size: 1rem;
+}
+
+.variant-option.main-product .variant-select-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.variant-option.main-product .variant-select-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+/* Variant Actions */
+.variant-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.variant-actions .btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 2px solid #d1d5db;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.variant-actions .btn-secondary:hover {
+    background: #e5e7eb;
+    border-color: #9ca3af;
+    transform: translateY(-1px);
+}
+
+/* Modal Body Override for Variant Selection */
+.modal-body:has(.variant-selection) {
+    display: block;
+    padding: 2rem;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+
+
+/* Responsive Design for Variant Modal */
+@media (max-width: 768px) {
+    .variant-option {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .variant-option-image {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+    }
+    
+    .variant-option-info {
+        align-items: center;
+        text-align: center;
+    }
+    
+    .variant-option-name {
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .variant-select-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .variant-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .variant-actions .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        margin: 1rem;
+        width: calc(100% - 2rem);
+        max-width: none;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+    
+    .variant-info-text {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .variant-option {
+        padding: 0.75rem;
+        gap: 0.75rem;
+    }
+    
+    .variant-option-image {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .variant-option-name {
+        font-size: 1rem;
+    }
+    
+    .variant-select-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Tablet specific adjustments */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .variant-option {
+        padding: 1rem;
+    }
+    
+    .variant-option-image {
+        width: 90px;
+        height: 90px;
+    }
+}
+
+/* Fix for very wide content */
+.modal-content[style*="max-width: 600px"] {
+    max-width: 600px !important;
+    width: min(90%, 600px);
+    margin: 0 auto;
 }

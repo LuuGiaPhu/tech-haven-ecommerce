@@ -1,0 +1,115 @@
+/* Smart Cart Icon Styles */
+.cart-badge.firebase-data {
+    background: linear-gradient(45deg, #4285f4, #0f9d58) !important;
+    box-shadow: 0 0 10px rgba(66, 133, 244, 0.3);
+    animation: firebase-pulse 2s infinite;
+}
+
+.cart-badge.local-data {
+    background: linear-gradient(45deg, #ff6b6b, #ffa500) !important;
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+}
+
+.fas.fa-shopping-cart.firebase-data {
+    color: #4285f4 !important;
+    filter: drop-shadow(0 0 3px rgba(66, 133, 244, 0.5));
+}
+
+.fas.fa-shopping-cart.local-data {
+    color: #ff6b6b !important;
+    filter: drop-shadow(0 0 3px rgba(255, 107, 107, 0.5));
+}
+
+@keyframes firebase-pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(66, 133, 244, 0.3);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(66, 133, 244, 0.6);
+    }
+}
+
+/* Cart Icon Wrapper Enhanced */
+.cart-icon-wrapper {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cart-icon-wrapper:hover {
+    transform: scale(1.1);
+}
+
+/* Data Source Indicator */
+.cart-icon-wrapper::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cart-icon-wrapper.has-firebase-data::after {
+    background: #4285f4;
+    opacity: 1;
+    animation: firebase-indicator 2s infinite;
+}
+
+.cart-icon-wrapper.has-local-data::after {
+    background: #ff6b6b;
+    opacity: 1;
+}
+
+@keyframes firebase-indicator {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Mobile Cart Count Enhanced */
+#mobileCartCount.firebase-data {
+    color: #4285f4;
+    font-weight: bold;
+}
+
+#mobileCartCount.local-data {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+/* Tooltip for Cart State */
+.cart-state-tooltip {
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.cart-icon-wrapper:hover .cart-state-tooltip {
+    opacity: 1;
+}
+
+.cart-state-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-bottom-color: rgba(0, 0, 0, 0.8);
+}

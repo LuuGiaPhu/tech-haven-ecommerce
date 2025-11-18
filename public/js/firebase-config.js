@@ -2,7 +2,7 @@
 console.log('Loading Firebase config...');
 
 // Import Firebase SDK from CDN
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { initializeApp, getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
@@ -18,16 +18,25 @@ const firebaseConfig = {
   measurementId: "G-N54V96PG4M"
 };
 
-// Initialize Firebase
+// Initialize Firebase (check if already initialized)
 let app, auth, db, storage, firebaseAvailable = false;
 
 try {
-  app = initializeApp(firebaseConfig);
+  // Check if Firebase app already exists
+  try {
+    app = getApp(); // Get existing app
+    console.log('✅ Using existing Firebase app');
+  } catch (e) {
+    // App doesn't exist, create it
+    app = initializeApp(firebaseConfig);
+    console.log('✅ New Firebase app initialized');
+  }
+  
   auth = getAuth(app);
   db = getFirestore(app);
   storage = getStorage(app);
   firebaseAvailable = true;
-  console.log('✅ Firebase initialized successfully');
+  console.log('✅ Firebase services initialized successfully');
 } catch (error) {
   console.error('❌ Firebase initialization error:', error);
   console.log('🔐 Falling back to server-side authentication');

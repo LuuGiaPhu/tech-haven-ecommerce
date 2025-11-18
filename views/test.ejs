@@ -3,150 +3,22 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="format-detection" content="telephone=no">
-    <!-- Touch and tablet optimizations -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-touch-fullscreen" content="yes">
-    <title>TECH HAVEN - PC Tùy Chỉnh &amp; Linh Kiện Cao Cấp | Máy Tính Gaming, Laptop, Linh Kiện Chính Hãng</title>
-    
-    <!-- Google Site Verification -->
-    <meta name="google-site-verification" content="iY2tYQRO1C7TRzvpo5pQkC7pmJptjx-YyzPKVdgP5CM">
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="TECH HAVEN - Chuyên cung cấp PC Gaming, Laptop cao cấp, linh kiện máy tính chính hãng. Tư vấn miễn phí, lắp ráp PC theo yêu cầu, bảo hành uy tín. Giá tốt nhất thị trường 2025.">
-    <meta name="keywords" content="PC Gaming, Laptop gaming, máy tính chơi game, linh kiện máy tính, RAM, SSD, VGA, CPU Intel, CPU AMD, màn hình gaming, bàn phím cơ, chuột gaming, Tech Haven">
-    <meta name="author" content="TECH HAVEN">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="googlebot" content="index, follow">
-    <link rel="canonical" href="https://tech-haven-5368b.web.app/">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://tech-haven-5368b.web.app/">
-    <meta property="og:title" content="TECH HAVEN - PC Tùy Chỉnh & Linh Kiện Cao Cấp">
-    <meta property="og:description" content="Chuyên cung cấp PC Gaming, Laptop cao cấp, linh kiện máy tính chính hãng. Tư vấn miễn phí, lắp ráp PC theo yêu cầu, bảo hành uy tín.">
-    <meta property="og:image" content="https://tech-haven-5368b.web.app/images/og-image.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:locale" content="vi_VN">
-    <meta property="og:site_name" content="TECH HAVEN">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://tech-haven-5368b.web.app/">
-    <meta name="twitter:title" content="TECH HAVEN - PC Tùy Chỉnh & Linh Kiện Cao Cấp">
-    <meta name="twitter:description" content="Chuyên cung cấp PC Gaming, Laptop cao cấp, linh kiện máy tính chính hãng. Tư vấn miễn phí, lắp ráp PC theo yêu cầu.">
-    <meta name="twitter:image" content="https://tech-haven-5368b.web.app/images/og-image.png">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-    <link rel="manifest" href="/images/site.webmanifest">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= product.name || 'Sản phẩm' %> - TECH HAVEN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/product_detail.css">
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://www.gstatic.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     
-    <!-- Google Fonts for Vietnamese Support - Optimized -->
+    <!-- Google Fonts for Vietnamese Support -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet"></noscript>
-    <link rel="preload" href="/css/style.css" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="preload" href="/css/user-profile.css" as="style">
     <link rel="stylesheet" href="/css/user-profile.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"></noscript>
-    
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N54V96PG4M"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-N54V96PG4M');
-    </script>
-    
-    <!-- JSON-LD Structured Data for SEO -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "TECH HAVEN",
-        "alternateName": "Tech Haven Vietnam",
-        "url": "https://tech-haven-5368b.web.app/",
-        "description": "Chuyên cung cấp PC Gaming, Laptop cao cấp, linh kiện máy tính chính hãng",
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": {
-                "@type": "EntryPoint",
-                "urlTemplate": "https://tech-haven-5368b.web.app/shop?search={search_term_string}"
-            },
-            "query-input": "required name=search_term_string"
-        }
-    }
-    </script>
-    
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "TECH HAVEN",
-        "url": "https://tech-haven-5368b.web.app/",
-        "logo": "https://tech-haven-5368b.web.app/images/logo.png",
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+84-xxx-xxx-xxx",
-            "contactType": "Customer Service",
-            "areaServed": "VN",
-            "availableLanguage": ["vi", "en"]
-        },
-        "sameAs": [
-            "https://www.facebook.com/techhaven",
-            "https://www.instagram.com/techhaven"
-        ]
-    }
-    </script>
-    
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Store",
-        "name": "TECH HAVEN",
-        "image": "https://tech-haven-5368b.web.app/images/store.jpg",
-        "priceRange": "$$",
-        "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "123 Đường ABC",
-            "addressLocality": "Quận 1",
-            "addressRegion": "Hồ Chí Minh",
-            "postalCode": "700000",
-            "addressCountry": "VN"
-        },
-        "telephone": "+84-xxx-xxx-xxx",
-        "openingHoursSpecification": [
-            {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-                "opens": "09:00",
-                "closes": "21:00"
-            },
-            {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": ["Saturday", "Sunday"],
-                "opens": "09:00",
-                "closes": "22:00"
-            }
-        ]
-    }
-    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <!-- Firebase Authentication SDK (loaded early for auth) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -426,10 +298,6 @@
                     provider: 'google'
                 };
                 
-                // Save user to localStorage for cross-page access
-                console.log('💾 Saving user to localStorage for cross-page access');
-                localStorage.setItem('userData', JSON.stringify(window.currentUser));
-                
                 console.log('🔄 Updating UI, currentUser:', window.currentUser);
                 
                 // Start real-time cart listener for cross-tab synchronization
@@ -707,586 +575,7 @@
                 joinDateElement.textContent = joinDate;
             }
             
-            // Load and update favorite products (wishlist)
-            await loadFavoriteProducts();
-            
-            // Load and update recently viewed products
-            console.log('👁️ Calling loadRecentProducts from updateUserProfileWishlist');
-            await loadRecentProducts();
-            
-            // Load and update recent orders
-            console.log('📋 Calling loadRecentOrders from updateUserProfileWishlist');
-            await loadRecentOrders();
-            
-            // Load and update membership level
-            await loadMembershipLevel();
-            
             console.log('✅ User profile panel updated with fresh data');
-        }
-        
-        // Function to load membership level for user
-        async function loadMembershipLevel() {
-            console.log('🏆 Loading membership level...');
-            
-            if (!window.currentUser || !window.currentUser.uid) {
-                console.log('❌ No user ID found');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`/api/users/${window.currentUser.uid}/membership`);
-                const data = await response.json();
-                
-                if (data.success && data.membership) {
-                    const membership = data.membership;
-                    console.log('✅ Membership loaded:', membership);
-                    
-                    // Update badge in header
-                    const membershipBadge = document.getElementById('membershipBadge');
-                    const membershipIcon = document.getElementById('membershipIcon');
-                    const membershipName = document.getElementById('membershipName');
-                    const membershipPoints = document.getElementById('membershipPoints');
-                    
-                    if (membershipBadge && membershipIcon && membershipName && membershipPoints) {
-                        membershipIcon.textContent = membership.icon;
-                        membershipName.textContent = membership.name;
-                        membershipPoints.textContent = `${membership.points.toLocaleString('vi-VN')} điểm`;
-                        membershipBadge.style.display = 'flex';
-                    }
-                    
-                    // Update membership section
-                    const membershipSection = document.getElementById('membershipSection');
-                    const tierIcon = document.getElementById('tierIcon');
-                    const tierName = document.getElementById('tierName');
-                    const tierPoints = document.getElementById('tierPoints');
-                    
-                    if (membershipSection && tierIcon && tierName && tierPoints) {
-                        tierIcon.textContent = membership.icon;
-                        tierName.textContent = membership.name;
-                        tierPoints.textContent = `${membership.points.toLocaleString('vi-VN')} điểm tích lũy`;
-                        membershipSection.style.display = 'block';
-                    }
-                    
-                    // Update progress bar if not at max tier
-                    if (membership.nextTier) {
-                        const membershipProgress = document.getElementById('membershipProgress');
-                        const pointsToNext = document.getElementById('pointsToNext');
-                        const nextTierName = document.getElementById('nextTierName');
-                        const progressBar = document.getElementById('progressBar');
-                        
-                        if (membershipProgress && pointsToNext && nextTierName && progressBar) {
-                            pointsToNext.textContent = membership.pointsToNextTier.toLocaleString('vi-VN');
-                            nextTierName.textContent = membership.nextTierName;
-                            
-                            // Calculate progress percentage
-                            let currentTierThreshold = 0;
-                            let nextTierThreshold = 0;
-                            
-                            switch(membership.level) {
-                                case 'standard':
-                                    currentTierThreshold = 0;
-                                    nextTierThreshold = 500000;
-                                    break;
-                                case 'silver':
-                                    currentTierThreshold = 500000;
-                                    nextTierThreshold = 1000000;
-                                    break;
-                                case 'gold':
-                                    currentTierThreshold = 1000000;
-                                    nextTierThreshold = 2000000;
-                                    break;
-                            }
-                            
-                            const progressPercent = ((membership.points - currentTierThreshold) / (nextTierThreshold - currentTierThreshold)) * 100;
-                            progressBar.style.width = `${Math.min(progressPercent, 100)}%`;
-                            membershipProgress.style.display = 'block';
-                        }
-                    }
-                    
-                    console.log('✅ Membership UI updated');
-                } else {
-                    console.log('⚠️ No membership data returned');
-                }
-            } catch (error) {
-                console.error('❌ Error loading membership:', error);
-            }
-        }
-        
-        // Function to load favorite products for user profile
-        async function loadFavoriteProducts() {
-            console.log('💖 Loading favorite products for user profile...');
-            
-            const favoriteProductsContainer = document.getElementById('favoriteProducts');
-            if (!favoriteProductsContainer || !window.currentUser) {
-                console.log('❌ No favorite products container or user found');
-                return;
-            }
-            
-            try {
-                // Show loading state
-                favoriteProductsContainer.innerHTML = `
-                    <div class="loading-favorites">
-                        <i class="fas fa-spinner fa-spin"></i> Đang tải sản phẩm yêu thích...
-                    </div>
-                `;
-                
-                // Get wishlist from script.js global variable
-                let favoriteItems = [];
-                if (window.wishlistItems && Array.isArray(window.wishlistItems)) {
-                    favoriteItems = window.wishlistItems;
-                } else {
-                    // Fallback: Load from API if global variable not available
-                    const response = await fetch(`/api/wishlist/${window.currentUser.uid}`);
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        favoriteItems = data.items || [];
-                    }
-                }
-                
-                console.log('📋 Loaded favorite items:', favoriteItems.length);
-                
-                if (favoriteItems.length === 0) {
-                    favoriteProductsContainer.className = 'favorite-products';
-                    favoriteProductsContainer.innerHTML = `
-                        <div class="empty-favorites">
-                            <i class="far fa-heart" style="font-size: 2rem; color: #e5e7eb; margin-bottom: 1rem;"></i>
-                            <p style="color: #6b7280; margin: 0;">Chưa có sản phẩm yêu thích nào</p>
-                            <p style="color: #9ca3af; font-size: 0.875rem; margin: 0.5rem 0 0 0;">Thêm sản phẩm vào danh sách yêu thích để xem ở đây</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                // Add class for styling when there are favorites
-                favoriteProductsContainer.className = 'favorite-products has-favorites';
-                
-                // Display favorite products
-                const favoritesHtml = favoriteItems.slice(0, 6).map(item => `
-                    <div class="favorite-item" data-product-id="${item.productId}">
-                        <div class="favorite-image">
-                            <img src="${item.image || '/images/default-product.png'}" alt="${item.name}" loading="lazy">
-                        </div>
-                        <div class="favorite-info">
-                            <h5>${item.name}</h5>
-                            <p class="favorite-price">${item.price}</p>
-                            <div class="favorite-actions">
-                                <button class="btn btn-sm btn-primary" onclick="addFavoriteToCart('${item.productId}', '${item.name}', '${item.price}', '${item.image}')">
-                                    <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="removeFavoriteFromProfile('${item.productId}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-                
-                favoriteProductsContainer.innerHTML = `
-                    <div class="favorites-grid">
-                        ${favoritesHtml}
-                    </div>
-                    ${favoriteItems.length > 6 ? `
-                        <div class="favorites-more">
-                            <button class="btn btn-outline-primary btn-sm" onclick="showAllFavorites()">
-                                <i class="fas fa-heart"></i> Xem tất cả (${favoriteItems.length})
-                            </button>
-                        </div>
-                    ` : ''}
-                `;
-                
-                console.log('✅ Favorite products loaded successfully');
-                
-            } catch (error) {
-                console.error('❌ Error loading favorite products:', error);
-                favoriteProductsContainer.innerHTML = `
-                    <div class="error-favorites">
-                        <i class="fas fa-exclamation-circle" style="color: #ef4444; margin-bottom: 0.5rem;"></i>
-                        <p style="color: #ef4444; margin: 0; font-size: 0.875rem;">Có lỗi khi tải sản phẩm yêu thích</p>
-                    </div>
-                `;
-            }
-        }
-        
-        // Add favorite product to cart from profile
-        async function addFavoriteToCart(productId, productName, productPrice, productImage) {
-            console.log('🛒 Adding favorite to cart:', productId, productName);
-            
-            if (typeof window.addToCart === 'function') {
-                await window.addToCart(productName, productPrice, productId, productImage, 1);
-            } else if (typeof window.addToCartDirectly === 'function') {
-                await window.addToCartDirectly(productName, productPrice, productId, productImage, 1);
-            } else {
-                console.error('❌ Cart functions not available');
-                alert('Lỗi: Không thể thêm vào giỏ hàng!');
-                return;
-            }
-            
-            // Show success notification
-            if (typeof showNotification === 'function') {
-                showNotification(`Đã thêm "${productName}" vào giỏ hàng!`, 'success');
-            } else {
-                alert(`Đã thêm "${productName}" vào giỏ hàng!`);
-            }
-        }
-        
-        // Remove favorite from profile
-        async function removeFavoriteFromProfile(productId) {
-            console.log('💔 Removing favorite from profile:', productId);
-            
-            if (typeof window.removeFromWishlist === 'function') {
-                const success = await window.removeFromWishlist(productId);
-                if (success) {
-                    // Reload favorite products display
-                    await loadFavoriteProducts();
-                }
-            } else {
-                console.error('❌ Wishlist functions not available');
-                alert('Lỗi: Không thể xóa khỏi danh sách yêu thích!');
-            }
-        }
-        
-        // Show all favorites in a modal
-        function showAllFavorites() {
-            console.log('💖 Showing all favorites...');
-            // Implementation for showing all favorites in a modal
-            alert('Tính năng xem tất cả sản phẩm yêu thích sẽ được cập nhật sớm!');
-        }
-        
-        // Function to load recently viewed products for user profile
-        async function loadRecentProducts() {
-            console.log('👁️ Loading recently viewed products for user profile...');
-            
-            const recentProductsContainer = document.getElementById('recentProducts');
-            if (!recentProductsContainer) {
-                console.log('❌ No recent products container found');
-                return;
-            }
-            
-            if (!window.currentUser) {
-                console.log('❌ No current user found');
-                return;
-            }
-            
-            console.log('✅ Container and user found, proceeding to load recent products...');
-            
-            try {
-                // Show loading state
-                recentProductsContainer.innerHTML = `
-                    <div class="loading-recent">
-                        <i class="fas fa-spinner fa-spin"></i> Đang tải sản phẩm đã xem...
-                    </div>
-                `;
-                
-                // Get Firebase ID token for authentication
-                let idToken = null;
-                if (window.firebaseCompatAuth && window.firebaseCompatAuth.currentUser) {
-                    idToken = await window.firebaseCompatAuth.currentUser.getIdToken();
-                } else if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
-                    idToken = await firebase.auth().currentUser.getIdToken();
-                }
-                
-                if (!idToken) {
-                    console.warn('⚠️ No Firebase token available, cannot load recent products');
-                    recentProductsContainer.innerHTML = `
-                        <div class="empty-recent">
-                            <i class="far fa-clock" style="font-size: 2rem; color: #e5e7eb; margin-bottom: 1rem;"></i>
-                            <p style="color: #6b7280; margin: 0;">Vui lòng đăng nhập để xem sản phẩm đã xem</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                // Load from API with authentication
-                const response = await fetch('/api/user/recent-products', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${idToken}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                const data = await response.json();
-                
-                if (!data.success) {
-                    throw new Error(data.error || 'Failed to load recent products');
-                }
-                
-                const recentProducts = data.products || [];
-                console.log('📋 Loaded recent products:', recentProducts.length);
-                
-                if (recentProducts.length === 0) {
-                    recentProductsContainer.className = 'recent-products';
-                    recentProductsContainer.innerHTML = `
-                        <div class="empty-recent">
-                            <i class="far fa-clock" style="font-size: 2rem; color: #e5e7eb; margin-bottom: 1rem;"></i>
-                            <p style="color: #6b7280; margin: 0;">Chưa có sản phẩm đã xem</p>
-                            <p style="color: #9ca3af; font-size: 0.875rem; margin: 0.5rem 0 0 0;">Các sản phẩm bạn xem sẽ xuất hiện ở đây</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                // Add class for styling when there are recent products
-                recentProductsContainer.className = 'recent-products has-recent';
-                
-                // Display recent products
-                const recentHtml = recentProducts.slice(0, 6).map(product => `
-                    <div class="recent-item" data-product-id="${product.id}">
-                        <div class="recent-image">
-                            <img src="${product.image || product.imageUrl || '/images/default-product.png'}" alt="${product.name}" loading="lazy">
-                        </div>
-                        <div class="recent-info">
-                            <h5>${product.name}</h5>
-                            <p class="recent-price">${product.price || product.priceFormatted || 'Liên hệ'}</p>
-                            <div class="recent-actions">
-                                <a href="/product/${product.id}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-eye"></i> Xem Lại
-                                </a>
-                                <button class="btn btn-sm btn-primary" onclick="addRecentToCart('${product.id}', '${product.name}', '${product.price || product.priceFormatted}', '${product.image || product.imageUrl}')">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-                
-                recentProductsContainer.innerHTML = `
-                    <div class="recent-grid">
-                        ${recentHtml}
-                    </div>
-                    ${recentProducts.length > 6 ? `
-                        <div class="recent-more">
-                            <button class="btn btn-outline-primary btn-sm" onclick="showAllRecent()">
-                                <i class="fas fa-history"></i> Xem tất cả (${recentProducts.length})
-                            </button>
-                        </div>
-                    ` : ''}
-                `;
-                
-                console.log('✅ Recent products loaded successfully');
-                
-            } catch (error) {
-                console.error('❌ Error loading recent products:', error);
-                recentProductsContainer.innerHTML = `
-                    <div class="error-recent">
-                        <i class="fas fa-exclamation-circle" style="color: #ef4444; margin-bottom: 0.5rem;"></i>
-                        <p style="color: #ef4444; margin: 0; font-size: 0.875rem;">Có lỗi khi tải sản phẩm đã xem</p>
-                    </div>
-                `;
-            }
-        }
-        
-        // Add recent product to cart from profile
-        async function addRecentToCart(productId, productName, productPrice, productImage) {
-            console.log('🛒 Adding recent product to cart:', productId, productName);
-            
-            if (typeof window.addToCart === 'function') {
-                await window.addToCart(productName, productPrice, productId, productImage, 1);
-            } else if (typeof window.addToCartDirectly === 'function') {
-                await window.addToCartDirectly(productName, productPrice, productId, productImage, 1);
-            } else {
-                console.error('❌ Cart functions not available');
-                alert('Lỗi: Không thể thêm vào giỏ hàng!');
-                return;
-            }
-            
-            // Show success notification
-            if (typeof showNotification === 'function') {
-                showNotification(`Đã thêm "${productName}" vào giỏ hàng!`, 'success');
-            } else {
-                alert(`Đã thêm "${productName}" vào giỏ hàng!`);
-            }
-        }
-        
-        // Show all recent products in a modal
-        function showAllRecent() {
-            console.log('👁️ Showing all recent products...');
-            // Implementation for showing all recent products in a modal
-            alert('Tính năng xem tất cả sản phẩm đã xem sẽ được cập nhật sớm!');
-        }
-
-        // Load Recent Orders (Bills)
-        async function loadRecentOrders() {
-            console.log('📋 Loading recent orders for user profile...');
-            
-            const recentOrdersContainer = document.getElementById('recentOrders');
-            if (!recentOrdersContainer || !window.currentUser) {
-                console.log('❌ No recent orders container or user found');
-                return;
-            }
-
-            try {
-                // Show loading state
-                recentOrdersContainer.innerHTML = `
-                    <div class="loading-orders">
-                        <i class="fas fa-spinner fa-spin"></i> Đang tải đơn hàng...
-                    </div>
-                `;
-
-                // Get Firebase ID token for authentication
-                let idToken = null;
-                if (window.firebaseCompatAuth && window.firebaseCompatAuth.currentUser) {
-                    idToken = await window.firebaseCompatAuth.currentUser.getIdToken();
-                    console.log('🔑 Got Firebase token for recent orders API');
-                } else if (window.firebase && window.firebase.auth && window.firebase.auth().currentUser) {
-                    idToken = await window.firebase.auth().currentUser.getIdToken();
-                    console.log('🔑 Got Firebase token (v8 compat) for recent orders API');
-                }
-
-                if (!idToken) {
-                    console.warn('⚠️ No Firebase token available, cannot load recent orders');
-                    recentOrdersContainer.innerHTML = `
-                        <div class="empty-orders">
-                            <p style="color: #6b7280; margin: 0;">Vui lòng đăng nhập để xem đơn hàng</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                console.log('📡 Fetching recent orders from API...');
-                const response = await fetch('/api/user/recent-orders', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${idToken}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log('📦 Recent orders API response:', data);
-
-                if (!data.success || !data.orders || data.orders.length === 0) {
-                    recentOrdersContainer.className = 'recent-orders';
-                    recentOrdersContainer.innerHTML = `
-                        <div class="empty-orders">
-                            <i class="far fa-file-alt" style="font-size: 2rem; color: #e5e7eb; margin-bottom: 1rem;"></i>
-                            <p style="color: #6b7280; margin: 0;">Chưa có đơn hàng nào</p>
-                            <p style="color: #9ca3af; font-size: 0.875rem; margin: 0.5rem 0 0 0;">Đơn hàng của bạn sẽ xuất hiện ở đây</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                const recentOrders = data.orders;
-                
-                // Helper function to format status
-                const formatStatus = (status) => {
-                    const statusMap = {
-                        'pending': { text: 'Chờ xử lý', class: 'status-pending', icon: 'fa-clock' },
-                        'processing': { text: 'Đang xử lý', class: 'status-processing', icon: 'fa-cog' },
-                        'shipping': { text: 'Đang giao', class: 'status-shipping', icon: 'fa-shipping-fast' },
-                        'completed': { text: 'Hoàn thành', class: 'status-completed', icon: 'fa-check-circle' },
-                        'cancelled': { text: 'Đã hủy', class: 'status-cancelled', icon: 'fa-times-circle' }
-                    };
-                    return statusMap[status] || { text: status, class: 'status-default', icon: 'fa-question-circle' };
-                };
-
-                // Helper function to format date
-                const formatDate = (timestamp) => {
-                    if (!timestamp) return 'N/A';
-                    try {
-                        // Handle ISO string from backend or Firestore timestamp
-                        let date;
-                        if (typeof timestamp === 'string') {
-                            date = new Date(timestamp);
-                        } else if (timestamp.toDate) {
-                            date = timestamp.toDate();
-                        } else {
-                            date = new Date(timestamp);
-                        }
-                        
-                        // Check if date is valid
-                        if (isNaN(date.getTime())) {
-                            return 'N/A';
-                        }
-                        
-                        return date.toLocaleDateString('vi-VN', { 
-                            year: 'numeric', 
-                            month: '2-digit', 
-                            day: '2-digit',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        });
-                    } catch (error) {
-                        console.error('Error formatting date:', error, timestamp);
-                        return 'N/A';
-                    }
-                };
-
-                // Helper function to format currency
-                const formatCurrency = (amount) => {
-                    return new Intl.NumberFormat('vi-VN', { 
-                        style: 'currency', 
-                        currency: 'VND' 
-                    }).format(amount);
-                };
-                
-                // Display recent orders
-                const ordersHtml = recentOrders.map(order => {
-                    const statusInfo = formatStatus(order.status);
-                    return `
-                        <div class="order-item" data-order-id="${order.id}">
-                            <div class="order-header">
-                                <div class="order-id">
-                                    <i class="fas fa-receipt"></i>
-                                    <span>#${order.orderId}</span>
-                                </div>
-                                <div class="order-status ${statusInfo.class}">
-                                    <i class="fas ${statusInfo.icon}"></i>
-                                    <span>${statusInfo.text}</span>
-                                </div>
-                            </div>
-                            <div class="order-info">
-                                <div class="order-detail">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span>${formatDate(order.createdAt)}</span>
-                                </div>
-                                <div class="order-detail">
-                                    <i class="fas fa-box"></i>
-                                    <span>${order.itemCount} sản phẩm</span>
-                                </div>
-                                <div class="order-detail">
-                                    <i class="fas fa-money-bill-wave"></i>
-                                    <span class="order-total">${formatCurrency(order.total)}</span>
-                                </div>
-                            </div>
-                            <div class="order-actions">
-                                <a href="/bill/${order.id}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-eye"></i> Chi tiết
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-                
-                recentOrdersContainer.innerHTML = `
-                    <div class="orders-list">
-                        ${ordersHtml}
-                    </div>
-                    ${recentOrders.length >= 5 ? `
-                        <div class="orders-more">
-                            <button class="btn btn-outline-primary btn-sm" onclick="viewOrderHistory()">
-                                <i class="fas fa-history"></i> Xem tất cả đơn hàng
-                            </button>
-                        </div>
-                    ` : ''}
-                `;
-                
-                console.log('✅ Recent orders loaded successfully');
-                
-            } catch (error) {
-                console.error('❌ Error loading recent orders:', error);
-                recentOrdersContainer.innerHTML = `
-                    <div class="error-orders">
-                        <i class="fas fa-exclamation-circle" style="color: #ef4444; margin-bottom: 0.5rem;"></i>
-                        <p style="color: #ef4444; margin: 0; font-size: 0.875rem;">Có lỗi khi tải đơn hàng</p>
-                    </div>
-                `;
-            }
         }
 
         // Function to open user profile panel
@@ -1306,8 +595,7 @@
                 console.log('✅ Profile panel opened');
                 
                 // Update profile panel with fresh data (async)
-                await updateUserProfilePanel();
-                console.log('✅ Profile panel data loaded');
+                updateUserProfilePanel();
             } else {
                 console.log('❌ Profile panel not found');
             }
@@ -1462,38 +750,6 @@
             showErrorMessages();
             updateUIBasedOnAuthStatus();
         });
-        
-        function showErrorMessages() {
-            <%- 'var hasError = ' + JSON.stringify(typeof error !== 'undefined' && error) + ';' %>
-            <%- 'var errorType = ' + JSON.stringify(error || '') + ';' %>
-            <%- 'var errorMessage = ' + JSON.stringify(message || '') + ';' %>
-            
-            if (hasError) {
-                let displayMessage = '';
-                if (errorType === 'login_required') {
-                    displayMessage = 'Vui lòng đăng nhập để truy cập trang admin';
-                } else if (errorType === 'admin_required') {
-                    displayMessage = 'Bạn không có quyền admin để truy cập trang này';
-                } else if (errorMessage) {
-                    displayMessage = decodeURIComponent(errorMessage);
-                } else {
-                    displayMessage = 'Có lỗi xảy ra';
-                }
-                
-                // Show error alert
-                alert('⚠️ ' + displayMessage);
-                
-                // Auto-open login modal if login required
-                if (errorType === 'login_required') {
-                    setTimeout(() => {
-                        const loginModal = document.getElementById('loginModal');
-                        if (loginModal) {
-                            loginModal.style.display = 'flex';
-                        }
-                    }, 500);
-                }
-            }
-        }
         
         async function updateUIBasedOnAuthStatus() {
             console.log('🔄 Updating UI based on auth status...');
@@ -1876,7 +1132,7 @@
         
         function viewOrderHistory() {
             console.log('📋 View order history clicked');
-            window.location.href = '/bill-detail';
+            alert('Chức năng xem lịch sử đơn hàng đang được phát triển!');
         }
         
         async function showUserMenu() {
@@ -1927,74 +1183,8 @@
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js"></script>
 </head>
-<body class="index-page">
-    <!-- Cute Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-container">
-            <!-- Cute Robot Mascot -->
-            <div class="cute-mascot">
-                <div class="robot-head">
-                    <div class="robot-eyes">
-                        <div class="eye left-eye">
-                            <div class="eye-pupil"></div>
-                        </div>
-                        <div class="eye right-eye">
-                            <div class="eye-pupil"></div>
-                        </div>
-                    </div>
-                    <div class="robot-mouth"></div>
-                    <div class="robot-antennas">
-                        <div class="antenna antenna-1">
-                            <div class="antenna-tip"></div>
-                        </div>
-                        <div class="antenna antenna-2">
-                            <div class="antenna-tip"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="robot-body">
-                    <div class="robot-screen">
-                        <div class="screen-line"></div>
-                        <div class="screen-line"></div>
-                        <div class="screen-line"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Brand Text -->
-            <div class="brand-section">
-                <h1 class="cute-title">TECH HAVEN</h1>
-                <p class="cute-subtitle">🎮 Đang chuẩn bị công nghệ tuyệt vời... 🚀</p>
-            </div>
-            
-            <!-- Cute Progress Bar -->
-            <div class="cute-progress">
-                <div class="progress-wrapper">
-                    <div class="cute-progress-bar">
-                        <div class="progress-fill" id="progressFill">
-                            <div class="progress-sparkle"></div>
-                        </div>
-                    </div>
-                    <div class="progress-percentage" id="progressPercentage">0%</div>
-                </div>
-                <div class="cute-message" id="progressText">🤖 Robot đang khởi động...</div>
-            </div>
-            
-            <!-- Floating Hearts & Stars -->
-            <div class="cute-decorations">
-                <div class="decoration heart">💖</div>
-                <div class="decoration star">⭐</div>
-                <div class="decoration heart">💜</div>
-                <div class="decoration star">✨</div>
-                <div class="decoration heart">💙</div>
-                <div class="decoration rocket">🚀</div>
-                <div class="decoration gaming">🎮</div>
-                <div class="decoration tech">💻</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Header -->
+<body class="product-detail-page">
+    <!-- Header with Navigation -->
     <header class="header">
         <nav class="navbar">
             <div class="nav-brand">
@@ -2019,9 +1209,9 @@
                         <a href="#" onclick="event.preventDefault(); event.stopPropagation(); navigateToAdmin('/admin/revenue'); return false;">REVENUE</a>
                     </div>
                 </div>
-                <a href="/shop?category=laptop" onclick="event.preventDefault(); selectCategoryFromSearch('laptop'); return false;">LAPTOP</a>
-                <a href="/shop?category=component" onclick="event.preventDefault(); selectCategoryFromSearch('component'); return false;">LINH KIỆN</a>
-                <a href="/shop?category=peripheral" onclick="event.preventDefault(); selectCategoryFromSearch('peripheral'); return false;">PHỤ KIỆN</a>
+                <a href="/laptops">LAPTOP</a>
+                <a href="/components">LINH KIỆN</a>
+                <a href="/peripherals">PHỤ KIỆN</a>
                 <a href="/build-pc" class="build-btn">XÂY DỰNG PC</a>
                 <div class="mobile-nav-icons">
                     <a href="#" onclick="toggleSearch(); return false;"><i class="fas fa-search"></i> Tìm kiếm</a>
@@ -2044,631 +1234,351 @@
         </nav>
     </header>
 
-    <!-- Banner Carousel -->
-    <section class="banner-section">
-        <div class="banner-container">
-            <div class="banner-slides">
-                <!-- Slide 1 -->
-                <div class="banner-slide active" data-slide="0">
-                    <div class="banner-bg bg-gradient-1"></div>
-                    <div class="banner-content">
-                        <div class="banner-left">
-                            <h1 class="banner-title">RTX 4090 SERIES MỚI</h1>
-                            <p class="banner-subtitle">Trải nghiệm hiệu suất gaming đỉnh cao với công nghệ đồ họa tiên tiến nhất</p>
-                            <button class="banner-button">MUA RTX SERIES</button>
+    <!-- Product Detail Content -->
+    <div class="product-detail-content">
+        <div class="product-container">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb">
+                <a href="/"><i class="fas fa-home"></i></a>
+                <span class="separator"><i class="fas fa-chevron-right"></i></span>
+                <a href="/shop">Cửa hàng</a>
+                <span class="separator"><i class="fas fa-chevron-right"></i></span>
+                <a href="/shop?category=laptop">laptop</a>
+                <span class="separator"><i class="fas fa-chevron-right"></i></span>
+                <span class="current"><%= product.name || 'Sản phẩm' %></span>
+            </nav>
+
+            <!-- Product Detail Grid -->
+            <div class="product-detail-grid" data-product-id="<%= product.id || '' %>">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <% if (product.images && product.images.length > 0) { %>
+                            <img src="<%= product.images[0] %>" alt="<%= product.name %>" id="mainProductImage">
+                        <% } else { %>
+                            <div class="placeholder-image">
+                                <i class="fas fa-image" style="font-size: 4rem; color: #ccc;"></i>
+                                <p>Không có hình ảnh</p>
+                            </div>
+                        <% } %>
+                    </div>
+                    <div class="thumbnail-gallery">
+                        <% if (product.images && product.images.length > 0) { %>
+                            <% product.images.forEach((image, index) => { %>
+                                <div class="thumbnail <%= index === 0 ? 'active' : '' %>" onclick="changeMainImage('<%= image %>', this)">
+                                    <img src="<%= image %>" alt="<%= product.name %> - Ảnh <%= index + 1 %>" loading="lazy">
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="thumbnail">
+                                <i class="fas fa-image"></i>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <% if (product.status && product.status === 'active') { %>
+                        <% if (product.availability === 'in-stock') { %>
+                            <div class="product-badge">Còn hàng</div>
+                        <% } else if (product.availability === 'out-of-stock') { %>
+                            <div class="product-badge out-of-stock">Hết hàng</div>
+                        <% } else if (product.availability === 'pre-order') { %>
+                            <div class="product-badge pre-order">Đặt trước</div>
+                        <% } else { %>
+                            <div class="product-badge">Liên hệ</div>
+                        <% } %>
+                    <% } else { %>
+                        <div class="product-badge inactive">Ngừng kinh doanh</div>
+                    <% } %>
+                    
+                    <h1 class="product-title"><%= product.name || 'Tên sản phẩm' %></h1>
+                    
+                    <div class="product-rating">
+                        <div class="stars">
+                            <% 
+                                const rating = product.rating || 0;
+                                const fullStars = Math.floor(rating);
+                                const hasHalfStar = rating % 1 !== 0;
+                                const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                            %>
+                            
+                            <% for(let i = 0; i < fullStars; i++) { %>
+                                <i class="fas fa-star"></i>
+                            <% } %>
+                            
+                            <% if (hasHalfStar) { %>
+                                <i class="fas fa-star-half-alt"></i>
+                            <% } %>
+                            
+                            <% for(let i = 0; i < emptyStars; i++) { %>
+                                <i class="far fa-star"></i>
+                            <% } %>
                         </div>
-                        <div class="banner-right">
-                            <div class="banner-image-container">
-                                <img src="/images/banner-rtx.svg" alt="RTX 4090" class="banner-image">
+                        <span class="rating-text">(<%= product.reviewCount || 0 %> đánh giá)</span>
+                    </div>
+                    
+                    <div class="product-price">
+                        <span class="current-price">
+                            <%= new Intl.NumberFormat('vi-VN').format(product.price || 0) %> VNĐ
+                        </span>
+                        <% if (product.oldPrice && product.oldPrice > product.price) { %>
+                            <span class="old-price">
+                                <%= new Intl.NumberFormat('vi-VN').format(product.oldPrice) %> VNĐ
+                            </span>
+                            <span class="discount-badge">
+                                <% 
+                                    const discountPercent = Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100);
+                                %>
+                                -<%= discountPercent %>%
+                            </span>
+                        <% } %>
+                    </div>
+                    
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Tình trạng:</span>
+                            <span class="meta-value availability <%= product.availability || 'in-stock' %>">
+                                <% if (product.availability === 'in-stock') { %>
+                                    Còn hàng
+                                <% } else if (product.availability === 'out-of-stock') { %>
+                                    Hết hàng
+                                <% } else if (product.availability === 'pre-order') { %>
+                                    Đặt trước
+                                <% } else { %>
+                                    Liên hệ
+                                <% } %>
+                            </span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">SKU:</span>
+                            <span class="meta-value"><%= product.sku || 'N/A' %></span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Thương hiệu:</span>
+                            <span class="meta-value"><%= product.brand || 'N/A' %></span>
+                        </div>
+                        <% if (product.stock !== undefined) { %>
+                        <div class="meta-item">
+                            <span class="meta-label">Còn lại:</span>
+                            <span class="meta-value"><%= product.stock %> sản phẩm</span>
+                        </div>
+                        <% } %>
+                    </div>
+                    
+                    <div class="product-description">
+                        <% if (product.description && product.description.trim() !== '') { %>
+                            <p><%= product.description %></p>
+                        <% } else { %>
+                            <p>Mô tả sản phẩm đang được cập nhật...</p>
+                        <% } %>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <div class="quantity-selector">
+                            <span class="quantity-label">Số lượng:</span>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn decrease">-</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="99">
+                                <button class="quantity-btn increase">+</button>
                             </div>
                         </div>
+                        
+                        <div class="action-buttons">
+                            <button class="add-to-cart-btn" 
+                                    data-product-name="<%= product.name || '' %>"
+                                    data-product-price="<%= new Intl.NumberFormat('vi-VN').format(product.price || 0) %> VNĐ"
+                                    data-product-id="<%= product.id || '' %>"
+                                    data-product-image="<%= (product.images && product.images[0]) || '' %>">
+                                <i class="fas fa-cart-plus"></i>
+                                Thêm vào giỏ hàng
+                            </button>
+                            <button class="buy-now-btn">
+                                <i class="fas fa-bolt"></i>
+                                Mua ngay
+                            </button>
+                            <button class="wishlist-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Slide 2 -->
-                <div class="banner-slide" data-slide="1">
-                    <div class="banner-bg bg-gradient-2"></div>
-                    <div class="banner-content">
-                        <div class="banner-left">
-                            <h1 class="banner-title">XÂY DỰNG GAMING TÙY CHỈNH</h1>
-                            <p class="banner-subtitle">Dịch vụ lắp ráp PC chuyên nghiệp với linh kiện cao cấp và lắp ráp chuyên gia</p>
-                            <button class="banner-button">XÂY DỰNG NGAY</button>
-                        </div>
-                        <div class="banner-right">
-                            <div class="banner-image-container">
-                                <img src="/images/banner-pc.svg" alt="Gaming Build" class="banner-image">
+            <!-- Product Tabs -->
+            <div class="product-tabs">
+                <div class="tab-headers">
+                    <div class="tab-header active">Thông số kỹ thuật</div>
+                    <div class="tab-header">Tính năng nổi bật</div>
+                    <div class="tab-header">Đánh giá</div>
+                </div>
+                
+                <div class="tab-content active">
+                    <div class="specs-grid">
+                        <% if (product.specifications && Object.keys(product.specifications).length > 0) { %>
+                            <% Object.entries(product.specifications).forEach(([key, value]) => { %>
+                                <div class="spec-item">
+                                    <span class="spec-label">
+                                        <%= key %>:
+                                    </span>
+                                    <span class="spec-value"><%= value %></span>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="spec-item">
+                                <span class="spec-label">Thông số:</span>
+                                <span class="spec-value">Đang cập nhật...</span>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <div class="features-list">
+                        <% if (product.features && Array.isArray(product.features) && product.features.length > 0) { %>
+                            <% product.features.forEach(feature => { %>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="feature-text"><%= feature %></div>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="feature-text">Thông tin tính năng đang được cập nhật...</div>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <div class="reviews-section">
+                        <div class="reviews-summary">
+                            <h3>Đánh giá từ khách hàng</h3>
+                            <div class="rating-summary">
+                                <div class="average-rating">
+                                    <span class="rating-number">5.0</span>
+                                    <div class="stars">
+                                        
+                                            
+                                                <i class="fas fa-star"></i>
+                                            
+                                        
+                                            
+                                                <i class="fas fa-star"></i>
+                                            
+                                        
+                                            
+                                                <i class="fas fa-star"></i>
+                                            
+                                        
+                                            
+                                                <i class="fas fa-star"></i>
+                                            
+                                        
+                                            
+                                                <i class="fas fa-star"></i>
+                                            
+                                        
+                                    </div>
+                                    <span class="review-count">(152 đánh giá)</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Slide 3 -->
-                <div class="banner-slide" data-slide="2">
-                    <div class="banner-bg bg-gradient-3"></div>
-                    <div class="banner-content">
-                        <div class="banner-left">
-                            <h1 class="banner-title">SIÊU SALE CUỐI NĂM</h1>
-                            <p class="banner-subtitle">Giảm giá lên đến 50% cho các phụ kiện gaming và linh kiện cao cấp được chọn lọc</p>
-                            <button class="banner-button">MUA NGAY</button>
-                        </div>
-                        <div class="banner-right">
-                            <div class="banner-image-container">
-                                <img src="/images/banner-sale.svg" alt="Holiday Sale" class="banner-image">
-                            </div>
+                        <div class="review-placeholder">
+                            <p style="text-align: center; color: #666; padding: 2rem;">
+                                <i class="fas fa-comments" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                                Tính năng đánh giá chi tiết sẽ sớm được cập nhật!
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Navigation -->
-            <button class="banner-nav banner-prev" aria-label="Previous slide">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="banner-nav banner-next" aria-label="Next slide">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-
-            <!-- Indicators -->
-            <div class="banner-indicators">
-                <button class="banner-dot active" data-slide="0"></button>
-                <button class="banner-dot" data-slide="1"></button>
-                <button class="banner-dot" data-slide="2"></button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h2>GIẢI PHÓNG SỨC MẠNH CỦA BẠN.</h2>
-                <p>PC Tùy Chỉnh & Linh Kiện Cao Cấp</p>
-                <button class="shop-btn" onclick="window.location.href='/shop'">MUA NGAY</button>
-            </div>
-            <div class="hero-image">
-                <img src="/images/pc-hero.png" alt="Gaming PC" loading="lazy">
-            </div>
-        </div>
-    </section>
-
-    <!-- Sản Phẩm Mới -->
-    <section class="new-products">
-        <div class="section-header">
-            <h3>🆕 SẢN PHẨM MỚI</h3>
-            <div class="nav-arrows">
-                <button class="nav-arrow prev" data-section="new-products">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="nav-arrow next" data-section="new-products">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </div>
-        <div class="products-container" id="new-products-container">
-            <div class="product-card" onclick="goToProductDetail(6)">
-                <div class="product-image">
-                    <i class="fas fa-microchip" style="font-size: 3rem; color: #a855f7;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
+            <!-- Related Products -->
+            <div class="related-products">
+                <h2 class="section-title">Sản phẩm liên quan</h2>
+                <div class="related-container">
+                    <button class="nav-btn prev-btn" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="products-wrapper">
+                        <div class="products-track" id="productsTrack">
+                            
+                                
+                                    <div class="product-item" data-product-id="2">
+                                        <div class="product-image">
+                                            
+                                                <img src="/images/laptop.jpg" alt="MSI Katana 17 B13V">
+                                            
+                                        </div>
+                                        <h4 class="product-name">MSI Katana 17 B13V</h4>
+                                        <p class="product-price">
+                                            28.990.000 VNĐ
+                                        </p>
+                                    </div>
+                                
+                                    <div class="product-item" data-product-id="3">
+                                        <div class="product-image">
+                                            
+                                                <img src="/images/laptop.jpg" alt="Acer Predator Helios 300">
+                                            
+                                        </div>
+                                        <h4 class="product-name">Acer Predator Helios 300</h4>
+                                        <p class="product-price">
+                                            32.990.000 VNĐ
+                                        </p>
+                                    </div>
+                                
+                                    <div class="product-item" data-product-id="4">
+                                        <div class="product-image">
+                                            
+                                                <img src="/images/laptop.jpg" alt="HP Omen 16-k0000">
+                                            
+                                        </div>
+                                        <h4 class="product-name">HP Omen 16-k0000</h4>
+                                        <p class="product-price">
+                                            26.990.000 VNĐ
+                                        </p>
+                                    </div>
+                                    <div class="product-item" data-product-id="5">
+                                        <div class="product-image">
+                                            
+                                                <img src="/images/laptop.jpg" alt="HP ">
+                                            
+                                        </div>
+                                        <h4 class="product-name">HP Omen 16-k0000</h4>
+                                        <p class="product-price">
+                                            26.990.000 VNĐ
+                                        </p>
+                                    </div>
+                                    <div class="product-item" data-product-id="6">
+                                        <div class="product-image">
+                                            
+                                                <img src="/images/laptop.jpg" alt="HP ">
+                                            
+                                        </div>
+                                        <h4 class="product-name">HP Omen 16-k0000</h4>
+                                        <p class="product-price">
+                                            26.990.000 VNĐ
+                                        </p>
+                                    </div>
+                                
+                            
+                        </div>
                     </div>
-                    <h4>Intel Core i9-14900K</h4>
-                    <div class="product-price">
-                        <span>15.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('Intel Core i9-14900K', '15.990.000 VNĐ', '6')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card" onclick="goToProductDetail(10)">
-                <div class="product-image">
-                    <i class="fas fa-memory" style="font-size: 3rem; color: #ec4899;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>ASUS ROG Strix RTX 4080</h4>
-                    <div class="product-price">
-                        <span>29.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('ASUS ROG Strix RTX 4080', '29.990.000 VNĐ', '10')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card" onclick="goToProductDetail(17)">
-                <div class="product-image">
-                    <i class="fas fa-hdd" style="font-size: 3rem; color: #10b981;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <h4>Samsung 980 PRO 2TB NVMe</h4>
-                    <div class="product-price">
-                        <span>6.490.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('Samsung 980 PRO 2TB NVMe', '6.490.000 VNĐ', '17')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card" onclick="goToProductDetail(14)">
-                <div class="product-image">
-                    <i class="fas fa-memory" style="font-size: 3rem; color: #f59e0b;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>Corsair Dominator 32GB DDR5</h4>
-                    <div class="product-price">
-                        <span>8.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('Corsair Dominator 32GB DDR5', '8.990.000 VNĐ', '14')">THÊM VÀO GIỎ</button>
-                    </div>
+                    <button class="nav-btn next-btn" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Bán Chạy Nhất -->
-    <section class="best-sellers">
-        <div class="section-header">
-            <h3>🏆 BÁN CHẠY NHẤT</h3>
-            <div class="nav-arrows">
-                <button class="nav-arrow prev" data-section="best-sellers">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="nav-arrow next" data-section="best-sellers">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </div>
-        <div class="products-container" id="best-sellers-container">
-            <div class="product-card" onclick="goToProductDetail(1)">
-                <div class="product-image">
-                    <i class="fas fa-laptop" style="font-size: 3rem; color: #3b82f6;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>ASUS ROG Strix G15 Gaming</h4>
-                    <div class="product-price">
-                        <span>35.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('ASUS ROG Strix G15 Gaming', '35.990.000 VNĐ', '1')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-keyboard" style="font-size: 3rem; color: #8b5cf6;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>Razer Huntsman V3 Pro</h4>
-                    <div class="product-price">
-                        <span>4.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('Razer Huntsman V3 Pro', '4.990.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-mouse" style="font-size: 3rem; color: #ef4444;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <h4>Logitech G Pro X Superlight</h4>
-                    <div class="product-price">
-                        <span>3.290.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('Logitech G Pro X Superlight', '3.290.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-headset" style="font-size: 3rem; color: #f59e0b;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>SteelSeries Arctis 7P+</h4>
-                    <div class="product-price">
-                        <span>4.590.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('SteelSeries Arctis 7P+', '4.590.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Laptop Gaming -->
-    <section class="laptops-section">
-        <div class="section-header">
-            <h3>💻 LAPTOP GAMING</h3>
-            <div class="nav-arrows">
-                <button class="nav-arrow prev" data-section="laptops">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="nav-arrow next" data-section="laptops">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </div>
-        <div class="products-container" id="laptops-container">
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-laptop" style="font-size: 3rem; color: #dc2626;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>MSI Katana 17 B13V</h4>
-                    <div class="product-price">
-                        <span>28.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('MSI Katana 17 B13V', '28.990.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-laptop" style="font-size: 3rem; color: #059669;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <h4>Acer Predator Helios 300</h4>
-                    <div class="product-price">
-                        <span>32.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('Acer Predator Helios 300', '32.990.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-laptop" style="font-size: 3rem; color: #7c3aed;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>Alienware m15 R7</h4>
-                    <div class="product-price">
-                        <span>45.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('Alienware m15 R7', '45.990.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-laptop" style="font-size: 3rem; color: #0891b2;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>HP Omen 16-k0000</h4>
-                    <div class="product-price">
-                        <span>26.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('HP Omen 16-k0000', '26.990.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Màn Hình Gaming -->
-    <section class="monitors-section">
-        <div class="section-header">
-            <h3>🖥️ MÀN HÌNH GAMING</h3>
-            <div class="nav-arrows">
-                <button class="nav-arrow prev" data-section="monitors">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="nav-arrow next" data-section="monitors">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </div>
-        <div class="products-container" id="monitors-container">
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-desktop" style="font-size: 3rem; color: #f59e0b;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>ASUS TUF VG27AQ 27" 144Hz</h4>
-                    <div class="product-price">
-                        <span>7.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('ASUS TUF VG27AQ 27inch 144Hz', '7.990.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-desktop" style="font-size: 3rem; color: #ef4444;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <h4>MSI Optix G32CQ4 32" Curved</h4>
-                    <div class="product-price">
-                        <span>9.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('MSI Optix G32CQ4 32inch Curved', '9.990.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-desktop" style="font-size: 3rem; color: #8b5cf6;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>LG UltraGear 34GP83A-B</h4>
-                    <div class="product-price">
-                        <span>18.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('LG UltraGear 34GP83A-B', '18.990.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-desktop" style="font-size: 3rem; color: #059669;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <h4>Acer Predator X34 GS</h4>
-                    <div class="product-price">
-                        <span>22.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('Acer Predator X34 GS', '22.990.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Ổ Cứng & Lưu Trữ -->
-    <section class="storage-section">
-        <div class="section-header">
-            <h3>💾 Ổ CỨNG & LUU TRỮ</h3>
-            <div class="nav-arrows">
-                <button class="nav-arrow prev" data-section="storage">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="nav-arrow next" data-section="storage">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </div>
-        <div class="products-container" id="storage-container">
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-hdd" style="font-size: 3rem; color: #3b82f6;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>WD Black SN850X 1TB NVMe</h4>
-                    <div class="product-price">
-                        <span>3.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('WD Black SN850X 1TB NVMe', '3.990.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-save" style="font-size: 3rem; color: #dc2626;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <h4>Seagate FireCuda 530 2TB</h4>
-                    <div class="product-price">
-                        <span>7.490.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('Seagate FireCuda 530 2TB', '7.490.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-database" style="font-size: 3rem; color: #059669;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>Crucial MX4 4TB SSD</h4>
-                    <div class="product-price">
-                        <span>12.990.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('Crucial MX4 4TB SSD', '12.990.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-server" style="font-size: 3rem; color: #7c3aed;"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <h4>Kingston Fury Renegade 1TB</h4>
-                    <div class="product-price">
-                        <span>4.290.000 VNĐ</span>
-                        <button class="add-to-cart" onclick="addToCart('Kingston Fury Renegade 1TB', '4.290.000 VNĐ')">THÊM VÀO GIỎ</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Build Your Dream PC -->
-    <section class="build-section">
-        <h3>🔧 XÂY DỰNG PC MƠ ƯỚC CỦA BẠN</h3>
-        <div class="build-options">
-            <div class="build-option" data-component="cpu">
-                <div class="build-icon">
-                    <i class="fas fa-microchip"></i>
-                    <span>CPU</span>
-                </div>
-            </div>
-            <div class="build-option" data-component="gpu">
-                <div class="build-icon">
-                    <i class="fas fa-memory"></i>
-                    <span>GPU</span>
-                </div>
-            </div>
-            <div class="build-option" data-component="ram">
-                <div class="build-icon">
-                    <i class="fas fa-memory"></i>
-                    <span>RAM</span>
-                </div>
-            </div>
-            <div class="build-option" data-component="storage">
-                <div class="build-icon">
-                    <i class="fas fa-hdd"></i>
-                    <span>Ổ CỨNG</span>
-                </div>
-            </div>
-            <div class="build-option" data-component="motherboard">
-                <div class="build-icon">
-                    <i class="fas fa-th-large"></i>
-                    <span>MAINBOARD</span>
-                </div>
-            </div>
-            <div class="build-option" data-component="psu">
-                <div class="build-icon">
-                    <i class="fas fa-plug"></i>
-                    <span>NGUỒN</span>
-                </div>
-            </div>
-        </div>
-        <button class="build-complete-btn" onclick="proceedToBuild()">BẮT ĐẦU XÂY DỰNG PC</button>
-    </section>
-
-    <!-- Mua Nhanh Không Cần Đăng Ký -->
-    <section class="quick-purchase">
-        <div class="quick-purchase-content">
-            <h3>🛒 MUA HÀNG NHANH CHÓNG</h3>
-            <div class="purchase-benefits">
-                <div class="benefit-item">
-                    <i class="fas fa-shipping-fast"></i>
-                    <h4>Không Cần Đăng Ký</h4>
-                    <p>Mua hàng ngay lập tức mà không cần tạo tài khoản</p>
-                </div>
-                <div class="benefit-item">
-                    <i class="fas fa-user-plus"></i>
-                    <h4>Tự Động Tạo Tài Khoản</h4>
-                    <p>Hệ thống sẽ tự động tạo tài khoản cho bạn sau khi mua hàng</p>
-                </div>
-                <div class="benefit-item">
-                    <i class="fas fa-history"></i>
-                    <h4>Theo Dõi Đơn Hàng</h4>
-                    <p>Xem lại lịch sử mua hàng khi đăng nhập lần sau</p>
-                </div>
-                <div class="benefit-item">
-                    <i class="fas fa-credit-card"></i>
-                    <h4>Thanh Toán An Toàn</h4>
-                    <p>Nhiều phương thức thanh toán bảo mật</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    </div>
     <!-- Shopping Cart Sidebar -->
     <div class="cart-overlay" id="cartOverlay"></div>
     <div class="cart-sidebar" id="cartSidebar">
@@ -3069,65 +1979,53 @@
             </div>
         </div>
     </div>
-
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h4>VỀ CHÚNG TÔI</h4>
-                <ul>
-                    <li><a href="#">Giới thiệu</a></li>
-                    <li><a href="#">Tuyển dụng</a></li>
-                    <li><a href="#">Tin tức</a></li>
-                    <li><a href="#">Liên hệ</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>HỖ TRỢ KHÁCH HÀNG</h4>
-                <ul>
-                    <li><a href="#">Hướng dẫn mua hàng</a></li>
-                    <li><a href="#">Chính sách bảo hành</a></li>
-                    <li><a href="#">Chính sách đổi trả</a></li>
-                    <li><a href="#">FAQ</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>CHÍNH SÁCH</h4>
-                <ul>
-                    <li><a href="#">Chính sách bảo mật</a></li>
-                    <li><a href="#">Điều khoản sử dụng</a></li>
-                    <li><a href="#">Chính sách vận chuyển</a></li>
-                    <li><a href="#">Chính sách thanh toán</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>TÀI KHOẢN CỦA TÔI</h4>
-                <ul>
-                    <li><a href="#">Đăng nhập</a></li>
-                    <li><a href="#">Đăng ký</a></li>
-                    <li><a href="#">Theo dõi đơn hàng</a></li>
-                    <li><a href="#">Lịch sử mua hàng</a></li>
-                </ul>
-            </div>
-            <div class="footer-social">
-                <h4>THEO DÕI CHÚNG TÔI</h4>
+                <div class="footer-logo">
+                    <i class="fas fa-microchip"></i>
+                    <span>TECH HAVEN</span>
+                </div>
+                <p>Điểm đến tin cậy cho mọi nhu cầu công nghệ của bạn. Chất lượng hàng đầu, dịch vụ tận tâm.</p>
                 <div class="social-icons">
                     <a href="#"><i class="fab fa-facebook"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
                     <a href="#"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
+            </div>
+            <div class="footer-section">
+                <h4>Sản phẩm</h4>
+                <ul>
+                    <li><a href="/desktops">Máy tính để bàn</a></li>
+                    <li><a href="/laptops">Laptop</a></li>
+                    <li><a href="/components">Linh kiện</a></li>
+                    <li><a href="/peripherals">Phụ kiện</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Dịch vụ</h4>
+                <ul>
+                    <li><a href="/build-pc">Xây dựng PC</a></li>
+                    <li><a href="#">Bảo hành</a></li>
+                    <li><a href="#">Hỗ trợ kỹ thuật</a></li>
+                    <li><a href="#">Giao hàng</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Liên hệ</h4>
                 <div class="contact-info">
-                    <p><i class="fas fa-phone"></i> Hotline: 1800-1234</p>
+                    <p><i class="fas fa-phone"></i> 1800-1234</p>
                     <p><i class="fas fa-envelope"></i> info@techhaven.vn</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Tech Street, Hà Nội</p>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2024 TECH HAVEN. Tất cả quyền được bảo lưu</p>
+            <p>&copy; 2024 Tech Haven. Tất cả quyền được bảo lưu.</p>
         </div>
     </footer>
-
     <!-- Login Modal - Hiển thị khi chưa đăng nhập -->
     
     <div class="login-modal-overlay" id="loginModal">
@@ -3237,14 +2135,6 @@
                     <span class="user-badge">
                         <i class="fas fa-user"></i> Đã xác thực
                     </span>
-                    <!-- Membership Badge -->
-                    <div class="membership-badge" id="membershipBadge" style="display: none; margin-top: 8px;">
-                        <span class="membership-tier" id="membershipTier">
-                            <span id="membershipIcon">⭐</span>
-                            <span id="membershipName">Tiêu Chuẩn</span>
-                        </span>
-                        <span class="membership-points" id="membershipPoints">0 điểm</span>
-                    </div>
                 </div>
                 <button class="close-profile-btn" onclick="closeUserProfile()">
                     <i class="fas fa-times"></i>
@@ -3252,48 +2142,6 @@
             </div>
 
             <div class="user-profile-content">
-                <!-- Membership Level Section -->
-                <div class="profile-section" id="membershipSection" style="display: none;">
-                    <h4><i class="fas fa-trophy"></i> Hạng Thành Viên</h4>
-                    <div class="membership-info">
-                        <div class="membership-current">
-                            <div class="membership-tier-display">
-                                <span class="tier-icon" id="tierIcon">⭐</span>
-                                <div class="tier-details">
-                                    <span class="tier-name" id="tierName">Tiêu Chuẩn</span>
-                                    <span class="tier-points" id="tierPoints">0 điểm tích lũy</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="membership-progress" id="membershipProgress" style="display: none;">
-                            <div class="progress-info">
-                                <span>Còn <strong id="pointsToNext">0</strong> điểm để đạt hạng <strong id="nextTierName">Bạc</strong></span>
-                            </div>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
-                            </div>
-                        </div>
-                        <div class="membership-tiers-legend">
-                            <div class="tier-item">
-                                <span class="tier-badge standard">⭐ Tiêu Chuẩn</span>
-                                <span class="tier-requirement">0 điểm</span>
-                            </div>
-                            <div class="tier-item">
-                                <span class="tier-badge silver">🥈 Bạc</span>
-                                <span class="tier-requirement">500,000 điểm</span>
-                            </div>
-                            <div class="tier-item">
-                                <span class="tier-badge gold">🥇 Vàng</span>
-                                <span class="tier-requirement">1,000,000 điểm</span>
-                            </div>
-                            <div class="tier-item">
-                                <span class="tier-badge diamond">💎 Kim Cương</span>
-                                <span class="tier-requirement">2,000,000 điểm</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="profile-section">
                     <h4><i class="fas fa-user-edit"></i> Thông Tin Cá Nhân</h4>
                     <div class="profile-info">
@@ -3336,15 +2184,6 @@
                     </div>
                 </div>
 
-                <div class="profile-section">
-                    <h4><i class="fas fa-history"></i> Sản Phẩm Đã Xem</h4>
-                    <div class="recent-products" id="recentProducts">
-                        <div class="loading-recent">
-                            <i class="fas fa-spinner fa-spin"></i> Đang tải sản phẩm đã xem...
-                        </div>
-                    </div>
-                </div>
-
                 <div class="profile-actions">
                     <button class="btn btn-primary" onclick="editUserProfile()">
                         <i class="fas fa-edit"></i> Chỉnh Sửa Hồ Sơ
@@ -3359,6 +2198,7 @@
             </div>
         </div>
     </div>
+
     <!-- Search Overlay -->
     <div class="search-overlay" id="searchOverlay">
         <div class="search-container">
@@ -3380,325 +2220,28 @@
         </div>
     </div>
 
-    <!-- User Profile Panel CSS -->
+    <!-- Variant Selection Modal -->
+    <div id="variantModal" class="variant-modal" style="display: none;">
+        <div class="variant-modal-overlay"></div>
+        <div class="variant-modal-content">
+            <div class="variant-modal-header">
+                <h3>Chọn phiên bản sản phẩm</h3>
+                <button class="variant-modal-close" onclick="closeVariantModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="variant-modal-body">
+                <div id="variantOptions">
+                    <!-- Variant options will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
     <style>
         /* =====================================
-           USER PROFILE PANEL STYLES
-           ===================================== */
-        
-        /* Membership Badge in Header */
-        .membership-badge {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 8px;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .membership-tier {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 600;
-            font-size: 13px;
-        }
-        
-        .membership-tier #membershipIcon {
-            font-size: 16px;
-        }
-        
-        .membership-points {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.8);
-            padding-left: 12px;
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Membership Info Section */
-        .membership-info {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-        
-        .membership-current {
-            margin-bottom: 20px;
-        }
-        
-        .membership-tier-display {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.85), rgba(124, 58, 237, 0.85));
-            border-radius: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .membership-tier-display::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: shimmer 3s infinite;
-        }
-        
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-        
-        .membership-tier-display:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        .tier-icon {
-            font-size: 56px;
-            line-height: 1;
-            animation: float 3s ease-in-out infinite;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-            position: relative;
-            z-index: 1;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .tier-details {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .tier-name {
-            font-size: 28px;
-            font-weight: 800;
-            color: #fff;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 255, 255, 0.3);
-            letter-spacing: 0.5px;
-        }
-        
-        .tier-points {
-            font-size: 15px;
-            color: #fff;
-            font-weight: 600;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        /* Progress Bar */
-        .membership-progress {
-            margin-bottom: 20px;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-        }
-        
-        .progress-info {
-            margin-bottom: 12px;
-            font-size: 14px;
-            color: #fff;
-            text-align: center;
-            font-weight: 500;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .progress-info strong {
-            color: #fff;
-            font-weight: 800;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-        }
-        
-        .progress-bar-container {
-            height: 12px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-        
-        .progress-bar-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.3) 50%, 
-                transparent 100%);
-            animation: progressShine 2s infinite;
-        }
-        
-        @keyframes progressShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, 
-                #667eea 0%, 
-                #764ba2 50%, 
-                #667eea 100%);
-            background-size: 200% 100%;
-            border-radius: 20px;
-            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
-            animation: gradientMove 3s ease infinite;
-            position: relative;
-        }
-        
-        @keyframes gradientMove {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 20px;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5));
-            border-radius: 20px;
-        }
-        
-        /* Membership Tiers Legend */
-        .membership-tiers-legend {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        
-        .tier-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 14px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            font-size: 13px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            cursor: default;
-        }
-        
-        .tier-item:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .tier-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 700;
-            font-size: 13px;
-            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-        }
-        
-        .tier-badge.standard { 
-            color: #e5e7eb;
-            filter: drop-shadow(0 0 8px rgba(156, 163, 175, 0.8));
-        }
-        .tier-badge.silver { 
-            color: #f3f4f6;
-            filter: drop-shadow(0 0 8px rgba(192, 192, 192, 0.9));
-        }
-        .tier-badge.gold { 
-            color: #fcd34d;
-            filter: drop-shadow(0 0 8px rgba(251, 191, 36, 1));
-        }
-        .tier-badge.diamond { 
-            color: #7dd3fc;
-            filter: drop-shadow(0 0 12px rgba(96, 215, 255, 1));
-            animation: membershipSparkle 2s ease-in-out infinite;
-        }
-        
-        @keyframes membershipSparkle {
-            0%, 100% { filter: drop-shadow(0 0 8px rgba(96, 215, 255, 0.8)); }
-            50% { filter: drop-shadow(0 0 16px rgba(96, 215, 255, 1)); }
-        }
-        
-        .tier-requirement {
-            color: #fff;
-            font-size: 11px;
-            font-weight: 700;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 8px;
-            border-radius: 8px;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        /* Profile Section Title Enhancement */
-        .profile-section h4 {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-            font-size: 16px;
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.95);
-        }
-        
-        .profile-section h4 i {
-            font-size: 18px;
-            animation: iconPulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 480px) {
-            .membership-tier-display {
-                flex-direction: column;
-                text-align: center;
-                gap: 16px;
-            }
-            
-            .tier-icon {
-                font-size: 48px;
-            }
-            
-            .tier-name {
-                font-size: 24px;
-            }
-            
-            .membership-tiers-legend {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* =====================================
-           EXISTING STYLES
-           ===================================== */
-           /* CART ICON CLICK HANDLING
+           CART ICON CLICK HANDLING
            ===================================== */
         
         .cart-icon-wrapper {
@@ -3980,7 +2523,6 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
         
         .user-profile-header {
@@ -4055,29 +2597,6 @@
         .user-profile-content {
             flex: 1;
             padding: 20px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e0 #f7fafc;
-        }
-        
-        /* Custom scrollbar for user profile content */
-        .user-profile-content::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .user-profile-content::-webkit-scrollbar-track {
-            background: #f7fafc;
-            border-radius: 4px;
-        }
-        
-        .user-profile-content::-webkit-scrollbar-thumb {
-            background: #cbd5e0;
-            border-radius: 4px;
-            transition: background 0.3s ease;
-        }
-        
-        .user-profile-content::-webkit-scrollbar-thumb:hover {
-            background: #a0aec0;
         }
         
         .profile-section {
@@ -4117,186 +2636,17 @@
         .text-danger { color: #dc3545; }
         .text-success { color: #28a745; }
         
-        .recent-orders, .favorite-products, .recent-products {
+        .recent-orders, .favorite-products {
             min-height: 60px;
             padding: 15px;
             background: #f8f9fa;
             border-radius: 8px;
             text-align: center;
-            max-height: 300px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e0 #f7fafc;
         }
         
-        /* Custom scrollbar for WebKit browsers */
-        .recent-orders::-webkit-scrollbar, .favorite-products::-webkit-scrollbar, .recent-products::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .recent-orders::-webkit-scrollbar-track, .favorite-products::-webkit-scrollbar-track, .recent-products::-webkit-scrollbar-track {
-            background: #f7fafc;
-            border-radius: 3px;
-        }
-        
-        .recent-orders::-webkit-scrollbar-thumb, .favorite-products::-webkit-scrollbar-thumb, .recent-products::-webkit-scrollbar-thumb {
-            background: #cbd5e0;
-            border-radius: 3px;
-            transition: background 0.3s ease;
-        }
-        
-        .recent-orders::-webkit-scrollbar-thumb:hover, .favorite-products::-webkit-scrollbar-thumb:hover, .recent-products::-webkit-scrollbar-thumb:hover {
-            background: #a0aec0;
-        }
-        
-        .loading-orders, .loading-favorites, .loading-recent {
+        .loading-orders, .loading-favorites {
             color: #666;
             font-style: italic;
-        }
-        
-        .empty-favorites, .error-favorites, .empty-recent, .error-recent {
-            text-align: center;
-            padding: 2rem 1rem;
-        }
-        
-        .favorites-grid, .recent-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-            text-align: left;
-            padding: 0;
-        }
-        
-        /* When favorites/recent container is scrolling, reset text alignment */
-        .favorite-products.has-favorites, .recent-products.has-recent {
-            text-align: left;
-            padding: 0;
-            position: relative;
-        }
-        
-        /* Add a subtle gradient overlay at the bottom when scrollable */
-        .favorite-products.has-favorites::after, .recent-products.has-recent::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: linear-gradient(transparent, rgba(248, 249, 250, 0.8));
-            pointer-events: none;
-            border-radius: 0 0 8px 8px;
-        }
-        
-        /* Add padding to the grid when it has content */
-        .favorite-products.has-favorites .favorites-grid, .recent-products.has-recent .recent-grid {
-            padding: 15px;
-        }
-        
-        .favorite-item, .recent-item {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
-        }
-        
-        .favorite-item:hover, .recent-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .favorite-image, .recent-image {
-            position: relative;
-            width: 100%;
-            height: 120px;
-            overflow: hidden;
-        }
-        
-        .favorite-image img, .recent-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-        
-        .favorite-item:hover .favorite-image img, .recent-item:hover .recent-image img {
-            transform: scale(1.05);
-        }
-        
-        .favorite-info, .recent-info {
-            padding: 0.75rem;
-        }
-        
-        .favorite-info h5, .recent-info h5 {
-            margin: 0 0 0.5rem 0;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #374151;
-            line-height: 1.3;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .favorite-price, .recent-price {
-            margin: 0 0 0.75rem 0;
-            font-weight: 700;
-            color: #ef4444;
-            font-size: 0.875rem;
-        }
-        
-        .favorite-actions, .recent-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .favorite-actions .btn, .recent-actions .btn {
-            flex: 1;
-            padding: 0.375rem 0.5rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.25rem;
-        }
-        
-        .btn-sm {
-            padding: 0.375rem 0.75rem;
-            font-size: 0.75rem;
-        }
-        
-        .btn-outline-danger {
-            background: transparent;
-            color: #ef4444;
-            border: 1px solid #ef4444;
-        }
-        
-        .btn-outline-danger:hover {
-            background: #ef4444;
-            color: white;
-        }
-        
-        .btn-outline-primary {
-            background: transparent;
-            color: #3b82f6;
-            border: 1px solid #3b82f6;
-        }
-        
-        .btn-outline-primary:hover {
-            background: #3b82f6;
-            color: white;
-        }
-        
-        .favorites-more {
-            text-align: center;
-            margin-top: 1rem;
         }
         
         .profile-actions {
@@ -4346,244 +2696,10 @@
             background: #c82333;
         }
         
-        /* ---------- Recent Orders Styles ---------- */
-        .orders-list {
-            padding: 10px;
-        }
-        
-        .order-item {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            box-sizing: border-box;
-            border: 1px solid rgba(102, 126, 234, 0.1);
-        }
-        
-        .order-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.15);
-            border-color: rgba(102, 126, 234, 0.3);
-        }
-        
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #f0f0f0;
-            gap: 12px;
-        }
-        
-        .order-id {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            color: #2d3748;
-            font-size: 0.95rem;
-            flex: 1;
-            min-width: 0;
-            overflow: hidden;
-        }
-        
-        .order-id i {
-            color: #667eea;
-            flex-shrink: 0;
-            font-size: 1.1rem;
-        }
-        
-        .order-id span {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 160px;
-            font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .order-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .status-pending {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            color: #92400e;
-        }
-        
-        .status-processing {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            color: #1e40af;
-        }
-        
-        .status-shipping {
-            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-            color: #4338ca;
-        }
-        
-        .status-completed {
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            color: #065f46;
-        }
-        
-        .status-cancelled {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            color: #991b1b;
-        }
-        
-        .status-default {
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-            color: #6b7280;
-        }
-        
-        .order-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
-            margin-bottom: 14px;
-            padding: 12px;
-            background: rgba(102, 126, 234, 0.03);
-            border-radius: 8px;
-        }
-        
-        .order-detail {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.875rem;
-            color: #4a5568;
-            padding: 6px 8px;
-            background: white;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-        }
-        
-        .order-detail:hover {
-            background: rgba(102, 126, 234, 0.05);
-            transform: scale(1.02);
-        }
-        
-        .order-detail i {
-            width: 18px;
-            color: #667eea;
-            font-size: 0.95rem;
-        }
-        
-        .order-detail span {
-            font-weight: 500;
-        }
-        
-        .order-total {
-            font-weight: 800;
-            color: #ef4444;
-            font-size: 1rem;
-        }
-        
-        .order-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 8px;
-        }
-        
-        .order-actions .btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .order-actions .btn-outline-primary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-        
-        .order-actions .btn-outline-primary:hover {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-        
-        .order-total {
-            font-weight: 700;
-            color: #ef4444;
-        }
-        
-        .order-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-        }
-        
-        .orders-more {
-            text-align: center;
-            margin-top: 1rem;
-            padding: 0 15px;
-        }
-        
-        .empty-orders, .error-orders {
-            text-align: center;
-            padding: 2rem 1rem;
-        }
-        
         @media (max-width: 768px) {
             .user-profile-panel {
                 width: 100vw;
                 right: -100vw;
-            }
-            
-            .recent-orders, .favorite-products {
-                max-height: 250px;
-            }
-            
-            .favorites-grid {
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-                gap: 0.75rem;
-            }
-            
-            .favorite-item {
-                border-radius: 6px;
-            }
-            
-            .favorite-image {
-                height: 100px;
-            }
-            
-            .favorite-info h5 {
-                font-size: 0.8rem;
-            }
-            
-            .favorite-price {
-                font-size: 0.8rem;
-            }
-            
-            .favorite-actions .btn {
-                padding: 0.25rem 0.4rem;
-                font-size: 0.7rem;
             }
         }
         
@@ -6106,40 +4222,250 @@
         .cart-badge[style*="display: none"] {
             display: none !important;
         }
-        
-        /* Loading cart items */
-        .cart-item.loading-item {
-            opacity: 0.7;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            background-size: 200% 100%;
-            animation: shimmerLoading 2s infinite;
+    </style>
+    <!-- Variant Modal CSS -->
+    <style>
+        .variant-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
         }
         
-        @keyframes shimmerLoading {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+        .variant-modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
         }
         
-        .cart-item.loading-item .cart-item-name {
-            color: #999;
-            font-style: italic;
+        .variant-modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 10001;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
         }
         
-        .cart-item.loading-item .cart-item-price {
-            color: #999;
-            font-style: italic;
+        .variant-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8fafc;
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .variant-modal-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .variant-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .variant-modal-close:hover {
+            background: #e5e7eb;
+            color: #333;
+        }
+        
+        .variant-modal-body {
+            padding: 1.5rem;
+        }
+        
+        .variant-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .variant-option:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .variant-image {
+            width: 80px;
+            height: 80px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .variant-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        
+        .variant-image i {
+            font-size: 2rem;
+            color: #667eea;
+        }
+        
+        .variant-info {
+            flex: 1;
+        }
+        
+        .variant-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .main-badge {
+            background: #667eea;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .variant-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.25rem;
+        }
+        
+        .variant-availability {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .variant-availability.in-stock {
+            color: #10b981;
+        }
+        
+        .variant-availability.out-of-stock {
+            color: #ef4444;
+        }
+        
+        .variant-availability.pre-order {
+            color: #f59e0b;
+        }
+        
+        .variant-availability.contact {
+            color: #6b7280;
+        }
+        
+        .variant-stock {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+        
+        .variant-action {
+            flex-shrink: 0;
+        }
+        
+        .variant-select-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .variant-select-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .variant-modal-content {
+                width: 95%;
+                max-height: 90vh;
+            }
+            
+            .variant-option {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.75rem;
+            }
+            
+            .variant-image {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .variant-info {
+                text-align: center;
+            }
+            
+            .variant-select-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Buy Now mode styling for variant selection */
+        .variant-select-btn.buy-now-mode {
+            background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+            border-color: #f59e0b !important;
+            color: white !important;
+            font-weight: 600;
+            animation: buyNowPulse 2s infinite;
+        }
+        
+        .variant-select-btn.buy-now-mode:hover {
+            background: linear-gradient(135deg, #d97706, #b45309) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+        }
+        
+        @keyframes buyNowPulse {
+            0%, 100% { 
+                box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); 
+            }
+            50% { 
+                box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6); 
+            }
         }
     </style>
-
     <script src="/js/script.js" defer></script>
     <script src="/js/auth.js" defer></script>
     <script src="/js/address-management.js"></script>
-    
-    <!-- Google Analytics 4 E-commerce Tracking -->
-    <script src="/js/ga4-tracking.js"></script>
-    
-    <!-- Tier Promotion Manager - Global tier monitoring across all pages -->
-    <script src="/js/tier-promotion-manager.js"></script>
+
     
     <!-- Guest Cart Synchronization -->
     <script>
@@ -6625,16 +4951,15 @@
             console.log('🔄 Refreshing user data before opening profile...');
             await refreshUserDataFromServer();
             
+            // Update profile panel with current user data
+            updateUserProfilePanel();
+            
             // Show the profile panel
             const panel = document.getElementById('userProfilePanel');
             if (panel) {
                 panel.classList.add('active');
                 console.log('✅ Profile panel opened');
             }
-            
-            // Update profile panel with current user data (async)
-            await updateUserProfilePanel();
-            console.log('✅ Profile panel data loaded');
         };
         
         window.closeUserProfile = function() {
@@ -6646,10 +4971,8 @@
         };
         
         // Update user profile panel with current user data and enhanced photo detection
-        async function updateUserProfilePanel() {
+        function updateUserProfilePanel() {
             if (!window.currentUser) return;
-            
-            console.log('🔄 updateUserProfilePanel called for:', window.currentUser.email);
             
             // Update profile name and email
             const profileName = document.getElementById('profileName');
@@ -6695,120 +5018,6 @@
                     month: 'long',
                     day: 'numeric'
                 });
-            }
-            
-            // Load membership level - try multiple ways
-            console.log('🏆 Attempting to load membership level...');
-            console.log('🔍 Checking loadMembershipLevel availability:', {
-                windowLoadMembershipLevel: typeof window.loadMembershipLevel,
-                globalLoadMembershipLevel: typeof loadMembershipLevel
-            });
-            
-            // Try using the function from script.js
-            if (typeof window.loadMembershipLevel === 'function') {
-                console.log('✅ Found window.loadMembershipLevel, calling it...');
-                await window.loadMembershipLevel();
-            } else {
-                // Fallback: define inline if script.js not loaded yet
-                console.log('⚠️ window.loadMembershipLevel not found, loading inline...');
-                await loadMembershipLevelInline();
-            }
-            
-            // Load recent orders
-            console.log('📋 Calling loadRecentOrders from updateUserProfilePanel');
-            await loadRecentOrders();
-        }
-        
-        // Inline membership loader as fallback
-        async function loadMembershipLevelInline() {
-            console.log('🏆 Loading membership level (inline)...');
-            
-            if (!window.currentUser || !window.currentUser.uid) {
-                console.log('❌ No user ID found');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`/api/users/${window.currentUser.uid}/membership`);
-                const data = await response.json();
-                
-                console.log('📊 Membership API response:', data);
-                
-                if (data.success && data.membership) {
-                    const membership = data.membership;
-                    console.log('✅ Membership loaded:', membership);
-                    
-                    // Update badge in header
-                    const membershipBadge = document.getElementById('membershipBadge');
-                    const membershipIcon = document.getElementById('membershipIcon');
-                    const membershipName = document.getElementById('membershipName');
-                    const membershipPoints = document.getElementById('membershipPoints');
-                    
-                    if (membershipBadge && membershipIcon && membershipName && membershipPoints) {
-                        membershipIcon.textContent = membership.icon;
-                        membershipName.textContent = membership.name;
-                        membershipPoints.textContent = `${membership.points.toLocaleString('vi-VN')} điểm`;
-                        membershipBadge.style.display = 'flex';
-                        console.log('✅ Membership badge updated');
-                    }
-                    
-                    // Update membership section
-                    const membershipSection = document.getElementById('membershipSection');
-                    const tierIcon = document.getElementById('tierIcon');
-                    const tierName = document.getElementById('tierName');
-                    const tierPoints = document.getElementById('tierPoints');
-                    
-                    if (membershipSection && tierIcon && tierName && tierPoints) {
-                        tierIcon.textContent = membership.icon;
-                        tierName.textContent = membership.name;
-                        tierPoints.textContent = `${membership.points.toLocaleString('vi-VN')} điểm tích lũy`;
-                        membershipSection.style.display = 'block';
-                        console.log('✅ Membership section updated');
-                    }
-                    
-                    // Update progress bar if not at max tier
-                    if (membership.nextTier) {
-                        const membershipProgress = document.getElementById('membershipProgress');
-                        const pointsToNext = document.getElementById('pointsToNext');
-                        const nextTierName = document.getElementById('nextTierName');
-                        const progressBar = document.getElementById('progressBar');
-                        
-                        if (membershipProgress && pointsToNext && nextTierName && progressBar) {
-                            pointsToNext.textContent = membership.pointsToNextTier.toLocaleString('vi-VN');
-                            nextTierName.textContent = membership.nextTierName;
-                            
-                            // Calculate progress percentage
-                            let currentTierThreshold = 0;
-                            let nextTierThreshold = 0;
-                            
-                            switch(membership.level) {
-                                case 'standard':
-                                    currentTierThreshold = 0;
-                                    nextTierThreshold = 500000;
-                                    break;
-                                case 'silver':
-                                    currentTierThreshold = 500000;
-                                    nextTierThreshold = 1000000;
-                                    break;
-                                case 'gold':
-                                    currentTierThreshold = 1000000;
-                                    nextTierThreshold = 2000000;
-                                    break;
-                            }
-                            
-                            const progressPercent = ((membership.points - currentTierThreshold) / (nextTierThreshold - currentTierThreshold)) * 100;
-                            progressBar.style.width = `${Math.min(progressPercent, 100)}%`;
-                            membershipProgress.style.display = 'block';
-                            console.log('✅ Progress bar updated');
-                        }
-                    }
-                    
-                    console.log('✅ Membership UI fully updated');
-                } else {
-                    console.log('⚠️ No membership data returned:', data);
-                }
-            } catch (error) {
-                console.error('❌ Error loading membership:', error);
             }
         }
         
@@ -7035,36 +5244,19 @@
                 const allProducts = data.products;
                 console.log('✅ Loaded', allProducts.length, 'products for homepage');
                 
-                // Load best sellers from actual sales data
-                let bestSellersProducts = [];
-                try {
-                    const bestSellersResponse = await fetch('/api/products/best-sellers');
-                    const bestSellersData = await bestSellersResponse.json();
-                    if (bestSellersData.success && bestSellersData.products.length > 0) {
-                        bestSellersProducts = bestSellersData.products;
-                        console.log('🔥 Loaded', bestSellersProducts.length, 'best sellers from sales data');
-                    } else {
-                        console.log('⚠️ No sales data found, using fallback logic');
-                        bestSellersProducts = allProducts.filter(p => p.isBestSeller || p.rating >= 4.5).slice(0, 10);
-                    }
-                } catch (bestSellerError) {
-                    console.warn('⚠️ Error loading best sellers, using fallback:', bestSellerError);
-                    bestSellersProducts = allProducts.filter(p => p.isBestSeller || p.rating >= 4.5).slice(0, 10);
-                }
-                
                 // Categorize products for different sections
                 homepageProductsCache = {
-                    newProducts: allProducts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)).slice(0, 10),
-                    bestSellers: bestSellersProducts,
-                    laptops: allProducts.filter(p => p.category === 'laptop').slice(0, 10),
-                    monitors: allProducts.filter(p => p.category === 'monitor').slice(0, 10),
-                    storage: allProducts.filter(p => p.category === 'storage').slice(0, 10)
+                    newProducts: allProducts.filter(p => p.isNew || p.id >= 15).slice(0, 8),
+                    bestSellers: allProducts.filter(p => p.isBestSeller || p.rating >= 4.5).slice(0, 8),
+                    laptops: allProducts.filter(p => p.category === 'laptop').slice(0, 8),
+                    monitors: allProducts.filter(p => p.category === 'monitor').slice(0, 8),
+                    storage: allProducts.filter(p => p.category === 'storage').slice(0, 8)
                 };
                 
                 // If not enough products in specific categories, fill with random products
                 Object.keys(homepageProductsCache).forEach(section => {
-                    if (homepageProductsCache[section].length < 10) {
-                        const remaining = 10 - homepageProductsCache[section].length;
+                    if (homepageProductsCache[section].length < 4) {
+                        const remaining = 4 - homepageProductsCache[section].length;
                         const otherProducts = allProducts
                             .filter(p => !homepageProductsCache[section].includes(p))
                             .slice(0, remaining);
@@ -7534,6 +5726,12 @@
         window.loadCart = loadCart;
         window.loadCartFromDatabase = loadCart; // Alias for script.js compatibility
         
+        // DO NOT override script.js functions to prevent circular calls
+        // Let script.js keep its original functions and call our wrapper functions
+        // Make our wrapper functions available with different names for optional use
+        window.productDetailUpdateQuantity = simpleUpdateQuantity;
+        window.productDetailRemoveFromCart = simpleRemoveFromCart;
+        
         // Sync cart from database (for cart badge click)
         async function syncCartFromDatabase() {
             if (!window.currentUser) {
@@ -7692,235 +5890,269 @@
         /* REMOVED: setupSimpleCartEventListeners, simpleUpdateQuantity, simpleRemoveFromCart 
            All cart operations are now handled by script.js for consistency */
         
-        // // Update cart badge
-        // function setupSimpleCartEventListeners() {
-        //     console.log('🔧 Setting up SIMPLE cart event listeners');
+        // Update cart badge
+        function setupSimpleCartEventListeners() {
+            console.log('🔧 Setting up SIMPLE cart event listeners');
             
-        //     // Remove existing event listeners by cloning cart items container
-        //     const cartItemsContainer = document.getElementById('cartItems');
-        //     if (!cartItemsContainer) {
-        //         console.error('❌ Cart items container not found');
-        //         return;
-        //     }
+            // Remove existing event listeners by cloning cart items container
+            const cartItemsContainer = document.getElementById('cartItems');
+            if (!cartItemsContainer) {
+                console.error('❌ Cart items container not found');
+                return;
+            }
             
-        //     // Use event delegation instead of adding multiple listeners
-        //     // Remove existing delegated listener if any
-        //     if (cartItemsContainer._hasCartListener) {
-        //         cartItemsContainer.removeEventListener('click', cartItemsContainer._cartClickHandler);
-        //     }
+            // Use event delegation instead of adding multiple listeners
+            // Remove existing delegated listener if any
+            if (cartItemsContainer._hasCartListener) {
+                cartItemsContainer.removeEventListener('click', cartItemsContainer._cartClickHandler);
+            }
             
-        //     // Create new delegated click handler
-        //     const cartClickHandler = async function(e) {
-        //         console.log('�️ Cart click detected:', e.target);
+            // Create new delegated click handler
+            const cartClickHandler = async function(e) {
+                console.log('�️ Cart click detected:', e.target);
                 
-        //         // Handle decrease buttons
-        //         if (e.target.classList.contains('decrease-qty')) {
-        //             e.preventDefault();
-        //             e.stopPropagation();
+                // Handle decrease buttons
+                if (e.target.classList.contains('decrease-qty')) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     
-        //             const cartId = e.target.getAttribute('data-cart-id');
-        //             const currentQuantity = parseInt(e.target.getAttribute('data-current-quantity'));
-        //             const newQuantity = Math.max(0, currentQuantity - 1);
+                    const cartId = e.target.getAttribute('data-cart-id');
+                    const currentQuantity = parseInt(e.target.getAttribute('data-current-quantity'));
+                    const newQuantity = Math.max(0, currentQuantity - 1);
                     
-        //             console.log('📉 Decrease clicked:', { cartId, currentQuantity, newQuantity });
+                    console.log('📉 Decrease clicked:', { cartId, currentQuantity, newQuantity });
                     
-        //             if (newQuantity <= 0) {
-        //                 console.log('🗑️ Quantity is 0, removing item');
-        //                 await simpleRemoveFromCart(cartId);
-        //             } else {
-        //                 console.log('📉 Updating quantity to:', newQuantity);
-        //                 await simpleUpdateQuantity(cartId, newQuantity);
-        //             }
-        //             return;
-        //         }
+                    if (newQuantity <= 0) {
+                        console.log('🗑️ Quantity is 0, removing item');
+                        await simpleRemoveFromCart(cartId);
+                    } else {
+                        console.log('📉 Updating quantity to:', newQuantity);
+                        await simpleUpdateQuantity(cartId, newQuantity);
+                    }
+                    return;
+                }
                 
-        //         // Handle increase buttons
-        //         if (e.target.classList.contains('increase-qty')) {
-        //             e.preventDefault();
-        //             e.stopPropagation();
+                // Handle increase buttons
+                if (e.target.classList.contains('increase-qty')) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     
-        //             const cartId = e.target.getAttribute('data-cart-id');
-        //             const currentQuantity = parseInt(e.target.getAttribute('data-current-quantity'));
-        //             const newQuantity = currentQuantity + 1;
+                    const cartId = e.target.getAttribute('data-cart-id');
+                    const currentQuantity = parseInt(e.target.getAttribute('data-current-quantity'));
+                    const newQuantity = currentQuantity + 1;
                     
-        //             console.log('📈 Increase clicked:', { cartId, currentQuantity, newQuantity });
+                    console.log('📈 Increase clicked:', { cartId, currentQuantity, newQuantity });
                     
-        //             await simpleUpdateQuantity(cartId, newQuantity);
-        //             return;
-        //         }
+                    await simpleUpdateQuantity(cartId, newQuantity);
+                    return;
+                }
                 
-        //         // Handle remove buttons
-        //         if (e.target.classList.contains('remove-item')) {
-        //             e.preventDefault();
-        //             e.stopPropagation();
+                // Handle remove buttons
+                if (e.target.classList.contains('remove-item')) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     
-        //             const cartId = e.target.getAttribute('data-cart-id');
-        //             console.log('🗑️ Remove clicked:', { cartId });
+                    const cartId = e.target.getAttribute('data-cart-id');
+                    console.log('🗑️ Remove clicked:', { cartId });
                     
-        //             await simpleRemoveFromCart(cartId);
-        //             return;
-        //         }
-        //     };
+                    await simpleRemoveFromCart(cartId);
+                    return;
+                }
+            };
             
-        //     // Add the new delegated listener
-        //     cartItemsContainer.addEventListener('click', cartClickHandler);
-        //     cartItemsContainer._cartClickHandler = cartClickHandler;
-        //     cartItemsContainer._hasCartListener = true;
+            // Add the new delegated listener
+            cartItemsContainer.addEventListener('click', cartClickHandler);
+            cartItemsContainer._cartClickHandler = cartClickHandler;
+            cartItemsContainer._hasCartListener = true;
             
-        //     console.log('✅ SIMPLE cart event listeners setup completed with event delegation');
-        // }
+            console.log('✅ SIMPLE cart event listeners setup completed with event delegation');
+        }
         
-        // // Simple update quantity function (supports both guest and logged users)
-        // async function simpleUpdateQuantity(cartId, newQuantity) {
-        //     console.log('📈 SIMPLE updating quantity:', cartId, 'to', newQuantity);
+        // Simple update quantity function (supports both guest and logged users)
+        async function simpleUpdateQuantity(cartId, newQuantity) {
+            // Prevent infinite loops
+            if (window._productDetailUpdating) {
+                console.log('⚠️ Update already in progress, skipping to prevent loop');
+                return;
+            }
+            window._productDetailUpdating = true;
             
-        //     // Check if user is logged in
-        //     if (!window.currentUser) {
-        //         console.log('👤 Guest mode: Using localStorage cart management');
+            try {
+                console.log('📈 SIMPLE updating quantity:', cartId, 'to', newQuantity);
                 
-        //         // Use script.js guest cart functions
-        //         if (typeof window.updateGuestCartQuantity === 'function') {
-        //             window.updateGuestCartQuantity(cartId, newQuantity);
+                // Check if user is logged in
+                if (!window.currentUser) {
+                    console.log('👤 Guest mode: Using localStorage cart management');
                     
-        //             // Small delay to let script.js update localStorage, then refresh our UI
-        //             setTimeout(async () => {
-        //                 await loadCart();
-        //                 notifyCartChange();
-        //             }, 50); // Reduced delay for faster response
-                    
-        //             console.log('✅ Guest cart quantity update initiated');
-        //         } else {
-        //             console.error('❌ updateGuestCartQuantity function not found');
-        //             showNotification('Không thể cập nhật số lượng', 'error');
-        //         }
-        //         return;
-        //     }
-            
-        //     // Logged user: Use script.js updateCartQuantityById function for better Firebase integration
-        //     if (typeof window.updateCartQuantityById === 'function') {
-        //         console.log('🔗 Using script.js updateCartQuantityById for Firebase integration');
-        //         await window.updateCartQuantityById(cartId, newQuantity);
-                
-        //         // Update our local UI after script.js handles the update
-        //         setTimeout(async () => {
-        //             await loadCart();
-        //             notifyCartChange();
-        //         }, 200);
-                
-        //         console.log('✅ Delegated to script.js updateCartQuantityById');
-        //         return;
-        //     }
-            
-        //     // Fallback: Direct API call (if script.js function not available)
-        //     try {
-        //         console.log('📡 Fallback: Making direct API request...');
-        //         const response = await fetch(`/api/cart/${cartId}`, {
-        //             method: 'PUT',
-        //             headers: {
-        //                 'Content-Type': 'application/json'
-        //             },
-        //             body: JSON.stringify({ quantity: newQuantity })
-        //         });
-                
-        //         console.log('📊 API response status:', response.status);
-                
-        //         if (response.ok) {
-        //             const data = await response.json();
-        //             console.log('📋 API response data:', data);
-                    
-        //             if (data.success) {
-        //                 console.log('✅ Quantity updated successfully');
+                    // Use script.js guest cart functions
+                    if (typeof window.updateGuestCartQuantity === 'function') {
+                        window.updateGuestCartQuantity(cartId, newQuantity);
                         
-        //                 // Refresh cart to show updated data
-        //                 await loadCart();
-        //                 notifyCartChange();
-        //             } else {
-        //                 throw new Error(data.error || 'Failed to update quantity');
-        //             }
-        //         } else {
-        //             const errorText = await response.text();
-        //             console.error('❌ API error:', errorText);
-        //             throw new Error(`HTTP ${response.status}: ${errorText}`);
-        //         }
-        //     } catch (error) {
-        //         console.error('❌ Error updating quantity:', error);
-        //         showNotification('Không thể cập nhật số lượng', 'error');
-        //     }
-        // }
+                        // Small delay to let script.js update localStorage, then refresh our UI
+                        setTimeout(async () => {
+                            await loadCart();
+                            notifyCartChange();
+                        }, 50); // Reduced delay for faster response
+                        
+                        console.log('✅ Guest cart quantity update initiated');
+                    } else {
+                        console.error('❌ updateGuestCartQuantity function not found');
+                        showNotification('Không thể cập nhật số lượng', 'error');
+                    }
+                    return;
+                }
+                
+                // Logged user: Use script.js updateCartQuantityById function for better Firebase integration
+                if (typeof window.updateCartQuantityById === 'function') {
+                    console.log('🔗 Using script.js updateCartQuantityById for Firebase integration');
+                    await window.updateCartQuantityById(cartId, newQuantity);
+                    
+                    // Update our local UI after script.js handles the update
+                    setTimeout(async () => {
+                        await loadCart();
+                        notifyCartChange();
+                    }, 200);
+                    
+                    console.log('✅ Delegated to script.js updateCartQuantityById');
+                    return;
+                }
+            } finally {
+                // Always clear the flag
+                window._productDetailUpdating = false;
+            }
+                
+                // Update our local UI after script.js handles the update
+                setTimeout(async () => {
+                    await loadCart();
+                    notifyCartChange();
+                }, 200);
+                
+                console.log('✅ Delegated to script.js updateCartQuantityById');
+                return;
+            }
+            
+            // Fallback: Direct API call (if script.js function not available)
+            try {
+                console.log('📡 Fallback: Making direct API request...');
+                const response = await fetch(`/api/cart/${cartId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ quantity: newQuantity })
+                });
+                
+                console.log('📊 API response status:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('📋 API response data:', data);
+                    
+                    if (data.success) {
+                        console.log('✅ Quantity updated successfully');
+                        
+                        // Refresh cart to show updated data
+                        await loadCart();
+                        notifyCartChange();
+                    } else {
+                        throw new Error(data.error || 'Failed to update quantity');
+                    }
+                } else {
+                    const errorText = await response.text();
+                    console.error('❌ API error:', errorText);
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+            } catch (error) {
+                console.error('❌ Error updating quantity:', error);
+                showNotification('Không thể cập nhật số lượng', 'error');
+            }
         
-        // // Simple remove from cart function (supports both guest and logged users)
-        // async function simpleRemoveFromCart(cartId) {
-        //     console.log('🗑️ SIMPLE removing from cart:', cartId);
+        
+        // Simple remove from cart function (supports both guest and logged users)
+        async function simpleRemoveFromCart(cartId) {
+            // Prevent infinite loops
+            if (window._productDetailRemoving) {
+                console.log('⚠️ Remove already in progress, skipping to prevent loop');
+                return;
+            }
+            window._productDetailRemoving = true;
             
-        //     // Check if user is logged in
-        //     if (!window.currentUser) {
-        //         console.log('👤 Guest mode: Using localStorage cart management');
+            try {
+                console.log('🗑️ SIMPLE removing from cart:', cartId);
                 
-        //         // Use script.js guest cart functions
-        //         if (typeof window.removeGuestCartItem === 'function') {
-        //             window.removeGuestCartItem(cartId);
+                // Check if user is logged in
+                if (!window.currentUser) {
+                    console.log('👤 Guest mode: Using localStorage cart management');
                     
-        //             // Small delay to let script.js update localStorage, then refresh our UI
-        //             setTimeout(async () => {
-        //                 await loadCart();
-        //                 notifyCartChange();
-        //             }, 50); // Reduced delay for faster response
-                    
-        //             console.log('✅ Guest cart item removal initiated');
-        //         } else {
-        //             console.error('❌ removeGuestCartItem function not found');
-        //             showNotification('Không thể xóa sản phẩm', 'error');
-        //         }
-        //         return;
-        //     }
-            
-        //     // Logged user: Use script.js removeFromCartById function for better Firebase integration
-        //     if (typeof window.removeFromCartById === 'function') {
-        //         console.log('🔗 Using script.js removeFromCartById for Firebase integration');
-        //         await window.removeFromCartById(cartId);
-                
-        //         // Update our local UI after script.js handles the removal
-        //         setTimeout(async () => {
-        //             await loadCart();
-        //             notifyCartChange();
-        //         }, 200);
-                
-        //         console.log('✅ Delegated to script.js removeFromCartById');
-        //         return;
-        //     }
-            
-        //     // Fallback: Direct API call (if script.js function not available)
-        //     try {
-        //         console.log('📡 Fallback: Making direct API request to remove...');
-        //         const response = await fetch(`/api/cart/${cartId}`, {
-        //             method: 'DELETE'
-        //         });
-                
-        //         console.log('📊 API response status:', response.status);
-                
-        //         if (response.ok) {
-        //             const data = await response.json();
-        //             console.log('📋 API response data:', data);
-                    
-        //             if (data.success) {
-        //                 console.log('✅ Item removed successfully');
+                    // Use script.js guest cart functions
+                    if (typeof window.removeGuestCartItem === 'function') {
+                        window.removeGuestCartItem(cartId);
                         
-        //                 // Refresh cart to show updated data
-        //                 await loadCart();
-        //                 notifyCartChange();
-        //             } else {
-        //                 throw new Error(data.error || 'Failed to remove item');
-        //             }
-        //         } else {
-        //             const errorText = await response.text();
-        //             console.error('❌ API error:', errorText);
-        //             throw new Error(`HTTP ${response.status}: ${errorText}`);
-        //         }
-        //     } catch (error) {
-        //         console.error('❌ Error removing item:', error);
-        //         showNotification('Không thể xóa sản phẩm', 'error');
-        //     }
-        // }
+                        // Small delay to let script.js update localStorage, then refresh our UI
+                        setTimeout(async () => {
+                            await loadCart();
+                            notifyCartChange();
+                        }, 50); // Reduced delay for faster response
+                        
+                        console.log('✅ Guest cart item removal initiated');
+                    } else {
+                        console.error('❌ removeGuestCartItem function not found');
+                        showNotification('Không thể xóa sản phẩm', 'error');
+                    }
+                    return;
+                }
+                
+                // Logged user: Use script.js removeFromCartById function for better Firebase integration
+                if (typeof window.removeFromCartById === 'function') {
+                    console.log('🔗 Using script.js removeFromCartById for Firebase integration');
+                    await window.removeFromCartById(cartId);
+                    
+                    // Update our local UI after script.js handles the removal
+                    setTimeout(async () => {
+                        await loadCart();
+                        notifyCartChange();
+                    }, 200);
+                    
+                    console.log('✅ Delegated to script.js removeFromCartById');
+                    return;
+                }
+            } finally {
+                // Always clear the flag
+                window._productDetailRemoving = false;
+            }
+            
+            // Fallback: Direct API call (if script.js function not available)
+            try {
+                console.log('📡 Fallback: Making direct API request to remove...');
+                const response = await fetch(`/api/cart/${cartId}`, {
+                    method: 'DELETE'
+                });
+                
+                console.log('📊 API response status:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('📋 API response data:', data);
+                    
+                    if (data.success) {
+                        console.log('✅ Item removed successfully');
+                        
+                        // Refresh cart to show updated data
+                        await loadCart();
+                        notifyCartChange();
+                    } else {
+                        throw new Error(data.error || 'Failed to remove item');
+                    }
+                } else {
+                    const errorText = await response.text();
+                    console.error('❌ API error:', errorText);
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+            } catch (error) {
+                console.error('❌ Error removing item:', error);
+                showNotification('Không thể xóa sản phẩm', 'error');
+            }
+        }
         
         // OLD COMPLEX RETRY MECHANISM REMOVED - USING SIMPLE APPROACH ABOVE
         

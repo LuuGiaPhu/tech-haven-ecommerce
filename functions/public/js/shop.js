@@ -1773,4 +1773,6 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
+// Export functions for use in other pages
 window.goToProductDetail = goToProductDetail;
+window.initializeShop = initializeShop;

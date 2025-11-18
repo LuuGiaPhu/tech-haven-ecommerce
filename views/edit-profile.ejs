@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh Sửa Hồ Sơ - TECH HAVEN</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Lottie Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Tier Promotion Manager - Global tier monitoring across all pages -->
+    <script src="/js/tier-promotion-manager.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            color: #764ba2;
+            transform: translateX(-5px);
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-group input:read-only {
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .form-group small {
+            color: #666;
+            font-size: 0.9rem;
+            display: block;
+            margin-top: 5px;
+        }
+        
+        .avatar-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            border: 4px solid #667eea;
+            background: linear-gradient(135deg, #667eea, #f093fb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .avatar-preview:hover {
+            transform: scale(1.05);
+            border-color: #5a6fd8;
+        }
+        
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-preview i {
+            font-size: 3rem;
+            color: white;
+        }
+        
+        .avatar-upload-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 50%;
+        }
+        
+        .avatar-preview:hover .avatar-upload-overlay {
+            opacity: 1;
+        }
+        
+        .avatar-upload-overlay i {
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-btn:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+            transform: translateY(-2px);
+        }
+        
+        .upload-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .upload-progress {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin: 10px 0;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .upload-progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #dc3545, #fd7e14);
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div class="container">
+        <a href="/" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Quay lại trang chủ
+        </a>
+        
+        <div class="header">
+            <h1><i class="fas fa-user-edit"></i> Chỉnh Sửa Hồ Sơ</h1>
+            <p>Cập nhật thông tin cá nhân của bạn</p>
+        </div>
+        
+        <form id="editProfileForm">
+            <div class="avatar-section">
+                <div class="avatar-preview" id="avatarPreview" onclick="document.getElementById('avatarFileInput').click()">
+                    <i class="fas fa-user"></i>
+                    <div class="avatar-upload-overlay">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                <input type="file" id="avatarFileInput" class="file-input" accept="image/*" onchange="handleFileUpload(this)">
+                <div class="upload-progress" id="uploadProgress">
+                    <div class="upload-progress-bar" id="uploadProgressBar"></div>
+                </div>
+                <button type="button" class="upload-btn" id="uploadBtn" onclick="document.getElementById('avatarFileInput').click()">
+                    <i class="fas fa-upload"></i> Tải ảnh từ máy tính
+                </button>
+                <button type="button" class="upload-btn" id="removeAvatarBtn" onclick="removeAvatar()" style="background: #dc3545;">
+                    <i class="fas fa-trash"></i> Xóa ảnh
+                </button>
+            </div>
+            
+            <div class="form-section">
+                <h3><i class="fas fa-info-circle"></i> Thông Tin Cá Nhân</h3>
+                
+                <div class="form-group">
+                    <label for="editName">Họ và tên *</label>
+                    <input type="text" id="editName" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" name="email" readonly>
+                    <small>Email không thể thay đổi</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editPhone">Số điện thoại</label>
+                    <input type="tel" id="editPhone" name="phone" placeholder="Đang tải số điện thoại hiện tại...">
+                    <small>Số điện thoại sẽ được hiển thị từ cơ sở dữ liệu sau khi tải</small>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3><i class="fas fa-image"></i> Ảnh Đại Diện</h3>
+                
+                <div class="form-group">
+                    <label for="editAvatar">URL Ảnh đại diện (Tùy chọn)</label>
+                    <input type="url" id="editAvatar" name="avatar" placeholder="https://example.com/avatar.jpg hoặc tải từ máy tính">
+                    <small>Nhập link ảnh từ internet hoặc sử dụng nút "Tải ảnh từ máy tính" ở trên</small>
+                </div>
+            </div>
+            
+            <div class="form-section" id="passwordSection" style="display: none;">
+                <h3><i class="fas fa-lock"></i> Thay Đổi Mật Khẩu</h3>
+                <small style="color: #666; display: block; margin-bottom: 15px;">
+                    <i class="fas fa-info-circle"></i> Chỉ áp dụng cho tài khoản đăng ký bằng email/mật khẩu
+                </small>
+                
+                <div class="form-group">
+                    <label for="currentPassword">Mật khẩu hiện tại *</label>
+                    <div style="position: relative;">
+                        <input type="password" id="currentPassword" name="currentPassword" placeholder="Nhập mật khẩu hiện tại">
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('currentPassword')" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #667eea;">
+                            <i class="fas fa-eye" id="currentPasswordIcon"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newPassword">Mật khẩu mới *</label>
+                    <div style="position: relative;">
+                        <input type="password" id="newPassword" name="newPassword" placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)">
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('newPassword')" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #667eea;">
+                            <i class="fas fa-eye" id="newPasswordIcon"></i>
+                        </button>
+                    </div>
+                    <small>Mật khẩu phải có ít nhất 6 ký tự</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Xác nhận mật khẩu mới *</label>
+                    <div style="position: relative;">
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Nhập lại mật khẩu mới">
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirmPassword')" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #667eea;">
+                            <i class="fas fa-eye" id="confirmPasswordIcon"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="password-strength" id="passwordStrength" style="display: none; margin-top: 10px; padding: 10px; border-radius: 8px;">
+                    <div style="font-weight: 500; margin-bottom: 5px;">Độ mạnh mật khẩu: <span id="strengthText"></span></div>
+                    <div style="height: 6px; background: #e9ecef; border-radius: 3px; overflow: hidden;">
+                        <div id="strengthBar" style="height: 100%; width: 0%; transition: all 0.3s ease;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <a href="/" class="btn btn-secondary">
+                    <i class="fas fa-times"></i>
+                    Hủy
+                </a>
+                <button type="submit" class="btn btn-primary" id="saveBtn">
+                    <i class="fas fa-save"></i>
+                    Lưu Thay Đổi
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDpzgsxZ1Jfs5hWAfS-gDbYfgkVte_jXoA",
+            authDomain: "tech-haven-5368b.firebaseapp.com",
+            projectId: "tech-haven-5368b",
+            storageBucket: "tech-haven-5368b.firebasestorage.app",
+            messagingSenderId: "442337591630",
+            appId: "1:442337591630:web:8b8f8f9f9f9f9f9f9f9f9f"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const storage = firebase.storage();
+
+        let currentUser = null;
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'exclamation-triangle'}"></i> ${message}`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Show loading
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        // Hide loading
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        // Toggle password visibility
+        function togglePasswordVisibility(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = document.getElementById(fieldId + 'Icon');
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Check password strength
+        function checkPasswordStrength(password) {
+            const strengthIndicator = document.getElementById('passwordStrength');
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            
+            if (!password) {
+                strengthIndicator.style.display = 'none';
+                return;
+            }
+            
+            strengthIndicator.style.display = 'block';
+            
+            let strength = 0;
+            let feedback = '';
+            let color = '';
+            
+            // Length check
+            if (password.length >= 8) strength += 25;
+            else if (password.length >= 6) strength += 15;
+            
+            // Contains lowercase
+            if (/[a-z]/.test(password)) strength += 15;
+            
+            // Contains uppercase
+            if (/[A-Z]/.test(password)) strength += 15;
+            
+            // Contains numbers
+            if (/[0-9]/.test(password)) strength += 20;
+            
+            // Contains special characters
+            if (/[^a-zA-Z0-9]/.test(password)) strength += 25;
+            
+            // Determine strength level
+            if (strength <= 30) {
+                feedback = 'Yếu';
+                color = '#dc3545';
+            } else if (strength <= 60) {
+                feedback = 'Trung bình';
+                color = '#ffc107';
+            } else if (strength <= 80) {
+                feedback = 'Khá';
+                color = '#28a745';
+            } else {
+                feedback = 'Mạnh';
+                color = '#20c997';
+            }
+            
+            strengthBar.style.width = strength + '%';
+            strengthBar.style.background = color;
+            strengthText.textContent = feedback;
+            strengthText.style.color = color;
+        }
+
+        // Validate password change
+        function validatePasswordChange() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!currentPassword) {
+                showNotification('Vui lòng nhập mật khẩu hiện tại!', 'error');
+                return false;
+            }
+            
+            if (!newPassword) {
+                showNotification('Vui lòng nhập mật khẩu mới!', 'error');
+                return false;
+            }
+            
+            if (newPassword.length < 6) {
+                showNotification('Mật khẩu mới phải có ít nhất 6 ký tự!', 'error');
+                return false;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showNotification('Mật khẩu xác nhận không khớp!', 'error');
+                return false;
+            }
+            
+            if (currentPassword === newPassword) {
+                showNotification('Mật khẩu mới phải khác mật khẩu hiện tại!', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Change password
+        async function changePassword() {
+            if (!validatePasswordChange()) {
+                return;
+            }
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            
+            showLoading();
+            
+            try {
+                const user = auth.currentUser;
+                
+                if (!user) {
+                    showNotification('Không tìm thấy thông tin người dùng!', 'error');
+                    hideLoading();
+                    return;
+                }
+                
+                // Re-authenticate user with current password
+                const credential = firebase.auth.EmailAuthProvider.credential(
+                    user.email,
+                    currentPassword
+                );
+                
+                await user.reauthenticateWithCredential(credential);
+                
+                // Update password
+                await user.updatePassword(newPassword);
+                
+                showNotification('Đổi mật khẩu thành công!', 'success');
+                
+                // Clear password fields
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+                document.getElementById('passwordStrength').style.display = 'none';
+                
+            } catch (error) {
+                console.error('Error changing password:', error);
+                
+                if (error.code === 'auth/wrong-password') {
+                    showNotification('Mật khẩu hiện tại không đúng!', 'error');
+                } else if (error.code === 'auth/weak-password') {
+                    showNotification('Mật khẩu mới quá yếu!', 'error');
+                } else if (error.code === 'auth/requires-recent-login') {
+                    showNotification('Vui lòng đăng xuất và đăng nhập lại để đổi mật khẩu!', 'error');
+                } else {
+                    showNotification('Có lỗi xảy ra khi đổi mật khẩu: ' + error.message, 'error');
+                }
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Load user data
+        async function loadUserData() {
+            showLoading();
+            
+            // Get user from localStorage or Firebase Auth
+            const storedUser = localStorage.getItem('techHavenUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                console.log('📱 User from localStorage:', currentUser);
+            } else {
+                // Check Firebase Auth
+                const user = auth.currentUser;
+                if (user) {
+                    currentUser = {
+                        uid: user.uid,
+                        name: user.displayName,
+                        email: user.email,
+                        photo: user.photoURL,
+                        provider: 'google'
+                    };
+                    console.log('📱 User from Firebase Auth:', currentUser);
+                }
+            }
+
+            if (!currentUser) {
+                hideLoading();
+                showNotification('Bạn cần đăng nhập để chỉnh sửa hồ sơ!', 'error');
+                setTimeout(() => window.location.href = '/', 2000);
+                return;
+            }
+
+            try {
+                // Fetch complete user data from Firebase/Firestore
+                const idToken = await getIdToken();
+                console.log('🔑 ID Token:', idToken ? 'Available' : 'Not available');
+                
+                let url = '/api/user/profile';
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                
+                // If we have ID token, use it. Otherwise, pass UID as query parameter
+                if (idToken) {
+                    headers['Authorization'] = `Bearer ${idToken}`;
+                    console.log('🔑 Using Firebase Auth token');
+                } else if (currentUser && currentUser.uid) {
+                    url += `?uid=${encodeURIComponent(currentUser.uid)}`;
+                    console.log('🔍 Using UID query parameter:', currentUser.uid);
+                }
+                
+                console.log('📡 API URL:', url);
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: headers
+                });
+
+                console.log('📡 API Response status:', response.status);
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('📊 API Response data:', result);
+                    
+                    if (result.success && result.user) {
+                        // Update currentUser with complete data from database
+                        currentUser = {
+                            ...currentUser,
+                            ...result.user
+                        };
+                        
+                        console.log('🔄 Updated currentUser with database data:', currentUser);
+                        console.log('📱 Phone from database:', currentUser.phone);
+                        
+                        // Update localStorage with complete data
+                        localStorage.setItem('techHavenUser', JSON.stringify(currentUser));
+                    }
+                } else {
+                    const errorData = await response.text();
+                    console.error('❌ API Error:', response.status, errorData);
+                }
+            } catch (error) {
+                console.error('❌ Error fetching user profile from database:', error);
+                // Continue with cached data if API fails
+            }
+
+            // Populate form with complete data (including phone from database)
+            document.getElementById('editName').value = currentUser.name || '';
+            document.getElementById('editEmail').value = currentUser.email || '';
+            document.getElementById('editPhone').value = currentUser.phone || '';
+            document.getElementById('editPhone').placeholder = currentUser.phone ? 
+                `Số hiện tại: ${currentUser.phone}` : 'Chưa có số điện thoại - nhập số mới';
+            document.getElementById('editAvatar').value = currentUser.photo || '';
+
+            // Debug log
+            console.log('📝 Form populated with:');
+            console.log('  Name:', currentUser.name);
+            console.log('  Email:', currentUser.email);
+            console.log('  Phone:', currentUser.phone);
+            console.log('  Photo:', currentUser.photo);
+            console.log('  Provider:', currentUser.provider);
+
+            // Update avatar preview
+            updateAvatarPreview(currentUser.photo || '');
+            
+            // Show password section only for email/password users (not Google/social login)
+            const user = auth.currentUser;
+            const passwordSection = document.getElementById('passwordSection');
+            
+            if (user && user.providerData && user.providerData.length > 0) {
+                const hasPasswordProvider = user.providerData.some(
+                    provider => provider.providerId === 'password'
+                );
+                
+                if (hasPasswordProvider) {
+                    passwordSection.style.display = 'block';
+                    console.log('🔐 Password section enabled - user has email/password auth');
+                } else {
+                    passwordSection.style.display = 'none';
+                    console.log('🔐 Password section hidden - user has social auth only');
+                }
+            } else if (currentUser.provider === 'manual' || !currentUser.provider) {
+                // Manual registration users (from localStorage)
+                passwordSection.style.display = 'block';
+                console.log('🔐 Password section enabled - manual user');
+            } else {
+                passwordSection.style.display = 'none';
+                console.log('🔐 Password section hidden - social login user');
+            }
+            
+            hideLoading();
+        }
+
+        // Get Firebase ID Token for API calls
+        async function getIdToken() {
+            try {
+                const user = auth.currentUser;
+                if (user) {
+                    return await user.getIdToken();
+                }
+                return null;
+            } catch (error) {
+                console.error('Error getting ID token:', error);
+                return null;
+            }
+        }
+
+        // Update avatar preview
+        function updateAvatarPreview(avatarUrl) {
+            const preview = document.getElementById('avatarPreview');
+            if (avatarUrl) {
+                preview.innerHTML = `<img src="${avatarUrl}" alt="Avatar" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-user\\'></i><div class=\\'avatar-upload-overlay\\'><i class=\\'fas fa-camera\\'></i></div>'"><div class="avatar-upload-overlay"><i class="fas fa-camera"></i></div>`;
+            } else {
+                preview.innerHTML = '<i class="fas fa-user"></i><div class="avatar-upload-overlay"><i class="fas fa-camera"></i></div>';
+            }
+        }
+
+        // Handle file upload to Firebase Storage
+        async function handleFileUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                showNotification('Vui lòng chọn file ảnh!', 'error');
+                return;
+            }
+
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                showNotification('Kích thước file không được vượt quá 5MB!', 'error');
+                return;
+            }
+
+            if (!currentUser) {
+                showNotification('Bạn cần đăng nhập để tải ảnh!', 'error');
+                return;
+            }
+
+            // Show progress bar
+            const progressContainer = document.getElementById('uploadProgress');
+            const progressBar = document.getElementById('uploadProgressBar');
+            const uploadBtn = document.getElementById('uploadBtn');
+            
+            progressContainer.style.display = 'block';
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tải...';
+
+            try {
+                // Create unique filename
+                const timestamp = Date.now();
+                const fileName = `avatars/${currentUser.uid}_${timestamp}.${file.name.split('.').pop()}`;
+                
+                // Create storage reference
+                const storageRef = storage.ref();
+                const fileRef = storageRef.child(fileName);
+                
+                // Upload file with progress tracking
+                const uploadTask = fileRef.put(file);
+                
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        // Progress tracking
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        progressBar.style.width = progress + '%';
+                        console.log('📤 Upload progress:', progress + '%');
+                    },
+                    (error) => {
+                        // Handle upload error
+                        console.error('❌ Upload error:', error);
+                        showNotification('Lỗi khi tải ảnh: ' + error.message, 'error');
+                        resetUploadUI();
+                    },
+                    async () => {
+                        try {
+                            // Upload completed successfully
+                            console.log('✅ Upload completed');
+                            
+                            // Get download URL
+                            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                            console.log('🔗 Download URL:', downloadURL);
+                            
+                            // Update avatar preview
+                            updateAvatarPreview(downloadURL);
+                            
+                            // Update the URL input field
+                            document.getElementById('editAvatar').value = downloadURL;
+                            
+                            // Only show upload success, don't save to database yet
+                            showNotification('Upload ảnh thành công! Bấm "Lưu Thay Đổi" để cập nhật vào hệ thống.', 'success');
+                            resetUploadUI();
+                            
+                        } catch (error) {
+                            console.error('❌ Error getting download URL:', error);
+                            showNotification('Lỗi khi lấy link ảnh: ' + error.message, 'error');
+                            resetUploadUI();
+                        }
+                    }
+                );
+                
+            } catch (error) {
+                console.error('❌ Upload error:', error);
+                showNotification('Lỗi khi tải ảnh: ' + error.message, 'error');
+                resetUploadUI();
+            }
+        }
+
+        // Remove avatar
+        function removeAvatar() {
+            if (confirm('Bạn có chắc muốn xóa ảnh đại diện không?')) {
+                document.getElementById('editAvatar').value = '';
+                updateAvatarPreview('');
+                showNotification('Đã xóa ảnh đại diện! Bấm "Lưu Thay Đổi" để cập nhật vào hệ thống.', 'success');
+            }
+        }
+
+        // Reset upload UI
+        function resetUploadUI() {
+            const progressContainer = document.getElementById('uploadProgress');
+            const progressBar = document.getElementById('uploadProgressBar');
+            const uploadBtn = document.getElementById('uploadBtn');
+            
+            progressContainer.style.display = 'none';
+            progressBar.style.width = '0%';
+            uploadBtn.disabled = false;
+            uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Tải ảnh từ máy tính';
+        }
+
+        // Validate phone number (Vietnamese format)
+        function isValidPhone(phone) {
+            if (!phone) return true; // Optional field
+            const cleanPhone = phone.replace(/\s+/g, '').replace(/[-().]/g, '');
+            const phoneRegex = /^(\+84|84|0)?(3[2-9]|5[689]|7[06-9]|8[1-689]|9[0-46-9])[0-9]{7}$/;
+            return phoneRegex.test(cleanPhone);
+        }
+
+        // Handle form submission
+        document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('editName').value.trim();
+            const phone = document.getElementById('editPhone').value.trim();
+            const avatar = document.getElementById('editAvatar').value.trim();
+            
+            // Check if user wants to change password
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            const isChangingPassword = currentPassword || newPassword || confirmPassword;
+            
+            // Validation
+            if (!name) {
+                showNotification('Vui lòng nhập họ và tên!', 'error');
+                return;
+            }
+            
+            if (phone && !isValidPhone(phone)) {
+                showNotification('Số điện thoại không hợp lệ!', 'error');
+                return;
+            }
+            
+            // If user is trying to change password, validate password fields
+            if (isChangingPassword) {
+                if (!validatePasswordChange()) {
+                    return;
+                }
+                
+                // Change password first
+                showLoading();
+                
+                try {
+                    const user = auth.currentUser;
+                    
+                    if (!user) {
+                        showNotification('Không tìm thấy thông tin người dùng!', 'error');
+                        hideLoading();
+                        return;
+                    }
+                    
+                    // Re-authenticate user with current password
+                    const credential = firebase.auth.EmailAuthProvider.credential(
+                        user.email,
+                        currentPassword
+                    );
+                    
+                    await user.reauthenticateWithCredential(credential);
+                    
+                    // Update password
+                    await user.updatePassword(newPassword);
+                    
+                    showNotification('Đổi mật khẩu thành công!', 'success');
+                    
+                    // Clear password fields
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+                    document.getElementById('passwordStrength').style.display = 'none';
+                    
+                } catch (error) {
+                    console.error('Error changing password:', error);
+                    
+                    if (error.code === 'auth/wrong-password') {
+                        showNotification('Mật khẩu hiện tại không đúng!', 'error');
+                    } else if (error.code === 'auth/weak-password') {
+                        showNotification('Mật khẩu mới quá yếu!', 'error');
+                    } else if (error.code === 'auth/requires-recent-login') {
+                        showNotification('Vui lòng đăng xuất và đăng nhập lại để đổi mật khẩu!', 'error');
+                    } else {
+                        showNotification('Có lỗi xảy ra khi đổi mật khẩu: ' + error.message, 'error');
+                    }
+                    
+                    hideLoading();
+                    return;
+                }
+                
+                hideLoading();
+            }
+            
+            // Continue with profile update
+            showLoading();
+            
+            try {
+                const idToken = await getIdToken();
+                
+                let apiUrl, requestHeaders;
+                
+                if (idToken) {
+                    // Use Firebase Auth API
+                    apiUrl = '/api/user/profile';
+                    requestHeaders = {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${idToken}`
+                    };
+                } else {
+                    // Use manual auth API for email/manual users
+                    apiUrl = '/api/user/profile-manual';
+                    requestHeaders = {
+                        'Content-Type': 'application/json'
+                    };
+                }
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: requestHeaders,
+                    body: JSON.stringify({
+                        uid: currentUser.uid,
+                        name: name,
+                        phone: phone,
+                        photo: avatar
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Update current user data
+                    currentUser.name = name;
+                    currentUser.phone = phone;
+                    currentUser.photo = avatar;
+                    
+                    // Update localStorage
+                    localStorage.setItem('techHavenUser', JSON.stringify(currentUser));
+                    
+                    if (isChangingPassword) {
+                        showNotification('Cập nhật hồ sơ và đổi mật khẩu thành công!', 'success');
+                    } else {
+                        showNotification('Cập nhật hồ sơ thành công!', 'success');
+                    }
+                    
+                    // Redirect back to home after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
+                } else {
+                    showNotification(result.message || 'Có lỗi xảy ra khi cập nhật hồ sơ!', 'error');
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showNotification('Có lỗi xảy ra khi cập nhật hồ sơ!', 'error');
+            } finally {
+                hideLoading();
+            }
+        });
+
+        // Avatar URL input change handler - only update preview
+        document.getElementById('editAvatar').addEventListener('change', function(e) {
+            const avatarUrl = e.target.value.trim();
+            updateAvatarPreview(avatarUrl);
+        });
+
+        // Also update preview on input (real-time)
+        document.getElementById('editAvatar').addEventListener('input', function(e) {
+            updateAvatarPreview(e.target.value);
+        });
+        
+        // Password strength indicator
+        document.getElementById('newPassword').addEventListener('input', function(e) {
+            checkPasswordStrength(e.target.value);
+        });
+
+        // Make functions globally available
+        window.handleFileUpload = handleFileUpload;
+        window.removeAvatar = removeAvatar;
+        window.togglePasswordVisibility = togglePasswordVisibility;
+
+        // Load user data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait for Firebase Auth to initialize
+            auth.onAuthStateChanged(function(user) {
+                if (user) {
+                    console.log('Firebase user detected:', user.email);
+                    // Firebase user is signed in, load data
+                    loadUserData();
+                } else {
+                    console.log('No Firebase user, checking localStorage...');
+                    // Check if we have a manual user in localStorage
+                    const storedUser = localStorage.getItem('techHavenUser');
+                    if (storedUser) {
+                        loadUserData();
+                    } else {
+                        showNotification('Bạn cần đăng nhập để chỉnh sửa hồ sơ!', 'error');
+                        setTimeout(() => window.location.href = '/', 2000);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

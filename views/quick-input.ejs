@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm Nhanh Sản Phẩm - TECH HAVEN Admin</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: #667eea;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+        .main-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .format-info {
+            background: linear-gradient(135deg, #e0e7ff 0%, #f0f4ff 100%);
+            border: 2px solid #c7d2fe;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .format-info h3 {
+            color: #4f46e5;
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .format-example {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #374151;
+            margin-top: 10px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            max-width: 100%;
+            overflow-x: auto;
+            text-align: left;
+        }
+
+        .format-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .format-list li {
+            padding: 8px 0;
+            color: #4b5563;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            word-break: break-word;
+        }
+
+        .format-list li::before {
+            content: '→';
+            color: #667eea;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .format-list li strong {
+            display: inline-block;
+            min-width: fit-content;
+        }
+        
+        .format-list li code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            word-break: break-word;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-section label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .quick-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 20px;
+            border: 3px solid #e5e7eb;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .quick-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(107, 114, 128, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 114, 128, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            border-radius: 15px;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .results h3 {
+            color: #374151;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .result-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #10b981;
+        }
+
+        .result-item.error {
+            border-left-color: #ef4444;
+        }
+
+        .result-item.success {
+            border-left-color: #10b981;
+        }
+
+        .progress {
+            margin-top: 20px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress.show {
+            display: block;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .message.show {
+            display: flex;
+        }
+
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #ef4444;
+        }
+
+        .message i {
+            font-size: 20px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .loading {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .header p {
+                font-size: 14px;
+            }
+            
+            .main-card {
+                padding: 20px;
+            }
+            
+            .format-info {
+                padding: 15px;
+            }
+            
+            .format-info h3 {
+                font-size: 16px;
+            }
+            
+            .format-info h4 {
+                font-size: 14px;
+            }
+            
+            .format-example {
+                padding: 10px;
+                font-size: 11px;
+                line-height: 1.6;
+            }
+            
+            .format-list li {
+                font-size: 13px;
+                padding: 6px 0;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .format-info h3 {
+                font-size: 14px;
+            }
+            
+            .format-example {
+                font-size: 10px;
+            }
+            
+            .format-list li {
+                font-size: 12px;
+            }
+            
+            .back-btn {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Về Trang Chủ
+        </a>
+
+        <div class="header">
+            <h1><i class="fas fa-bolt"></i> Thêm Nhanh Sản Phẩm</h1>
+            <p>Nhập nhiều sản phẩm cùng lúc với định dạng đơn giản</p>
+        </div>
+
+        <div class="main-card">
+            <!-- Format Guide -->
+            <div class="format-info">
+                <h3><i class="fas fa-info-circle"></i> Hướng Dẫn Định Dạng</h3>
+                <p style="color: #4b5563; margin-bottom: 10px;">
+                    Mỗi dòng là 1 sản phẩm, các trường cách nhau bằng dấu chấm phẩy (;)
+                </p>
+                
+                <h4 style="color: #667eea; margin-top: 15px; margin-bottom: 10px;">
+                    <i class="fas fa-box"></i> Sản Phẩm Chính (Main Product):
+                </h4>
+                <div class="format-example">
+                    Tên;Danh mục;Thương hiệu;Giá;Giá cũ;Tồn kho;Trạng thái;Mô tả;Specs;Features
+                </div>
+
+                <ul class="format-list">
+                    <li><strong>Tên:</strong> Tên sản phẩm (bắt buộc)</li>
+                    <li><strong>Danh mục:</strong> laptop, pc, gpu, cpu, ram, storage, motherboard, psu, case, keyboard, mouse, headset, monitor, speaker, webcam, other</li>
+                    <li><strong>Thương hiệu:</strong> ASUS, MSI, Intel, AMD... (bắt buộc)</li>
+                    <li><strong>Giá:</strong> Giá bán (số, bắt buộc)</li>
+                    <li><strong>Giá cũ:</strong> Giá gốc trước giảm (số, có thể để trống)</li>
+                    <li><strong>Tồn kho:</strong> Số lượng (số, bắt buộc)</li>
+                    <li><strong>Trạng thái:</strong> in-stock (còn hàng), out-of-stock (hết hàng), pre-order (đặt trước)</li>
+                    <li><strong>Mô tả:</strong> Mô tả sản phẩm (có thể để trống)</li>
+                    <li><strong>Specs:</strong> Thông số kỹ thuật dạng key:value|key:value (VD: CPU:i7|RAM:16GB) - có thể để trống</li>
+                    <li><strong>Features:</strong> Tính năng dạng title:desc:icon|title:desc:icon (VD: Gaming:High Performance:fas fa-gamepad) - có thể để trống</li>
+                </ul>
+
+                <div class="format-example" style="margin-top: 15px;">
+                    <strong>Ví dụ Sản Phẩm Chính:</strong><br>
+                    ASUS ROG Strix G15;laptop;ASUS;25990000;28990000;10;in-stock;Laptop gaming cao cấp;CPU:Intel i7-11800H|RAM:16GB DDR4|GPU:RTX 3060|Storage:512GB SSD;Performance:High FPS Gaming:fas fa-gamepad|Display:144Hz Screen:fas fa-tv<br>
+                    MSI Gaming Monitor;monitor;MSI;5990000;;15;in-stock;Màn hình gaming 144Hz;Screen:27 inch|Resolution:1920x1080|Refresh:144Hz;FastResponse:1ms Response Time:fas fa-tachometer-alt
+                </div>
+
+                <h4 style="color: #10b981; margin-top: 20px; margin-bottom: 10px;">
+                    <i class="fas fa-layer-group"></i> Sản Phẩm Biến Thể (Variant Product):
+                </h4>
+                <div class="format-example">
+                    [VARIANT];SKU_Chính;Tên_biến_thể;Giá;Giá_cũ;Tồn_kho;Trạng_thái;Attributes
+                </div>
+
+                <ul class="format-list">
+                    <li><strong>[VARIANT]:</strong> Từ khóa bắt buộc để đánh dấu đây là biến thể</li>
+                    <li><strong>SKU_Chính:</strong> SKU của sản phẩm chính (hoặc dùng <code>[SKU_VỪA_TẠO]</code> để tham chiếu sản phẩm chính ở dòng trước)</li>
+                    <li><strong>Tên_biến_thể:</strong> Tên của biến thể này (VD: "ASUS ROG - Màu Đen")</li>
+                    <li><strong>Giá:</strong> Giá của biến thể này</li>
+                    <li><strong>Giá_cũ:</strong> Giá gốc (có thể để trống)</li>
+                    <li><strong>Tồn_kho:</strong> Số lượng tồn kho riêng của biến thể</li>
+                    <li><strong>Trạng_thái:</strong> in-stock, out-of-stock, pre-order</li>
+                    <li><strong>Attributes:</strong> Thuộc tính phân biệt dạng key:value|key:value (VD: color:Black|size:15.6 inch) - bắt buộc</li>
+                </ul>
+
+                <div class="format-example" style="margin-top: 15px;">
+                    <strong>Ví dụ Biến Thể (thêm sau sản phẩm chính):</strong><br>
+                    [VARIANT];[SKU_VỪA_TẠO];sample - Màu Đen;999;99999999;25;in-stock;color:Black|size:15.6 inch<br>
+                    [VARIANT];[SKU_VỪA_TẠO];sample - Màu Trắng;1099;99999999;30;in-stock;color:White|size:15.6 inch<br>
+                    <br>
+                    <em style="color: #059669;">💡 Sử dụng [SKU_VỪA_TẠO] khi thêm biến thể ngay sau sản phẩm chính!</em>
+                </div>
+
+                <div style="background: #fef3c7; border: 2px solid #f59e0b; border-radius: 10px; padding: 15px; margin-top: 15px;">
+                    <strong style="color: #92400e;"><i class="fas fa-exclamation-triangle"></i> Lưu Ý Quan Trọng:</strong>
+                    <ul style="margin-top: 10px; color: #78350f;">
+                        <li>Phải thêm sản phẩm chính TRƯỚC rồi mới thêm biến thể</li>
+                        <li>Biến thể sẽ kế thừa thông tin (category, brand, description, specs, features, images) từ sản phẩm chính</li>
+                        <li>SKU của biến thể sẽ tự động có dạng: SKU_Chính-V1, SKU_Chính-V2, ...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Message Display -->
+            <div id="message" class="message"></div>
+
+            <!-- Input Section -->
+            <div class="input-section">
+                <label for="quickInput">
+                    <i class="fas fa-keyboard"></i> Nhập Dữ Liệu (Mỗi Dòng 1 Sản Phẩm)
+                </label>
+                <textarea 
+                    id="quickInput" 
+                    class="quick-input" 
+                    placeholder="Nhập dữ liệu sản phẩm theo định dạng trên...&#10;Ví dụ: ASUS ROG Strix G15;laptop;ASUS;25990000;28990000;10;available;Laptop gaming cao cấp"
+                ></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-group">
+                <button id="submitBtn" class="btn btn-primary">
+                    <i class="fas fa-upload"></i> Thêm Sản Phẩm
+                </button>
+                <button id="clearBtn" class="btn btn-secondary">
+                    <i class="fas fa-eraser"></i> Xóa Dữ Liệu
+                </button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progress" class="progress">
+                <div id="progressBar" class="progress-bar">0%</div>
+            </div>
+
+            <!-- Results -->
+            <div id="results" class="results">
+                <h3><i class="fas fa-list-check"></i> Kết Quả</h3>
+                <div id="resultsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load quick-input admin script (handles Firebase init and authentication) -->
+    <script type="module" src="/js/quick-input-admin.js"></script>
+</body>
+</html>

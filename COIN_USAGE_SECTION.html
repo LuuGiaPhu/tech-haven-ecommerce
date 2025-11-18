@@ -1,0 +1,490 @@
+<!-- ===================================== 
+     COIN USAGE SECTION - Thêm sau Discount Code Section
+     ===================================== -->
+
+                    <!-- Coin Usage Section -->
+                    <div class="form-section" id="coinUsageSection" style="display: none;">
+                        <h4><i class="fas fa-coins"></i> Sử Dụng Coin</h4>
+                        
+                        <div class="coin-usage-container">
+                            <div class="coin-balance-display-checkout">
+                                <div class="coin-balance-info-checkout">
+                                    <span class="coin-label-checkout">Số dư hiện tại:</span>
+                                    <span class="coin-balance-value-checkout">
+                                        <span id="checkoutCoinBalance">0</span> coin
+                                        <span class="coin-vnd-value-checkout">(<span id="checkoutCoinValue">0</span> VNĐ)</span>
+                                    </span>
+                                </div>
+                                <button type="button" class="use-all-coin-btn" onclick="useAllCoin()" id="useAllCoinBtn" style="display: none;">
+                                    <i class="fas fa-check-circle"></i> Sử dụng tất cả
+                                </button>
+                            </div>
+
+                            <div class="coin-input-group-checkout" id="coinInputGroup" style="display: none;">
+                                <label for="coinToUse">Nhập số coin muốn sử dụng:</label>
+                                <div class="coin-input-wrapper-checkout">
+                                    <input 
+                                        type="number" 
+                                        id="coinToUse" 
+                                        min="0" 
+                                        max="0"
+                                        value="0"
+                                        placeholder="Nhập số coin"
+                                        oninput="updateCoinUsage(this.value)"
+                                    >
+                                    <span class="coin-unit-checkout">coin</span>
+                                </div>
+                                <div class="coin-slider-container-checkout">
+                                    <input 
+                                        type="range" 
+                                        id="coinSlider"
+                                        min="0" 
+                                        max="0"
+                                        value="0"
+                                        step="1000"
+                                        oninput="updateCoinUsage(this.value)"
+                                    >
+                                </div>
+                                <div class="coin-usage-info-checkout">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Giảm giá: <strong id="coinDiscountDisplay">0 VNĐ</strong></span>
+                                </div>
+                            </div>
+                            
+                            <div class="no-coin-message-checkout" id="noCoinMessage">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Bạn chưa có coin. Hoàn thành đơn hàng để nhận 10% giá trị đơn hàng thành coin!</span>
+                            </div>
+                        </div>
+                    </div>
+
+<style>
+/* Coin Usage Section Styles */
+#coinUsageSection {
+    margin-top: 20px;
+}
+
+.coin-usage-container {
+    margin-top: 15px;
+}
+
+.coin-balance-display-checkout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
+}
+
+.coin-balance-info-checkout {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.coin-label-checkout {
+    font-size: 0.9rem;
+    color: #333;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.coin-balance-value-checkout {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.coin-vnd-value-checkout {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #555;
+    opacity: 0.9;
+}
+
+.use-all-coin-btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+.use-all-coin-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.coin-input-group-checkout {
+    margin-top: 15px;
+}
+
+.coin-input-group-checkout label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+.coin-input-wrapper-checkout {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.coin-input-wrapper-checkout input[type="number"] {
+    width: 100%;
+    padding: 12px 60px 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-family: 'Inter', monospace;
+}
+
+.coin-input-wrapper-checkout input[type="number"]:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2);
+}
+
+.coin-unit-checkout {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 600;
+    color: #666;
+    pointer-events: none;
+}
+
+.coin-slider-container-checkout {
+    margin-bottom: 15px;
+}
+
+.coin-slider-container-checkout input[type="range"] {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(to right, #ffd700 0%, #ffed4e 100%);
+    outline: none;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.coin-slider-container-checkout input[type="range"]:hover {
+    opacity: 1;
+}
+
+.coin-slider-container-checkout input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.coin-slider-container-checkout input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.7);
+}
+
+.coin-slider-container-checkout input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.coin-slider-container-checkout input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.7);
+}
+
+.coin-usage-info-checkout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(255, 215, 0, 0.1);
+    border-left: 4px solid #ffd700;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.coin-usage-info-checkout i {
+    color: #ffd700;
+    font-size: 1.1rem;
+}
+
+.coin-usage-info-checkout strong {
+    color: #1a1a1a;
+    font-weight: 700;
+}
+
+.no-coin-message-checkout {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(108, 117, 125, 0.1);
+    border-left: 4px solid #6c757d;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+.no-coin-message-checkout i {
+    color: #6c757d;
+    font-size: 1.2rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+/* Coin discount line in order summary */
+.coin-discount-line {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.coin-discount-amount {
+    color: #28a745;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .coin-balance-display-checkout {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .use-all-coin-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .coin-balance-value-checkout {
+        font-size: 1.3rem;
+    }
+}
+</style>
+
+<script>
+// Coin Usage Manager (Inline)
+let currentCoinBalance = 0;
+let coinUsed = 0;
+let currentOrderTotal = 0;
+
+// Initialize coin section when checkout modal opens
+async function initializeCoinSection(userId, orderTotal) {
+    currentOrderTotal = orderTotal;
+    console.log('🛒 Initializing coin section with order total:', orderTotal.toLocaleString('vi-VN'), 'VNĐ');
+
+    try {
+        // Fetch user's current coin balance
+        const response = await fetch(`/api/users/${userId}/coin`);
+        const data = await response.json();
+
+        if (data.success) {
+            currentCoinBalance = data.coin || 0;
+            console.log('💰 Current coin balance:', currentCoinBalance.toLocaleString('vi-VN'));
+
+            // Show coin section
+            const coinSection = document.getElementById('coinUsageSection');
+            if (coinSection) {
+                coinSection.style.display = 'block';
+            }
+
+            // Update displays
+            const checkoutCoinBalance = document.getElementById('checkoutCoinBalance');
+            const checkoutCoinValue = document.getElementById('checkoutCoinValue');
+            
+            if (checkoutCoinBalance) {
+                checkoutCoinBalance.textContent = currentCoinBalance.toLocaleString('vi-VN');
+            }
+            if (checkoutCoinValue) {
+                checkoutCoinValue.textContent = currentCoinBalance.toLocaleString('vi-VN');
+            }
+
+            // Show/hide appropriate sections
+            const noCoinMessage = document.getElementById('noCoinMessage');
+            const coinInputGroup = document.getElementById('coinInputGroup');
+            const useAllCoinBtn = document.getElementById('useAllCoinBtn');
+
+            if (currentCoinBalance > 0) {
+                if (noCoinMessage) noCoinMessage.style.display = 'none';
+                if (coinInputGroup) coinInputGroup.style.display = 'block';
+                if (useAllCoinBtn) useAllCoinBtn.style.display = 'flex';
+
+                // Set max values
+                const maxUsable = Math.min(currentCoinBalance, orderTotal);
+                const coinInput = document.getElementById('coinToUse');
+                const coinSlider = document.getElementById('coinSlider');
+
+                if (coinInput) {
+                    coinInput.max = maxUsable;
+                }
+                if (coinSlider) {
+                    coinSlider.max = maxUsable;
+                }
+            } else {
+                if (noCoinMessage) noCoinMessage.style.display = 'flex';
+                if (coinInputGroup) coinInputGroup.style.display = 'none';
+                if (useAllCoinBtn) useAllCoinBtn.style.display = 'none';
+            }
+        }
+    } catch (error) {
+        console.error('❌ Error fetching coin balance:', error);
+    }
+}
+
+// Update coin usage when user changes input/slider
+function updateCoinUsage(value) {
+    const coinAmount = parseInt(value) || 0;
+    
+    // Validate amount
+    const maxUsable = Math.min(currentCoinBalance, currentOrderTotal);
+    const validAmount = Math.max(0, Math.min(coinAmount, maxUsable));
+
+    console.log('💳 Updating coin usage to:', validAmount);
+
+    coinUsed = validAmount;
+
+    // Sync input and slider
+    const coinInput = document.getElementById('coinToUse');
+    const coinSlider = document.getElementById('coinSlider');
+    const discountDisplay = document.getElementById('coinDiscountDisplay');
+
+    if (coinInput && coinInput.value != validAmount) {
+        coinInput.value = validAmount;
+    }
+    if (coinSlider && coinSlider.value != validAmount) {
+        coinSlider.value = validAmount;
+    }
+    if (discountDisplay) {
+        discountDisplay.textContent = validAmount.toLocaleString('vi-VN') + ' VNĐ';
+    }
+
+    // Update order total
+    updateOrderTotalWithCoin();
+}
+
+// Use all available coin
+function useAllCoin() {
+    const maxUsable = Math.min(currentCoinBalance, currentOrderTotal);
+    console.log('💰 Using all available coin:', maxUsable);
+    updateCoinUsage(maxUsable);
+}
+
+// Update final order total with coin discount
+function updateOrderTotalWithCoin() {
+    const subtotalAmount = document.getElementById('subtotalAmount');
+    const finalTotal = document.getElementById('finalTotal');
+
+    if (!subtotalAmount || !finalTotal) {
+        console.warn('⚠️ Order total elements not found');
+        return;
+    }
+
+    // Parse current subtotal
+    const subtotalText = subtotalAmount.textContent.replace(/[^\d]/g, '');
+    const subtotal = parseInt(subtotalText) || currentOrderTotal;
+
+    // Calculate final total (subtotal - coupon discount - coin discount + shipping)
+    const discountAmount = getDiscountAmount(); // From existing discount code
+    const shippingFee = 50000; // Fixed shipping fee
+
+    const finalAmount = subtotal - discountAmount - coinUsed + shippingFee;
+
+    // Update final total display
+    finalTotal.textContent = finalAmount.toLocaleString('vi-VN') + ' VNĐ';
+
+    // Show/hide coin discount line
+    let coinDiscountLine = document.getElementById('coinDiscountLine');
+    
+    if (!coinDiscountLine && coinUsed > 0) {
+        // Create coin discount line
+        const discountLineElement = document.querySelector('.discount-line');
+        if (discountLineElement) {
+            const coinDiscountHTML = `
+                <div class="total-line coin-discount-line" id="coinDiscountLine">
+                    <span>Giảm từ Coin:</span>
+                    <span class="coin-discount-amount" id="coinDiscountAmountInTotal">-${coinUsed.toLocaleString('vi-VN')} VNĐ</span>
+                </div>
+            `;
+            discountLineElement.insertAdjacentHTML('afterend', coinDiscountHTML);
+        }
+    } else if (coinDiscountLine) {
+        // Update existing coin discount line
+        coinDiscountLine.style.display = coinUsed > 0 ? 'flex' : 'none';
+        const coinDiscountAmountInTotal = document.getElementById('coinDiscountAmountInTotal');
+        if (coinDiscountAmountInTotal) {
+            coinDiscountAmountInTotal.textContent = `-${coinUsed.toLocaleString('vi-VN')} VNĐ`;
+        }
+    }
+
+    console.log('🧾 Updated order total:', {
+        subtotal,
+        discountAmount,
+        coinUsed,
+        shippingFee,
+        finalAmount
+    });
+}
+
+// Get current discount amount from discount code
+function getDiscountAmount() {
+    const discountAmountElement = document.getElementById('discountAmount');
+    if (discountAmountElement) {
+        const discountText = discountAmountElement.textContent.replace(/[^\d]/g, '');
+        return parseInt(discountText) || 0;
+    }
+    return 0;
+}
+
+// Get coin usage data for order completion
+function getCoinUsageData() {
+    return {
+        coinUsed: coinUsed,
+        discountAmount: coinUsed // 1 coin = 1 VND
+    };
+}
+
+// Reset coin usage
+function resetCoinUsage() {
+    coinUsed = 0;
+    currentOrderTotal = 0;
+    const coinInput = document.getElementById('coinToUse');
+    const coinSlider = document.getElementById('coinSlider');
+    if (coinInput) coinInput.value = 0;
+    if (coinSlider) coinSlider.value = 0;
+    updateOrderTotalWithCoin();
+    console.log('🔄 Coin usage reset');
+}
+
+console.log('💳 Coin usage functions loaded successfully');
+</script>

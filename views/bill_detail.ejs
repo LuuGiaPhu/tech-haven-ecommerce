@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Sử Đơn Hàng - TECH HAVEN</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <link rel="manifest" href="/images/site.webmanifest">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Lottie Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/bill_detail.css">
+    
+    <!-- Tier Promotion Manager - Global tier monitoring across all pages -->
+    <script src="/js/tier-promotion-manager.js" defer></script>
+    
+    <!-- Firebase Configuration for Bill Detail -->
+    <script>
+        // Initialize Firebase for bill_detail page (independent from script.js)
+        if (!firebase.apps || firebase.apps.length === 0) {
+            const firebaseConfig = {
+                apiKey: "AIzaSyD_QGS7c0FYmNiMYxEHbtWuM1c5r5gUxsg",
+                authDomain: "tech-haven-5368b.firebaseapp.com",
+                projectId: "tech-haven-5368b",
+                storageBucket: "tech-haven-5368b.firebasestorage.app",
+                messagingSenderId: "442337591630",
+                appId: "1:442337591630:web:6d31a1fa9cd20e7d0fdb7f",
+                measurementId: "G-2CV1C2KHXZ"
+            };
+            firebase.initializeApp(firebaseConfig);
+            console.log('✅ Firebase initialized for bill_detail page');
+        }
+    </script>
+</head>
+<body class="bill-detail-page">
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1><a href="/" style="text-decoration: none; color: inherit;">TECH HAVEN</a></h1>
+            </div>
+            
+            <!-- Mobile Menu Toggle -->
+            <div class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="/">TRANG CHỦ</a>
+                <a href="/shop">CỬA HÀNG</a>
+                <a href="/shop?category=laptop" onclick="event.preventDefault(); if (typeof selectCategoryFromSearch === 'function') { selectCategoryFromSearch('laptop'); } else { window.location.href='/shop?category=laptop'; } return false;">LAPTOP</a>
+                <a href="/shop?category=component" onclick="event.preventDefault(); if (typeof selectCategoryFromSearch === 'function') { selectCategoryFromSearch('component'); } else { window.location.href='/shop?category=component'; } return false;">LINH KIỆN</a>
+                <a href="/shop?category=peripheral" onclick="event.preventDefault(); if (typeof selectCategoryFromSearch === 'function') { selectCategoryFromSearch('peripheral'); } else { window.location.href='/shop?category=peripheral'; } return false;">PHỤ KIỆN</a>
+                <a href="/build-pc" class="build-btn">XÂY DỰNG PC</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="bill-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <button class="back-btn" onclick="window.back()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="header-text">
+                    <h1 class="page-title">
+                        <i class="fas fa-receipt"></i>
+                        Lịch Sử Đơn Hàng
+                    </h1>
+                    <p class="page-subtitle">Xem và quản lý các đơn hàng của bạn</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter & Stats -->
+        <div class="bill-stats">
+            <div class="stat-card stat-all">
+                <div class="stat-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="totalOrders">0</div>
+                    <div class="stat-label">Tổng Đơn</div>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-pending">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="pendingOrders">0</div>
+                    <div class="stat-label">Chờ Xử Lý</div>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-processing">
+                <div class="stat-icon">
+                    <i class="fas fa-spinner"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="processingOrders">0</div>
+                    <div class="stat-label">Đang Xử Lý</div>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-shipping">
+                <div class="stat-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="shippingOrders">0</div>
+                    <div class="stat-label">Đang Vận Chuyển</div>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-delivered">
+                <div class="stat-icon">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="deliveredOrders">0</div>
+                    <div class="stat-label">Đã Giao</div>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-completed">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="completedOrders">0</div>
+                    <div class="stat-label">Hoàn Thành</div>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-cancelled">
+                <div class="stat-icon">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="cancelledOrders">0</div>
+                    <div class="stat-label">Đã Hủy</div>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-returned">
+                <div class="stat-icon">
+                    <i class="fas fa-undo"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="returnedOrders">0</div>
+                    <div class="stat-label">Đã Trả Hàng</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">
+                <i class="fas fa-list"></i>
+                Tất Cả
+            </button>
+            <button class="filter-tab" data-filter="pending">
+                <i class="fas fa-clock"></i>
+                Chờ Xử Lý
+            </button>
+            <button class="filter-tab" data-filter="processing">
+                <i class="fas fa-spinner"></i>
+                Đang Xử Lý
+            </button>
+            <button class="filter-tab" data-filter="shipping">
+                <i class="fas fa-truck"></i>
+                Đang Vận Chuyển
+            </button>
+            <button class="filter-tab" data-filter="delivered">
+                <i class="fas fa-box-open"></i>
+                Đã Giao
+            </button>
+            <button class="filter-tab" data-filter="completed">
+                <i class="fas fa-check-circle"></i>
+                Hoàn Thành
+            </button>
+            <button class="filter-tab" data-filter="cancelled">
+                <i class="fas fa-times-circle"></i>
+                Đã Hủy
+            </button>
+            <button class="filter-tab" data-filter="returned">
+                <i class="fas fa-undo"></i>
+                Đã Trả Hàng
+            </button>
+        </div>
+
+        <!-- Bills List -->
+        <div class="bills-list" id="billsList">
+            <!-- Loading State -->
+            <div class="loading-state" id="loadingState">
+                <div class="loading-spinner"></div>
+                <p>Đang tải đơn hàng...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <h3>Chưa Có Đơn Hàng</h3>
+                <p>Bạn chưa có đơn hàng nào. Hãy bắt đầu mua sắm ngay!</p>
+                <a href="/shop" class="shop-now-btn">
+                    <i class="fas fa-store"></i>
+                    Mua Sắm Ngay
+                </a>
+            </div>
+
+            <!-- Bills will be rendered here by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Bill Detail Modal -->
+    <div class="modal-overlay" id="billDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-invoice"></i> Chi Tiết Đơn Hàng</h3>
+                <button class="close-modal" onclick="closeBillDetailModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="billDetailContent">
+                <!-- Bill details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>VỀ CHÚNG TÔI</h4>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Tuyển dụng</a></li>
+                    <li><a href="#">Tin tức</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>HỖ TRỢ KHÁCH HÀNG</h4>
+                <ul>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Chính sách bảo hành</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h4>THEO DÕI CHÚNG TÔI</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 TECH HAVEN. Tất cả quyền được bảo lưu</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <% if (typeof selectedOrder !== 'undefined' && selectedOrder) { %>
+    <script>
+        // Pre-selected order from URL parameter
+        window.preSelectedOrder = {
+            id: '<%= selectedOrder.id %>',
+            orderId: '<%= selectedOrder.orderId || selectedOrder.id %>',
+            status: '<%= selectedOrder.status %>',
+            createdAt: '<%= selectedOrder.createdAt ? (selectedOrder.createdAt.toDate ? selectedOrder.createdAt.toDate().toISOString() : selectedOrder.createdAt) : new Date().toISOString() %>',
+            totalAmount: <%= selectedOrder.totalAmount || selectedOrder.total || 0 %>,
+            products: <%- JSON.stringify(selectedOrder.products || []) %>,
+            customerInfo: <%- JSON.stringify(selectedOrder.customerInfo || {}) %>,
+            paymentMethod: '<%= selectedOrder.paymentMethod || "N/A" %>'
+        };
+        console.log('📦 Pre-selected order loaded:', window.preSelectedOrder);
+    </script>
+    <% } %>
+    <script src="/js/script.js"></script>
+    <script src="/js/bill_detail.js"></script>
+</body>
+</html>

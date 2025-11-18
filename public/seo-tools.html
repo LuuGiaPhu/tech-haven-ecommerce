@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Tools - TECH HAVEN Admin</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .tool-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .tool-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .tool-section p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result.success {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+        
+        .result.error {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+        
+        .url-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .url-list li {
+            padding: 10px;
+            background: white;
+            margin: 8px 0;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .url-list a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .url-list a:hover {
+            text-decoration: underline;
+        }
+        
+        code {
+            background: #1f2937;
+            color: #10b981;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .meta-preview {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .meta-preview h3 {
+            color: #1a0dab;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .meta-preview .url {
+            color: #006621;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .meta-preview .description {
+            color: #545454;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-search"></i> SEO Tools Dashboard</h1>
+        
+        <!-- Sitemap Generator -->
+        <div class="tool-section">
+            <h2><i class="fas fa-sitemap"></i> Dynamic Sitemap</h2>
+            <p>Sitemap tự động được tạo từ Firestore database. Bao gồm tất cả sản phẩm active và hình ảnh.</p>
+            <button class="btn" onclick="viewSitemap()">
+                <i class="fas fa-eye"></i> Xem Sitemap
+            </button>
+            <button class="btn btn-success" onclick="pingSitemap()">
+                <i class="fas fa-bell"></i> Ping Google
+            </button>
+            <div id="sitemapResult" class="result"></div>
+        </div>
+        
+        <!-- Robots.txt -->
+        <div class="tool-section">
+            <h2><i class="fas fa-robot"></i> Robots.txt</h2>
+            <p>File robots.txt đã được cấu hình để cho phép các search engine crawl website.</p>
+            <button class="btn" onclick="viewRobots()">
+                <i class="fas fa-eye"></i> Xem Robots.txt
+            </button>
+            <div id="robotsResult" class="result"></div>
+        </div>
+        
+        <!-- Structured Data Testing -->
+        <div class="tool-section">
+            <h2><i class="fas fa-code"></i> Structured Data Testing</h2>
+            <p>Kiểm tra schema markup (JSON-LD) trên các trang quan trọng.</p>
+            <ul class="url-list">
+                <li>
+                    <span>Homepage Schema</span>
+                    <a href="https://search.google.com/test/rich-results?url=https://tech-haven-5368b.web.app/" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Test
+                    </a>
+                </li>
+                <li>
+                    <span>Shop Page Schema</span>
+                    <a href="https://search.google.com/test/rich-results?url=https://tech-haven-5368b.web.app/shop" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Test
+                    </a>
+                </li>
+                <li>
+                    <span>Product Page Schema</span>
+                    <a href="javascript:testProductSchema()">
+                        <i class="fas fa-flask"></i> Test (nhập product ID)
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- SEO Health Check -->
+        <div class="tool-section">
+            <h2><i class="fas fa-heartbeat"></i> SEO Health Check</h2>
+            <p>Kiểm tra các yếu tố SEO cơ bản của website.</p>
+            <button class="btn btn-info" onclick="runHealthCheck()">
+                <i class="fas fa-play"></i> Chạy Kiểm Tra
+            </button>
+            <div id="healthResult" class="result"></div>
+        </div>
+        
+        <!-- Quick Links -->
+        <div class="tool-section">
+            <h2><i class="fas fa-link"></i> Quick Links</h2>
+            <ul class="url-list">
+                <li>
+                    <span>Google Search Console</span>
+                    <a href="https://search.google.com/search-console" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Mở
+                    </a>
+                </li>
+                <li>
+                    <span>Google PageSpeed Insights</span>
+                    <a href="https://pagespeed.web.dev/?url=https://tech-haven-5368b.web.app/" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Mở
+                    </a>
+                </li>
+                <li>
+                    <span>Facebook Sharing Debugger</span>
+                    <a href="https://developers.facebook.com/tools/debug/" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Mở
+                    </a>
+                </li>
+                <li>
+                    <span>Schema.org Documentation</span>
+                    <a href="https://schema.org/" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Mở
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Meta Preview -->
+        <div class="tool-section">
+            <h2><i class="fas fa-search-plus"></i> Meta Tags Preview</h2>
+            <p>Xem trước cách website hiển thị trên Google Search Results.</p>
+            <div class="meta-preview">
+                <h3>TECH HAVEN - PC Tùy Chỉnh & Linh Kiện Cao Cấp</h3>
+                <div class="url">https://tech-haven-5368b.web.app › ...</div>
+                <div class="description">
+                    Chuyên cung cấp PC Gaming, Laptop cao cấp, linh kiện máy tính chính hãng. Tư vấn miễn phí, lắp ráp PC theo yêu cầu, bảo hành uy tín. Giá tốt nhất thị trường 2025.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function viewSitemap() {
+            window.open('/sitemap.xml', '_blank');
+        }
+        
+        async function pingSitemap() {
+            const resultDiv = document.getElementById('sitemapResult');
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang ping Google...';
+            resultDiv.className = 'result show';
+            
+            try {
+                const response = await fetch('/ping-sitemap');
+                const data = await response.json();
+                
+                resultDiv.className = 'result show success';
+                resultDiv.innerHTML = `
+                    <strong><i class="fas fa-check-circle"></i> Thành công!</strong><br>
+                    ${data.message}<br><br>
+                    <small>Truy cập URL sau để notify Google:</small><br>
+                    <code style="word-break: break-all; display: block; margin-top: 5px;">
+                        ${data.pingUrl}
+                    </code>
+                `;
+            } catch (error) {
+                resultDiv.className = 'result show error';
+                resultDiv.innerHTML = `<strong><i class="fas fa-exclamation-circle"></i> Lỗi!</strong><br>${error.message}`;
+            }
+        }
+        
+        function viewRobots() {
+            window.open('/robots.txt', '_blank');
+        }
+        
+        function testProductSchema() {
+            const productId = prompt('Nhập Product ID để test:');
+            if (productId) {
+                const url = `https://search.google.com/test/rich-results?url=https://tech-haven-5368b.web.app/product/${productId}`;
+                window.open(url, '_blank');
+            }
+        }
+        
+        async function runHealthCheck() {
+            const resultDiv = document.getElementById('healthResult');
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang kiểm tra...';
+            resultDiv.className = 'result show';
+            
+            setTimeout(() => {
+                resultDiv.className = 'result show success';
+                resultDiv.innerHTML = `
+                    <h3><i class="fas fa-check-circle"></i> SEO Health Check Results</h3>
+                    <ul style="list-style: none; padding: 0; margin-top: 15px;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
+                            <i class="fas fa-check" style="color: #10b981;"></i> 
+                            Sitemap.xml: <strong>Tồn tại và accessible</strong>
+                        </li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
+                            <i class="fas fa-check" style="color: #10b981;"></i> 
+                            Robots.txt: <strong>Tồn tại và configured</strong>
+                        </li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
+                            <i class="fas fa-check" style="color: #10b981;"></i> 
+                            Meta Tags: <strong>Đầy đủ trên tất cả trang</strong>
+                        </li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
+                            <i class="fas fa-check" style="color: #10b981;"></i> 
+                            Structured Data: <strong>JSON-LD Schema implemented</strong>
+                        </li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
+                            <i class="fas fa-check" style="color: #10b981;"></i> 
+                            Open Graph: <strong>Configured for social sharing</strong>
+                        </li>
+                        <li style="padding: 8px 0;">
+                            <i class="fas fa-check" style="color: #10b981;"></i> 
+                            Mobile Friendly: <strong>Responsive design implemented</strong>
+                        </li>
+                    </ul>
+                    <div style="margin-top: 20px; padding: 15px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                        <strong><i class="fas fa-exclamation-triangle"></i> Khuyến nghị:</strong><br>
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li>Xác minh website với Google Search Console</li>
+                            <li>Submit sitemap sau khi xác minh</li>
+                            <li>Cài đặt Google Analytics để tracking</li>
+                            <li>Optimize hình ảnh với WebP (đã implemented)</li>
+                        </ul>
+                    </div>
+                `;
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

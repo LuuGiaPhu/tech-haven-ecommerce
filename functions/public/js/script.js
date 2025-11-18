@@ -3313,7 +3313,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Guest cart items (with regular id) or local items need full data validation
             const hasValidName = (item.name || item.productName) && 
                                 (item.name !== 'undefined' && item.productName !== 'undefined');
-            const hasValidProductId = item.productId && item.productId !== 'undefined';
+            const hasValidProductId = (item.productId || item.id) && 
+                                     (item.productId !== 'undefined' && item.id !== 'undefined');
             const hasValidPrice = (item.numericPrice || item.price || item.productPrice) &&
                                  !isNaN(parseFloat(item.numericPrice || item.price || item.productPrice));
             
@@ -3327,13 +3328,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     hasValidProductId: hasValidProductId,
                     hasValidPrice: hasValidPrice,
                     name: item.name || item.productName,
-                    productId: item.productId,
+                    productId: item.productId || item.id,
                     price: item.numericPrice || item.price || item.productPrice
                 });
             } else {
                 console.log('✅ Valid guest cart item:', {
                     name: item.name || item.productName,
-                    productId: item.productId,
+                    productId: item.productId || item.id,
                     price: item.numericPrice || item.price || item.productPrice
                 });
             }
@@ -4757,10 +4758,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.error('❌ Error parsing guestTempAddress:', error);
                 }
                 
+                // Get coin usage data if available
+                let coinUsed = 0;
+                if (typeof getCoinUsageData === 'function') {
+                    try {
+                        const coinData = getCoinUsageData();
+                        coinUsed = coinData?.coinUsed || 0;
+                        console.log('💰 Coin usage data:', coinData);
+                    } catch (error) {
+                        console.warn('⚠️ Error getting coin usage data:', error);
+                    }
+                }
+                
                 const billData = {
                     userId: billUserId,
                     products: billProducts,
                     totalAmount: billTotalAmount,
+                    coinUsed: coinUsed, // Add coin usage to bill
                     couponUserId: appliedCoupon ? (window.currentCouponUserId || appliedCoupon.couponUserId) : null,
                     guestTempAddress: guestTempAddress, // Add guest temp address to bill
                     customerInfo: {
@@ -6302,6 +6316,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Export Firebase cart real-time listener functions
     window.startCartRealtimeListener = startCartRealtimeListener;
     window.stopCartRealtimeListener = stopCartRealtimeListener;
+
+    // Make search functions globally available for other scripts
+    window.handleSearch = handleSearch;
+    window.performProductSearch = performProductSearch;
+    window.displaySearchResults = displaySearchResults;
+    window.showDefaultSearchSuggestions = showDefaultSearchSuggestions;
+    window.showSearchSuggestions = showSearchSuggestions;
+    window.hideSearchSuggestions = hideSearchSuggestions;
+    window.getProductIcon = getProductIcon;
+    window.highlightSearchTerm = highlightSearchTerm;
+    window.navigateToProductDetail = navigateToProductDetail;
+    window.selectProductFromSearch = selectProductFromSearch;
+    window.selectCategoryFromSearch = selectCategoryFromSearch;
+    window.clearSearchAndShowAll = clearSearchAndShowAll;
+    window.searchAllProducts = searchAllProducts;
+    window.selectProduct = selectProduct;
 
     // Initialize mobile menu toggle for all pages
     setupCommonEventListeners();
@@ -9029,6 +9059,19 @@ function fillUserInformationIfLoggedIn() {
         if (customerEmail) {
             customerEmail.disabled = false;
             customerEmail.placeholder = 'Nhập email';
+            
+            // Add event listener to fetch coin when guest enters email (similar to coupon)
+            if (!customerEmail.hasAttribute('data-coin-listener-attached')) {
+                customerEmail.addEventListener('blur', async function() {
+                    const email = this.value.trim();
+                    if (email && email.includes('@')) {
+                        console.log('📧 Guest email entered, fetching coin balance for:', email);
+                        await fetchGuestCoinByEmail(email);
+                    }
+                });
+                customerEmail.setAttribute('data-coin-listener-attached', 'true');
+                console.log('✅ Guest email coin listener attached');
+            }
         }
         return;
     }
@@ -9154,6 +9197,125 @@ window.debugCart = function() {
 
 // Make function globally available
 window.fillUserInformationIfLoggedIn = fillUserInformationIfLoggedIn;
+
+/**
+ * Fetch guest user's coin balance by email
+ * Similar to how coupons are loaded for guest users
+ */
+async function fetchGuestCoinByEmail(email) {
+    try {
+        console.log('🔍 Fetching coin balance for guest email:', email);
+        
+        // Call backend API to get user coin by email
+        const response = await fetch(`/api/users/email/${encodeURIComponent(email)}/coin`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            console.log('⚠️ No user found with email:', email);
+            // Reset coin display to 0
+            resetCoinDisplay();
+            return;
+        }
+        
+        const data = await response.json();
+        
+        if (data.success && data.coin !== undefined) {
+            const coinBalance = data.coin || 0;
+            console.log('💰 Guest coin balance loaded:', coinBalance.toLocaleString('vi-VN'));
+            
+            // Update coin display (use checkout-coin-manager.js functions if available)
+            if (typeof window.updateGuestCoinBalance === 'function') {
+                window.updateGuestCoinBalance(coinBalance, data.userId);
+            } else {
+                // Fallback: directly update UI elements
+                updateCoinUIElements(coinBalance);
+            }
+            
+            // Store guest userId for later use
+            window.guestUserId = data.userId;
+            console.log('✅ Guest userId stored:', data.userId);
+        } else {
+            console.log('⚠️ No coin data returned for email:', email);
+            resetCoinDisplay();
+        }
+    } catch (error) {
+        console.error('❌ Error fetching guest coin:', error);
+        resetCoinDisplay();
+    }
+}
+
+/**
+ * Update coin UI elements directly
+ */
+function updateCoinUIElements(coinBalance) {
+    const checkoutCoinBalance = document.getElementById('checkoutCoinBalance');
+    const checkoutCoinValue = document.getElementById('checkoutCoinValue');
+    const coinSlider = document.getElementById('coinSlider');
+    const coinToUse = document.getElementById('coinToUse');
+    const noCoinMessage = document.getElementById('noCoinMessage');
+    const coinInputGroup = document.getElementById('coinInputGroup');
+    const useAllCoinBtn = document.getElementById('useAllCoinBtn');
+    
+    // Update balance display
+    if (checkoutCoinBalance) {
+        checkoutCoinBalance.textContent = coinBalance.toLocaleString('vi-VN');
+    }
+    if (checkoutCoinValue) {
+        checkoutCoinValue.textContent = coinBalance.toLocaleString('vi-VN');
+    }
+    
+    // Show/hide appropriate sections
+    if (coinBalance > 0) {
+        if (noCoinMessage) noCoinMessage.style.display = 'none';
+        if (coinInputGroup) coinInputGroup.style.display = 'block';
+        if (useAllCoinBtn) useAllCoinBtn.style.display = 'inline-flex';
+        
+        // Update slider and input max values
+        const orderTotal = calculateCartTotal() + 50000; // Add shipping
+        const maxCoinUsable = Math.min(coinBalance, orderTotal);
+        
+        if (coinSlider) {
+            coinSlider.max = maxCoinUsable;
+            coinSlider.value = 0;
+        }
+        if (coinToUse) {
+            coinToUse.max = maxCoinUsable;
+            coinToUse.value = 0;
+        }
+        
+        console.log('✅ Coin UI updated for guest - Balance:', coinBalance.toLocaleString('vi-VN'));
+    } else {
+        resetCoinDisplay();
+    }
+}
+
+/**
+ * Reset coin display to default state (no coin)
+ */
+function resetCoinDisplay() {
+    const noCoinMessage = document.getElementById('noCoinMessage');
+    const coinInputGroup = document.getElementById('coinInputGroup');
+    const useAllCoinBtn = document.getElementById('useAllCoinBtn');
+    const checkoutCoinBalance = document.getElementById('checkoutCoinBalance');
+    const checkoutCoinValue = document.getElementById('checkoutCoinValue');
+    
+    if (noCoinMessage) noCoinMessage.style.display = 'flex';
+    if (coinInputGroup) coinInputGroup.style.display = 'none';
+    if (useAllCoinBtn) useAllCoinBtn.style.display = 'none';
+    if (checkoutCoinBalance) checkoutCoinBalance.textContent = '0';
+    if (checkoutCoinValue) checkoutCoinValue.textContent = '0';
+    
+    console.log('🔄 Coin display reset to default (no coin)');
+}
+
+// Export functions
+window.fetchGuestCoinByEmail = fetchGuestCoinByEmail;
+window.updateCoinUIElements = updateCoinUIElements;
+window.resetCoinDisplay = resetCoinDisplay;
 
 // =====================================
 // EMAIL VERIFICATION LOADING SCREEN
@@ -10246,17 +10408,6 @@ window.setupCommentRealtimeListener = setupCommentRealtimeListener;
 window.stopCommentListener = stopCommentListener;
 window.commentEventEmitter = commentEventEmitter;
 
-// Make search functions globally available for other scripts
-window.handleSearch = handleSearch;
-window.performProductSearch = performProductSearch;
-window.displaySearchResults = displaySearchResults;
-window.showDefaultSearchSuggestions = showDefaultSearchSuggestions;
-window.showSearchSuggestions = showSearchSuggestions;
-window.hideSearchSuggestions = hideSearchSuggestions;
-window.getProductIcon = getProductIcon;
-window.highlightSearchTerm = highlightSearchTerm;
-window.navigateToProductDetail = navigateToProductDetail;
-
 // =====================================
 // MEMBERSHIP LEVEL SYSTEM
 // =====================================
@@ -10354,8 +10505,3 @@ async function loadMembershipLevel() {
 
 // Make membership function globally available
 window.loadMembershipLevel = loadMembershipLevel;
-window.selectProductFromSearch = selectProductFromSearch;
-window.selectCategoryFromSearch = selectCategoryFromSearch;
-window.clearSearchAndShowAll = clearSearchAndShowAll;
-window.searchAllProducts = searchAllProducts;
-window.selectProduct = selectProduct;

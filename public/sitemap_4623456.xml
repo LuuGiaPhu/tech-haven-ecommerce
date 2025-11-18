@@ -4,14 +4,56 @@
 
   <url>
        <loc>https://tech-haven-5368b.web.app/</loc>
-       <lastmod>2025-10-26T15:41:13+00:00</lastmod>
+       <lastmod>2024-10-26T08:00:00+00:00</lastmod>
        <changefreq>daily</changefreq>
        <priority>1.0000</priority>
   </url>
   <url>
        <loc>https://tech-haven-5368b.web.app/shop</loc>
-       <lastmod>2025-10-26T15:41:13+00:00</lastmod>
+       <lastmod>2024-10-26T08:00:00+00:00</lastmod>
        <changefreq>daily</changefreq>
+       <priority>0.9000</priority>
+  </url>
+  <url>
+       <loc>https://tech-haven-5368b.web.app/laptops</loc>
+       <lastmod>2024-10-26T08:00:00+00:00</lastmod>
+       <changefreq>weekly</changefreq>
        <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://tech-haven-5368b.web.app/components</loc>
+       <lastmod>2024-10-26T08:00:00+00:00</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://tech-haven-5368b.web.app/peripherals</loc>
+       <lastmod>2024-10-26T08:00:00+00:00</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://tech-haven-5368b.web.app/build-pc</loc>
+       <lastmod>2024-10-26T08:00:00+00:00</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.7000</priority>
+  </url>
+  <url>
+       <loc>https://tech-haven-5368b.web.app/admin/input</loc>
+       <lastmod>2024-10-26T08:00:00+00:00</lastmod>
+       <changefreq>monthly</changefreq>
+       <priority>0.3000</priority>
+  </url>
+  <url>
+       <loc>https://tech-haven-5368b.web.app/admin/edit</loc>
+       <lastmod>2024-10-26T08:00:00+00:00</lastmod>
+       <changefreq>monthly</changefreq>
+       <priority>0.3000</priority>
+  </url>
+  <url>
+       <loc>https://tech-haven-5368b.web.app/admin/coupon</loc>
+       <lastmod>2024-10-26T08:00:00+00:00</lastmod>
+       <changefreq>monthly</changefreq>
+       <priority>0.3000</priority>
   </url>
 </urlset>

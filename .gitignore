@@ -75,5 +75,13 @@ serviceAccountKey-*.json
 functions/serviceAccountKey.json
 functions/serviceAccountKey-*.json
 
+# Backup files
+*.backup
+*-backup.*
+*.old
+
+# Zip files
+*.zip
+
 # dataconnect generated files
 .dataconnect

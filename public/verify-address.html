@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác thực địa chỉ - TECH HAVEN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .address-info {
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 8px;
+            flex: 1;
+        }
+
+        .address-info strong {
+            color: #333;
+            font-size: 14px;
+        }
+
+        .container {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .instruction-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .instruction-card h2 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instruction-card h2 i {
+            color: #667eea;
+        }
+
+        .steps {
+            list-style: none;
+            padding: 0;
+        }
+
+        .steps li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .steps li:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .map-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            flex: 1;
+            min-height: 500px;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            border: none;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 10;
+            max-width: 90%;
+        }
+
+        .map-overlay p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-confirm {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-cancel {
+            background: white;
+            color: #666;
+            border: 2px solid #ddd;
+        }
+
+        .btn-cancel:hover {
+            background: #f8f9fa;
+            border-color: #bbb;
+        }
+
+        .btn-open-maps {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-open-maps:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4);
+        }
+        
+        .btn-open-maps::after {
+            content: '(Mở tab mới)';
+            font-size: 11px;
+            opacity: 0.8;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: white;
+        }
+
+        .loading i {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-map-marked-alt"></i> TECH HAVEN
+            </div>
+            <div class="address-info">
+                <strong id="displayAddress">Đang tải địa chỉ...</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="instruction-card">
+            <h2>
+                <i class="fas fa-info-circle"></i>
+                Hướng dẫn xác thực địa chỉ
+            </h2>
+            <ul class="steps">
+                <li>
+                    <span class="step-number">1</span>
+                    <span>Kiểm tra vị trí trên bản đồ bên dưới có đúng với địa chỉ của bạn không</span>
+                </li>
+                <li>
+                    <span class="step-number">2</span>
+                    <span>Nếu muốn xem chi tiết hơn, nhấn "Mở trên Google Maps" để xem bản đồ đầy đủ</span>
+                </li>
+                <li>
+                    <span class="step-number">3</span>
+                    <span>Sau khi xác nhận đúng địa chỉ, nhấn nút "Xác nhận địa chỉ đúng" để tiếp tục</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="map-container">
+            <div class="map-overlay">
+                <p><i class="fas fa-location-arrow"></i> Kiểm tra vị trí điểm đỏ có đúng với địa chỉ của bạn</p>
+            </div>
+            <iframe id="map" loading="lazy"></iframe>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-open-maps" onclick="openFullGoogleMaps()">
+                <i class="fab fa-google"></i>
+                Mở trên Google Maps
+            </button>
+            <button class="btn btn-confirm" onclick="confirmAddress()">
+                <i class="fas fa-check-circle"></i>
+                Xác nhận địa chỉ đúng
+            </button>
+            <button class="btn btn-cancel" onclick="cancelVerification()">
+                <i class="fas fa-times"></i>
+                Hủy
+            </button>
+        </div>
+        
+        <!-- Info banner when map opened -->
+        <div id="mapOpenedBanner" style="display: none; background: linear-gradient(135deg, #4285f4 0%, #34a853 100%); color: white; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <i class="fas fa-external-link-alt"></i>
+            <strong>Google Maps đã mở trong tab mới</strong>
+            <p style="margin: 8px 0 0 0; font-size: 14px; opacity: 0.9;">Kiểm tra vị trí trên bản đồ, sau đó quay lại đây để xác nhận</p>
+        </div>
+    </div>
+
+    <script>
+        // Get address from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const address = urlParams.get('address');
+        const returnUrl = urlParams.get('return') || '/';
+        const mode = urlParams.get('mode') || 'checkout'; // 'checkout' or 'welcome'
+
+        // Display address
+        if (address) {
+            document.getElementById('displayAddress').textContent = decodeURIComponent(address);
+            
+            // Load Google Maps iframe
+            const encodedAddress = encodeURIComponent(address);
+            const mapIframe = document.getElementById('map');
+            mapIframe.src = `https://maps.google.com/maps?q=${encodedAddress}&output=embed&z=16`;
+        } else {
+            document.getElementById('displayAddress').textContent = 'Không tìm thấy địa chỉ';
+            alert('Không tìm thấy thông tin địa chỉ. Vui lòng thử lại.');
+            window.close();
+        }
+
+        // Open full Google Maps in new tab
+        function openFullGoogleMaps() {
+            const encodedAddress = encodeURIComponent(address);
+            const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+            
+            // Open in new tab WITHOUT leaving current page
+            const newWindow = window.open(googleMapsUrl, '_blank', 'noopener,noreferrer');
+            
+            // Focus back to current window immediately
+            if (newWindow) {
+                // Small delay to ensure new window opens first
+                setTimeout(() => {
+                    window.focus();
+                }, 100);
+            }
+            
+            // Show banner that map is opened
+            const banner = document.getElementById('mapOpenedBanner');
+            if (banner) {
+                banner.style.display = 'block';
+                banner.style.animation = 'slideIn 0.3s ease';
+            }
+            
+            // Show notification that map opened in new tab
+            showNotification('🗺️ Bản đồ Google Maps đã mở trong tab mới. Vui lòng kiểm tra và quay lại đây để xác nhận.', 'info');
+        }
+        
+        // Show notification function
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'info' ? 'linear-gradient(135deg, #4285f4 0%, #34a853 100%)' : 'white'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 10000;
+                max-width: 300px;
+                font-size: 14px;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            // Add animation keyframes
+            if (!document.getElementById('notification-styles')) {
+                const style = document.createElement('style');
+                style.id = 'notification-styles';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(400px); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(400px); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 5000);
+        }
+
+        // Confirm address and return
+        async function confirmAddress() {
+            // Show loading state
+            const confirmBtn = document.querySelector('.btn-confirm');
+            const originalText = confirmBtn.innerHTML;
+            confirmBtn.disabled = true;
+            confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang lấy tọa độ...';
+            
+            try {
+                // Get coordinates from Google Geocoding API
+                const result = await getCoordinatesFromAddress(address);
+                
+                if (result) {
+                    // Store verification status with coordinates in localStorage
+                    // Use different keys for welcome mode vs checkout mode
+                    const storagePrefix = mode === 'welcome' ? 'welcome' : '';
+                    localStorage.setItem(`${storagePrefix}AddressVerified`, 'true');
+                    localStorage.setItem(`${storagePrefix}VerifiedAddress`, JSON.stringify({
+                        address: address,
+                        coordinates: { lat: result.lat, lng: result.lng },
+                        timestamp: Date.now()
+                    }));
+                    
+                    // Show success message with coordinates
+                    let message = `✅ Địa chỉ đã được xác thực!\n\n📍 Tọa độ:\nLatitude: ${result.lat}\nLongitude: ${result.lng}`;
+                    
+                    // If simplified address was used, inform user
+                    if (result.usedAddress && result.usedAddress !== result.originalAddress) {
+                        message += `\n\nℹ️ Lưu ý: Hệ thống đã sử dụng địa chỉ rút gọn "${result.usedAddress}" để xác định tọa độ chính xác hơn.`;
+                    }
+                    
+                    message += '\n\nBạn sẽ được chuyển về trang trước để lưu địa chỉ.';
+                    
+                    alert(message);
+                    
+                    // Close window or redirect back
+                    if (window.opener) {
+                        // If opened in popup, close and notify parent with mode
+                        window.opener.postMessage({
+                            type: 'addressVerified',
+                            mode: mode,
+                            address: address,
+                            verified: true,
+                            coordinates: { lat: result.lat, lng: result.lng }
+                        }, '*');
+                        window.close();
+                    } else {
+                        // If opened in new tab, go back
+                        window.history.back();
+                    }
+                } else {
+                    throw new Error('Không thể lấy tọa độ');
+                }
+            } catch (error) {
+                console.error('Error getting coordinates:', error);
+                alert('⚠️ Không thể lấy tọa độ từ địa chỉ. Vui lòng thử lại hoặc nhập địa chỉ đơn giản hơn (ví dụ: chỉ số nhà chính, tên đường và thành phố).');
+                confirmBtn.disabled = false;
+                confirmBtn.innerHTML = originalText;
+            }
+        }
+        
+        // Get coordinates from address using Google Geocoding API
+        async function getCoordinatesFromAddress(address) {
+            try {
+                // Use Google Geocoding API via our server proxy (to hide API key)
+                const response = await fetch('/api/geocode', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ address })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.coordinates) {
+                        // Check if a simplified address was used
+                        if (data.usedAddress && data.usedAddress !== data.originalAddress) {
+                            console.log(`ℹ️ Used simplified address: "${data.usedAddress}" instead of "${data.originalAddress}"`);
+                        }
+                        return {
+                            ...data.coordinates,
+                            usedAddress: data.usedAddress,
+                            originalAddress: data.originalAddress,
+                            formattedAddress: data.formattedAddress
+                        };
+                    }
+                }
+                
+                // Fallback: parse from iframe src if API fails
+                console.warn('Geocoding API failed, using fallback method');
+                return null;
+            } catch (error) {
+                console.error('Geocoding error:', error);
+                return null;
+            }
+        }
+
+        // Cancel verification
+        function cancelVerification() {
+            if (confirm('Bạn có chắc muốn hủy xác thực địa chỉ?')) {
+                const storagePrefix = mode === 'welcome' ? 'welcome' : '';
+                localStorage.setItem(`${storagePrefix}AddressVerified`, 'cancelled');
+                
+                if (window.opener) {
+                    window.opener.postMessage({
+                        type: 'addressVerified',
+                        mode: mode,
+                        verified: false
+                    }, '*');
+                    window.close();
+                } else {
+                    window.history.back();
+                }
+            }
+        }
+
+        // Listen for beforeunload to handle accidental close
+        window.addEventListener('beforeunload', function(e) {
+            if (!localStorage.getItem('addressVerified')) {
+                // User is leaving without confirming
+                const message = 'Bạn chưa xác nhận địa chỉ. Bạn có chắc muốn thoát?';
+                e.returnValue = message;
+                return message;
+            }
+        });
+    </script>
+</body>
+</html>
