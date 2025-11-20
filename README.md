@@ -1,7 +1,7 @@
 # Tech Haven - E-commerce Platform
 
-[![Deploy to Firebase](https://github.com/[your-username]/[your-repo]/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/[your-username]/[your-repo]/actions/workflows/firebase-hosting-merge.yml)
-[![CI Tests](https://github.com/[your-username]/[your-repo]/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/[your-username]/[your-repo]/actions/workflows/ci-tests.yml)
+[![Deploy to Firebase](https://github.com/LuuGiaPhu/tech-haven-ecommerce/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/LuuGiaPhu/tech-haven-ecommerce/actions/workflows/firebase-hosting-merge.yml)
+[![CI Tests](https://github.com/LuuGiaPhu/tech-haven-ecommerce/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/LuuGiaPhu/tech-haven-ecommerce/actions/workflows/ci-tests.yml)
 
 ## 🚀 Tech Stack
 
@@ -53,8 +53,8 @@ See [CI/CD Setup Guide](.github/CICD-SETUP-GUIDE.md) for detailed instructions.
 
 ```bash
 # Clone repository
-git clone [your-repo-url]
-cd tech-haven
+git clone https://github.com/LuuGiaPhu/tech-haven-ecommerce.git
+cd tech-haven-ecommerce
 
 # Install dependencies
 npm install
@@ -130,7 +130,7 @@ Required secrets in GitHub Actions:
 
 ## 👥 Contributors
 
-- Developer: [Your Name]
+- Developer: Lưu Gia Phú
 
 ## 📄 License
 
