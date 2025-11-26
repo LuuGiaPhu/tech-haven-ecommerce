@@ -491,6 +491,26 @@
                     <input type="number" id="editUserPoints" class="cute-input" placeholder="0" min="0">
                     <small class="input-hint">💰 Điểm = 10% tổng tiền bills completed</small>
                 </div>
+                
+                <div class="cute-input-group">
+                    <label class="cute-label">
+                        <i class="fas fa-ban"></i>
+                        Trạng Thái Tài Khoản
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <input type="checkbox" id="editUserBanned" style="width: auto; margin: 0;">
+                        <label for="editUserBanned" style="margin: 0; cursor: pointer;">🚫 Khóa tài khoản này</label>
+                    </div>
+                </div>
+                
+                <div class="cute-input-group" id="banReasonGroup" style="display: none;">
+                    <label class="cute-label">
+                        <i class="fas fa-comment-dots"></i>
+                        Lý Do Khóa Tài Khoản
+                    </label>
+                    <textarea id="editUserBanReason" class="cute-input" rows="3" placeholder="Nhập lý do khóa tài khoản..."></textarea>
+                    <small class="input-hint">⚠️ Lý do này sẽ hiển thị khi người dùng đăng nhập</small>
+                </div>
             </div>
             
             <div class="cute-modal-footer">
@@ -2425,7 +2445,7 @@
                         </div>
                         <div class="user-detail-row">
                             <span class="user-detail-label">Điểm tích lũy:</span>
-                            <span class="user-detail-value">${(user.membershipPoints || 0).toLocaleString('vi-VN')}</span>
+                            <span class="user-detail-value">${(user.points || 0).toLocaleString('vi-VN')}</span>
                         </div>
                         <div class="user-detail-row">
                             <span class="user-detail-label">Vai trò:</span>
@@ -2524,7 +2544,21 @@
                 console.log('User role set to:', userRole, '(is_admin:', userData.is_admin, ')');
                 
                 document.getElementById('editUserMembership').value = userData.membershipLevel || 'standard';
-                document.getElementById('editUserPoints').value = userData.membershipPoints || 0;
+                document.getElementById('editUserPoints').value = userData.points || 0;
+                
+                // Set ban fields
+                const isBanned = userData.is_banned === true;
+                document.getElementById('editUserBanned').checked = isBanned;
+                document.getElementById('editUserBanReason').value = userData.banned_reason || '';
+                
+                // Show/hide ban reason field based on ban status
+                const banReasonGroup = document.getElementById('banReasonGroup');
+                if (isBanned) {
+                    banReasonGroup.style.display = 'block';
+                } else {
+                    banReasonGroup.style.display = 'none';
+                }
+                
                 console.log('✅ Form fields filled');
                 
                 // Show modal
@@ -2560,10 +2594,18 @@
                 const photo = document.getElementById('editUserPhoto').value.trim();
                 const role = document.getElementById('editUserRole').value;
                 const membershipLevel = document.getElementById('editUserMembership').value;
-                const membershipPoints = parseInt(document.getElementById('editUserPoints').value) || 0;
+                const points = parseInt(document.getElementById('editUserPoints').value) || 0;
+                const isBanned = document.getElementById('editUserBanned').checked;
+                const banReason = document.getElementById('editUserBanReason').value.trim();
                 
                 if (!name) {
                     showError('Vui lòng nhập tên người dùng');
+                    return;
+                }
+                
+                // Validate ban reason if banning user
+                if (isBanned && !banReason) {
+                    showError('Vui lòng nhập lý do khóa tài khoản');
                     return;
                 }
                 
@@ -2579,7 +2621,9 @@
                 console.log('Updating user role:', {
                     userId: userId,
                     role: role,
-                    is_admin: isAdmin
+                    is_admin: isAdmin,
+                    is_banned: isBanned,
+                    banned_reason: banReason
                 });
                 
                 // Update user document
@@ -2592,12 +2636,14 @@
                     role: role,
                     is_admin: isAdmin, // Add is_admin field based on role
                     membershipLevel: membershipLevel,
-                    membershipPoints: membershipPoints,
+                    points: points,
+                    is_banned: isBanned,
+                    banned_reason: isBanned ? banReason : '',
                     updatedAt: new Date().toISOString()
                 });
                 
                 console.log('✅ User updated successfully');
-                showSuccess('Cập nhật người dùng thành công!');
+                showSuccess(isBanned ? 'Đã khóa tài khoản người dùng!' : 'Cập nhật người dùng thành công!');
                 
                 // Close modal and reload users
                 closeEditUserModal();
@@ -2851,6 +2897,23 @@
                 loadingSpinner.style.display = 'none';
             }
         }
+        
+        // Toggle ban reason field when checkbox changes
+        document.addEventListener('DOMContentLoaded', function() {
+            const banCheckbox = document.getElementById('editUserBanned');
+            const banReasonGroup = document.getElementById('banReasonGroup');
+            
+            if (banCheckbox) {
+                banCheckbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        banReasonGroup.style.display = 'block';
+                    } else {
+                        banReasonGroup.style.display = 'none';
+                        document.getElementById('editUserBanReason').value = '';
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>

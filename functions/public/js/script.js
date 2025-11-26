@@ -7120,6 +7120,15 @@ function handleLogin() {
     })
     .then(response => response.json())
     .then(async data => {
+        // Check if user is banned (can come from error or is_banned field)
+        if (data.is_banned === true || data.banned_reason) {
+            const banMessage = data.banned_reason || 'Tài khoản đã bị khóa';
+            showNotification(`🚫 Tài khoản bị khóa: ${banMessage}`, 'error');
+            closeLoginModal();
+            clearForms();
+            return;
+        }
+        
         if (data.success) {
             showNotification('Đăng nhập thành công!', 'success');
             closeLoginModal();

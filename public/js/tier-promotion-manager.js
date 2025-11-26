@@ -47,7 +47,7 @@ class TierPromotionManager {
                     console.log('📊 Membership data updated:', {
                         currentLevel,
                         lastKnownLevel: this.lastKnownLevel,
-                        points: userData.membershipPoints
+                        points: userData.points
                     });
 
                     // Check for tier promotion
@@ -74,7 +74,7 @@ class TierPromotionManager {
                                 level: currentLevel,
                                 name: this.getTierName(currentLevel),
                                 icon: this.getTierIcon(currentLevel),
-                                points: userData.membershipPoints || 0
+                                points: userData.points || 0
                             };
                             this.showTierPromotionAnimation(membership);
                         });
@@ -141,12 +141,12 @@ class TierPromotionManager {
             });
 
             // Membership points = 10% of total spending
-            const membershipPoints = Math.floor(totalSpending * 0.1);
+            const points = Math.floor(totalSpending * 0.1);
             
             console.log('💵 Total spending:', totalSpending.toLocaleString('vi-VN'), 'đ');
-            console.log('⭐ Membership points (10%):', membershipPoints.toLocaleString('vi-VN'));
+            console.log('⭐ Membership points (10%):', points.toLocaleString('vi-VN'));
             
-            return membershipPoints;
+            return points;
         } catch (error) {
             console.error('❌ Error calculating membership points:', error);
             return 0;

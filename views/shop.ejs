@@ -6540,7 +6540,9 @@
                 const discountBadge = product.discount ? `<div class="product-badge">SALE</div>` : '';
                 const oldPriceHtml = product.oldPrice ? `<span class="product-old-price">${formatPrice(product.oldPrice)}</span>` : '';
                 const categoryIcon = getCategoryIcon(product.category);
-                const rating = generateStarRating(product.rating || 4);
+                // Use 0 as default rating if no rating data
+                const productRating = product.rating || 0;
+                const rating = generateStarRating(productRating);
                 
                 // Get first image from images array or fallback to image field
                 let productImage = '';

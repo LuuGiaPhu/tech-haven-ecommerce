@@ -283,17 +283,24 @@
                 const result = await response.json();
                 if (result.authenticated && result.user) {
                     console.log('✅ Server verification successful:', result.user);
-                    window.currentUser = result.user;
                     
-                    // Load full user profile from Firestore
-                    await loadUserProfile(idToken);
+                    // Load full user profile from Firestore and CHECK BAN STATUS FIRST
+                    const profileLoaded = await loadUserProfile(idToken);
                     
-                    updateUIBasedOnAuthStatus();
+                    // Only update UI if user is not banned (profileLoaded returns false if banned)
+                    if (profileLoaded !== false) {
+                        window.currentUser = result.user;
+                        return true; // Success
+                    } else {
+                        return false; // Banned
+                    }
                 } else {
                     console.log('❌ Server verification failed');
+                    return false;
                 }
             } catch (error) {
                 console.error('❌ Error sending token to server:', error);
+                return false;
             }
         }
 
@@ -310,6 +317,22 @@
                 });
                 
                 const result = await response.json();
+                
+                // Check if user is banned - PRIORITY CHECK
+                if (result.is_banned === true) {
+                    const banMessage = result.banned_reason || 'Vi phạm chính sách sử dụng';
+                    console.log('🚫 BANNED USER DETECTED:', banMessage);
+                    alert(`🚫 TÀI KHOẢN ĐÃ BỊ KHÓA\n\nLý do: ${banMessage}\n\nVui lòng liên hệ admin để biết thêm chi tiết.`);
+                    
+                    // Sign out the user immediately
+                    await firebaseCompatAuth.signOut();
+                    window.currentUser = null;
+                    updateUIBasedOnAuthStatus();
+                    
+                    // Return false to signal ban status
+                    return false;
+                }
+                
                 if (result.success && result.profile) {
                     console.log('✅ User profile loaded:', result.profile);
                     window.currentUser = {
@@ -322,11 +345,15 @@
                     // Track recently viewed product after profile loaded
                     console.log('👁️ Profile loaded, tracking product view...');
                     await trackRecentlyViewedProduct();
+                    
+                    return true; // User is not banned
                 } else {
                     console.log('❌ Failed to load user profile');
+                    return false;
                 }
             } catch (error) {
                 console.error('❌ Error loading user profile:', error);
+                return false;
             }
         }
 
@@ -471,9 +498,15 @@
                 
                 // Get fresh token and send to server
                 const idToken = await user.getIdToken();
-                await sendTokenToServer(idToken);
+                const serverVerified = await sendTokenToServer(idToken);
                 
-                updateUIBasedOnAuthStatus();
+                // Only update UI if server verification successful and user not banned
+                if (serverVerified !== false) {
+                    updateUIBasedOnAuthStatus();
+                } else {
+                    console.log('🚫 User banned or verification failed, not updating UI');
+                    return; // Stop here, user will be signed out
+                }
                 
                 // Check and show welcome modal for new users (after 1 second to ensure script.js is loaded)
                 console.log('⏱️ Scheduling welcome modal check for new user...');
@@ -8602,6 +8635,16 @@
                                 });
                             }
                         }
+                    } else if (response.status === 403) {
+                        // User is banned - sign out and stop processing
+                        console.log('🚫 User is banned, signing out...');
+                        await window.firebaseAuth.signOut();
+                        localStorage.removeItem('techHavenUser');
+                        window.currentUser = null;
+                        const errorData = await response.json().catch(() => ({}));
+                        const reason = errorData.banned_reason || 'Vi phạm chính sách sử dụng';
+                        alert(`🚫 TÀI KHOẢN ĐÃ BỊ KHÓA\n\nLý do: ${reason}\n\nVui lòng liên hệ admin để biết thêm chi tiết.`);
+                        return; // Stop processing and don't update UI
                     }
                 } catch (error) {
                     console.error('Error fetching user data:', error);

@@ -207,6 +207,39 @@
             console.log('🔐 Firebase v8 Auth state changed:', user ? user.email : 'No user');
             
             if (user) {
+                // Check if user is banned FIRST
+                try {
+                    const idToken = await user.getIdToken();
+                    const profileResponse = await fetch('/api/user/profile', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${idToken}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    const profileResult = await profileResponse.json();
+                    
+                    // Check ban status
+                    if (profileResult.is_banned === true) {
+                        const banMessage = profileResult.banned_reason || 'Vi phạm chính sách sử dụng';
+                        console.log('🚫 BANNED USER DETECTED in shop.ejs:', banMessage);
+                        alert(`🚫 TÀI KHOẢN ĐÃ BỊ KHÓA\n\nLý do: ${banMessage}\n\nVui lòng liên hệ admin để biết thêm chi tiết.`);
+                        
+                        // Sign out immediately
+                        await authCompat.signOut();
+                        window.currentUser = null;
+                        localStorage.removeItem('userData');
+                        localStorage.removeItem('techHavenUser');
+                        
+                        // Reload to clear state
+                        window.location.reload();
+                        return;
+                    }
+                } catch (banCheckError) {
+                    console.error('❌ Error checking ban status:', banCheckError);
+                }
+                
                 // Update window.currentUser and save to localStorage for cross-page access
                 window.currentUser = {
                     uid: user.uid,
@@ -4078,27 +4111,6 @@
                 Cửa Hàng TECH HAVEN
             </h1>
             <p class="shop-subtitle">Khám phá hàng nghìn sản phẩm công nghệ chất lượng cao</p>
-            
-            <!-- Debug Test Button -->
-            <button onclick="toggleCart()" style="background: red; color: white; padding: 10px; margin: 10px; border: none; border-radius: 5px; cursor: pointer;">
-                🛒 TEST CART TOGGLE
-            </button>
-            <button onclick="testCartCount()" style="background: blue; color: white; padding: 10px; margin: 10px; border: none; border-radius: 5px; cursor: pointer;">
-                🔢 TEST CART COUNT
-            </button>
-            <button onclick="window.debugCart ? window.debugCart() : console.log('debugCart not available')" style="background: green; color: white; padding: 10px; margin: 10px; border: none; border-radius: 5px; cursor: pointer;">
-                🔍 DEBUG CART
-            </button>
-            <button onclick="testSmartCartState()" style="background: purple; color: white; padding: 10px; margin: 10px; border: none; border-radius: 5px; cursor: pointer;">
-                🧠 TEST SMART CART
-            </button>
-            <button onclick="window.forceUpdateCartUI ? window.forceUpdateCartUI() : console.log('forceUpdateCartUI not available')" style="background: orange; color: white; padding: 10px; margin: 10px; border: none; border-radius: 5px; cursor: pointer;">
-                🔧 FORCE CART UPDATE
-            </button>
-            <button onclick="window.testMobileCart ? window.testMobileCart() : console.log('testMobileCart not available')" style="background: teal; color: white; padding: 10px; margin: 10px; border: none; border-radius: 5px; cursor: pointer;">
-                📱 TEST MOBILE CART
-            </button>
-            <!-- Removed TEST ADD TO CART button - use script.js implementation instead -->
         </div>
     </div>
 
@@ -6509,6 +6521,15 @@
                     
                     console.log(`✅ Loaded ${data.products.length} products (${totalProducts} total)`);
                     
+                    // Debug: Check if rating is in API response
+                    if (data.products.length > 0) {
+                        console.log('📊 Sample product from API:', {
+                            name: data.products[0].name,
+                            rating: data.products[0].rating,
+                            hasRating: 'rating' in data.products[0]
+                        });
+                    }
+                    
                     renderProducts();
                     updateResultCount();
                     updateLoadMoreButton(data.pagination.hasMore);
@@ -6540,7 +6561,14 @@
                 const discountBadge = product.discount ? `<div class="product-badge">SALE</div>` : '';
                 const oldPriceHtml = product.oldPrice ? `<span class="product-old-price">${formatPrice(product.oldPrice)}</span>` : '';
                 const categoryIcon = getCategoryIcon(product.category);
-                const rating = generateStarRating(product.rating || 4);
+                // Use 0 as default rating if no rating data
+                const productRating = product.rating || 0;
+                const rating = generateStarRating(productRating);
+                
+                // Debug: log rating for first few products
+                if (filteredProducts.indexOf(product) < 3) {
+                    console.log(`⭐ Product "${product.name}" rating:`, product.rating, '-> display:', productRating);
+                }
                 
                 // Get first image from images array or fallback to image field
                 let productImage = '';
@@ -6915,12 +6943,33 @@
         console.log('✅ applyCategoryFilter exported to window object');
         
         function setupFilterEventListeners() {
-            // Filter checkboxes
-            document.querySelectorAll('.category-filter, .brand-filter').forEach(checkbox => {
+            // Category filter checkboxes - uncheck "All" when selecting specific category
+            document.querySelectorAll('.category-filter').forEach(checkbox => {
+                checkbox.addEventListener('change', function(e) {
+                    const categoryAll = document.getElementById('categoryAll');
+                    
+                    if (e.target.checked) {
+                        // Uncheck "All" when any specific category is selected
+                        if (categoryAll) {
+                            categoryAll.checked = false;
+                        }
+                    } else {
+                        // If unchecking and no other category is selected, auto-check "All"
+                        const anyChecked = document.querySelectorAll('.category-filter:checked').length > 0;
+                        if (!anyChecked && categoryAll) {
+                            categoryAll.checked = true;
+                        }
+                    }
+                    applyFilters();
+                });
+            });
+            
+            // Brand filter checkboxes
+            document.querySelectorAll('.brand-filter').forEach(checkbox => {
                 checkbox.addEventListener('change', applyFilters);
             });
             
-            // Category "All" checkbox
+            // Category "All" checkbox - uncheck all specific categories when "All" is selected
             document.getElementById('categoryAll').addEventListener('change', function(e) {
                 if (e.target.checked) {
                     document.querySelectorAll('.category-filter').forEach(cb => cb.checked = false);

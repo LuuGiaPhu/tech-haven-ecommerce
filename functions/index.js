@@ -249,74 +249,203 @@ async function verifyToken(req, res, next) {
     const decodedToken = await auth.verifyIdToken(idToken);
     console.log('✅ Token verified for user:', decodedToken.name, 'UID:', decodedToken.uid);
     
+    // Determine provider from token
+    const provider = decodedToken.firebase.sign_in_provider;
+    const isGoogleLogin = provider === 'google.com';
+    
+    console.log('🔍 Login provider:', provider, '- Is Google:', isGoogleLogin);
+    
     // First check if this is a Firebase UID or if we need to find by firebaseUid
     let userRef;
     let userDoc;
     let userData;
     
-    // Try to find user by Firebase UID first (Google users)
+    // Try to find user by Firebase UID first
     userRef = db.collection('users').doc(decodedToken.uid);
     userDoc = await userRef.get();
     
     if (!userDoc.exists) {
       // If not found, try to find by firebaseUid field (manual login users)
       console.log('🔍 User not found by Firebase UID, searching by firebaseUid field...');
-      const userQuery = await db.collection('users').where('firebaseUid', '==', decodedToken.uid).limit(1).get();
+      const userQuery = await db.collection('users')
+        .where('firebaseUid', '==', decodedToken.uid)
+        .limit(1)
+        .get();
       
       if (!userQuery.empty) {
         console.log('✅ Found user by firebaseUid field');
         userDoc = userQuery.docs[0];
         userRef = userDoc.ref;
         userData = userDoc.data();
-      } else {
-        // Create new Google user if not found at all
-        console.log('📝 Creating new Google user profile...');
-        const newUserData = {
-          uid: decodedToken.uid,
-          firebaseUid: decodedToken.uid,
-          email: decodedToken.email,
-          name: decodedToken.name,
-          photo: decodedToken.picture,
-          provider: 'google',
-          createdAt: admin.firestore.FieldValue.serverTimestamp(),
-          lastLoginAt: admin.firestore.FieldValue.serverTimestamp(),
-          // Additional fields for e-commerce
-          preferences: {
-            currency: 'VND',
-            language: 'vi',
-            notifications: true
-          },
-          profile: {
-            isActive: true,
-            membershipLevel: 'bronze',
-            totalOrders: 0,
-            totalSpent: 0
-          },
-          addresses: [],
-          wishlist: [],
-          is_admin: false,
-          hasSeenWelcomeModal: false // Track if user has seen welcome address modal
-        };
         
-        await userRef.set(newUserData);
-        console.log('✅ Created new Google user profile in Firestore:', decodedToken.name);
-        userData = newUserData;
+        // IMPORTANT: Check provider match
+        if (isGoogleLogin && userData.provider === 'manual') {
+          console.log('🔄 Google login found manual account - checking if we should merge...');
+          
+          // Check if email matches (merge accounts with same email)
+          if (userData.email === decodedToken.email) {
+            console.log('✅ Email matches! Upgrading manual account to support Google login');
+            // Merge: Keep manual account but add Google support
+            // Update to allow both providers by adding Google photo
+            await userRef.update({
+              photo: decodedToken.picture, // Update with Google photo
+              photoURL: decodedToken.picture,
+              provider: 'google', // Switch to Google (manual data like password still exists in Firebase Auth)
+              lastGoogleLoginAt: admin.firestore.FieldValue.serverTimestamp(),
+              upgradedToGoogle: true, // Flag to indicate account was upgraded
+              updatedAt: admin.firestore.FieldValue.serverTimestamp()
+            });
+            
+            console.log('✅ Account merged! Manual account now supports Google login');
+            // Re-fetch updated data
+            userDoc = await userRef.get();
+            userData = userDoc.data();
+          } else {
+            // Different email - create separate Google account
+            console.log('⚠️ Email mismatch - creating separate Google account');
+            const googleUserQuery = await db.collection('users')
+              .where('firebaseUid', '==', decodedToken.uid)
+              .where('provider', '==', 'google')
+              .limit(1)
+              .get();
+            
+            if (!googleUserQuery.empty) {
+              userDoc = googleUserQuery.docs[0];
+              userRef = userDoc.ref;
+              userData = userDoc.data();
+            } else {
+              userRef = db.collection('users').doc();
+              userDoc = null;
+            }
+          }
+        } else if (!isGoogleLogin && userData.provider === 'google') {
+          console.log('⚠️ Found Google user, but login is manual - this should not happen');
+        }
+      } else {
+        // No user found by firebaseUid - check by email for first-time Google login
+        if (isGoogleLogin) {
+          console.log('🔍 No user by UID, checking by email for potential merge...');
+          const emailQuery = await db.collection('users')
+            .where('email', '==', decodedToken.email)
+            .limit(1)
+            .get();
+          
+          if (!emailQuery.empty) {
+            const existingUser = emailQuery.docs[0];
+            const existingData = existingUser.data();
+            
+            if (existingData.provider === 'manual') {
+              console.log('🔄 Found manual account with same email - merging with Google login');
+              userRef = existingUser.ref;
+              
+              // Merge: Upgrade manual account to Google
+              await userRef.update({
+                firebaseUid: decodedToken.uid, // Link to Google Firebase UID
+                photo: decodedToken.picture,
+                photoURL: decodedToken.picture,
+                provider: 'google', // Switch to Google
+                lastGoogleLoginAt: admin.firestore.FieldValue.serverTimestamp(),
+                upgradedToGoogle: true,
+                updatedAt: admin.firestore.FieldValue.serverTimestamp()
+              });
+              
+              console.log('✅ Manual account upgraded to Google login!');
+              userDoc = await userRef.get();
+              userData = userDoc.data();
+            }
+          }
+        }
       }
     } else {
       userData = userDoc.data();
+      
+      // If found by UID, check provider match
+      if (isGoogleLogin && userData.provider === 'manual') {
+        console.log('🔄 Google login found manual account by UID - upgrading...');
+        if (userData.email === decodedToken.email) {
+          // Merge
+          await userRef.update({
+            photo: decodedToken.picture,
+            photoURL: decodedToken.picture,
+            provider: 'google',
+            lastGoogleLoginAt: admin.firestore.FieldValue.serverTimestamp(),
+            upgradedToGoogle: true,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+          });
+          
+          userDoc = await userRef.get();
+          userData = userDoc.data();
+        }
+      }
+    }
+    
+    // Create new Google user if needed
+    if (!userDoc || !userDoc.exists) {
+      console.log('📝 Creating new Google user profile...');
+      const newUserData = {
+        uid: userRef.id,
+        firebaseUid: decodedToken.uid,
+        email: decodedToken.email,
+        name: decodedToken.name,
+        photo: decodedToken.picture,
+        provider: 'google',
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        lastLoginAt: admin.firestore.FieldValue.serverTimestamp(),
+        // Additional fields for e-commerce
+        preferences: {
+          currency: 'VND',
+          language: 'vi',
+          notifications: true
+        },
+        profile: {
+          isActive: true,
+          membershipLevel: 'bronze',
+          totalOrders: 0,
+          totalSpent: 0
+        },
+        points: 0, // Initialize points
+        addresses: [],
+        wishlist: [],
+        is_admin: false,
+        is_banned: false, // Google accounts start unbanned
+        banned_reason: '',
+        hasSeenWelcomeModal: false
+      };
+      
+      await userRef.set(newUserData);
+      console.log('✅ Created new Google user profile in Firestore:', decodedToken.name);
+      userData = newUserData;
     }
 
     // Update last login time and ensure all required fields exist
     const updateData = {
-      lastLoginAt: admin.firestore.FieldValue.serverTimestamp(),
-      // Update user info in case it changed
-      name: decodedToken.name,
-      email: decodedToken.email
+      lastLoginAt: admin.firestore.FieldValue.serverTimestamp()
+      // Don't auto-update name or email to preserve user customizations
+      // Only update if these fields are missing
     };
     
+    // Only update name if it's missing or empty (preserve user customizations)
+    if (!userData.name || userData.name.trim() === '') {
+      updateData.name = decodedToken.name;
+      console.log('📝 Setting initial name from token:', decodedToken.name);
+    } else {
+      console.log('✅ Preserving existing name:', userData.name);
+    }
+    
+    // Only update email if missing (should rarely happen)
+    if (!userData.email) {
+      updateData.email = decodedToken.email;
+    }
+    
     // Only update photo if it exists (Google users have pictures, manual users don't)
+    // But don't overwrite if user has custom photo
     if (decodedToken.picture) {
-      updateData.photo = decodedToken.picture;
+      // Only update photo from Google if user doesn't have a custom one
+      // or if it's still the default Google photo
+      if (!userData.photo || userData.photo.includes('googleusercontent.com')) {
+        updateData.photo = decodedToken.picture;
+        updateData.photoURL = decodedToken.picture;
+      }
     }
     
     // Add missing fields for existing users, but preserve is_admin if it exists
@@ -335,6 +464,9 @@ async function verifyToken(req, res, next) {
         totalSpent: userData.totalSpent || 0
       };
     }
+    if (typeof userData.points === 'undefined') {
+      updateData.points = 0; // Initialize points if missing
+    }
     if (!userData.addresses) {
       updateData.addresses = [];
     }
@@ -352,6 +484,20 @@ async function verifyToken(req, res, next) {
     // Get fresh user data after update to ensure we have the latest is_admin value
     const freshUserDoc = await userRef.get();
     const freshUserData = freshUserDoc.data();
+    
+    // CHECK IF USER IS BANNED - Block immediately in verifyToken
+    if (freshUserData.is_banned === true) {
+      const banReason = freshUserData.banned_reason || 'Tài khoản đã bị khóa';
+      console.log('🚫 BANNED USER BLOCKED in verifyToken:', freshUserData.email, '- Provider:', freshUserData.provider);
+      req.user = null; // Set to null to indicate banned user
+      req.bannedUser = { // Add ban info for endpoints to check
+        is_banned: true,
+        banned_reason: banReason,
+        email: freshUserData.email,
+        provider: freshUserData.provider
+      };
+      return next(); // Continue but with null user
+    }
     
     req.user = {
       uid: freshUserData.uid || decodedToken.uid, // Use database uid for manual users, Firebase uid for Google users
@@ -884,7 +1030,20 @@ app.get('/product/:id', async (req, res) => {
 
 // API route to get current user (with token verification)
 app.get('/api/user', verifyToken, (req, res) => {
-  console.log('� User API called - User:', req.user?.name || 'None');
+  console.log('🔍 User API called - User:', req.user?.name || 'None');
+  
+  // Check if user is banned
+  if (req.bannedUser) {
+    console.log('🚫 Banned user detected in /api/user:', req.bannedUser.email);
+    return res.status(403).json({
+      success: false,
+      authenticated: false,
+      is_banned: true,
+      banned_reason: req.bannedUser.banned_reason,
+      message: `Tài khoản đã bị khóa. Lý do: ${req.bannedUser.banned_reason}`,
+      timestamp: new Date().toISOString()
+    });
+  }
   
   res.json({
     success: true,
@@ -972,9 +1131,12 @@ app.post('/api/auth/register', async (req, res) => {
         totalOrders: 0,
         totalSpent: 0
       },
+      points: 0, // Initialize points
       addresses: [],
       wishlist: [],
       is_admin: false,
+      is_banned: false, // Ban status
+      banned_reason: '', // Reason for ban
       hasSeenWelcomeModal: false, // Track if user has seen welcome address modal
       createdAt: admin.firestore.FieldValue.serverTimestamp()
     };
@@ -1633,19 +1795,40 @@ app.post('/api/auth/login', async (req, res) => {
     // Normalize email to lowercase to handle case sensitivity
     const normalizedEmail = email.toLowerCase().trim();
     
-    // Find user by email
-    const userQuery = await db.collection('users').where('email', '==', normalizedEmail).get();
+    // Find user by email (check both manual and upgraded Google accounts)
+    const userQuery = await db.collection('users')
+      .where('email', '==', normalizedEmail)
+      .get();
+      
     if (userQuery.empty) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: 'Email hoặc mật khẩu không đúng' });
     }
     
-    const userDoc = userQuery.docs[0];
+    // Filter users: Accept manual OR upgraded Google accounts (merged accounts)
+    const validUsers = userQuery.docs.filter(doc => {
+      const data = doc.data();
+      return data.provider === 'manual' || data.upgradedToGoogle === true;
+    });
+    
+    if (validUsers.length === 0) {
+      // Only pure Google accounts found (no manual password)
+      const pureGoogleUser = userQuery.docs.find(doc => 
+        doc.data().provider === 'google' && !doc.data().upgradedToGoogle
+      );
+      
+      if (pureGoogleUser) {
+        return res.status(401).json({ 
+          error: 'Email này chỉ đăng ký qua Google (không có mật khẩu). Vui lòng đăng nhập bằng Google.' 
+        });
+      }
+      
+      return res.status(401).json({ error: 'Email hoặc mật khẩu không đúng' });
+    }
+    
+    const userDoc = validUsers[0];
     const userData = userDoc.data();
     
-    // Check if user was created manually
-    if (userData.provider !== 'manual') {
-      return res.status(401).json({ error: 'Vui lòng sử dụng đăng nhập Google cho tài khoản này' });
-    }
+    console.log('🔍 Login attempt for user:', userData.email, 'Provider:', userData.provider, 'Upgraded:', userData.upgradedToGoogle);
     
     // For manual users, verify password using Firebase Auth client SDK
     // Auto-update missing firebaseUid if uid exists
@@ -1715,6 +1898,17 @@ app.post('/api/auth/login', async (req, res) => {
     } else {
       console.error('❌ No Firebase UID found for user:', userData);
       return res.status(401).json({ error: 'Tài khoản không hợp lệ - missing Firebase UID' });
+    }
+    
+    // Check if user is banned
+    if (userData.is_banned === true) {
+      const banReason = userData.banned_reason || 'Vi phạm chính sách sử dụng';
+      console.log('❌ Banned user attempted login:', userData.email);
+      return res.status(403).json({ 
+        error: `Tài khoản đã bị khóa. Lý do: ${banReason}`,
+        is_banned: true,
+        banned_reason: banReason
+      });
     }
     
     // Update last login
@@ -1930,21 +2124,74 @@ app.get('/api/user/profile', async (req, res) => {
         console.log('✅ Token verified for user:', decodedToken.email);
         searchUid = decodedToken.uid;
         
+        // Determine provider from token
+        const provider = decodedToken.firebase.sign_in_provider;
+        const isGoogleLogin = provider === 'google.com';
+        
+        console.log('🔍 Profile request - Provider:', provider, '- Is Google:', isGoogleLogin);
+        
         // Find user in Firestore by firebaseUid first
         const usersSnapshot = await db.collection('users')
           .where('firebaseUid', '==', decodedToken.uid)
-          .limit(1)
           .get();
         
         if (!usersSnapshot.empty) {
-          user = usersSnapshot.docs[0].data();
-          console.log('👤 User found by Firebase UID:', user.name);
+          // If multiple users found (Google + Manual with same Firebase UID), filter by provider
+          const allUsers = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          
+          // Check for merged account (manual upgraded to Google)
+          const mergedAccount = allUsers.find(u => u.upgradedToGoogle === true);
+          if (mergedAccount) {
+            user = mergedAccount;
+            console.log('👤 Found merged account (manual→Google):', user.name);
+          } else {
+            // Filter by provider
+            const matchingUsers = allUsers.filter(u => {
+              if (isGoogleLogin) {
+                return u.provider === 'google';
+              } else {
+                return u.provider === 'manual';
+              }
+            });
+            
+            if (matchingUsers.length > 0) {
+              user = matchingUsers[0];
+              console.log('👤 User found by Firebase UID and provider match:', user.name, '- Provider:', user.provider);
+            } else {
+              // No provider match - check by email for merge opportunity
+              if (isGoogleLogin) {
+                const emailMatch = allUsers.find(u => u.email === decodedToken.email && u.provider === 'manual');
+                if (emailMatch) {
+                  console.log('🔄 Found manual account by email - should merge in next login');
+                  user = null; // Return not found to trigger verifyToken merge
+                } else {
+                  console.log('⚠️ No matching user found');
+                  user = null;
+                }
+              } else {
+                user = null;
+              }
+            }
+          }
         } else {
-          // Try by custom UID
+          // Try by custom UID (document ID)
           const userDoc = await db.collection('users').doc(decodedToken.uid).get();
           if (userDoc.exists) {
-            user = userDoc.data();
-            console.log('� User found by custom UID:', user.name);
+            const foundUser = userDoc.data();
+            // Check provider match or merged status
+            if (foundUser.upgradedToGoogle === true) {
+              user = foundUser;
+              console.log('👤 Merged user found by document ID:', user.name);
+            } else if (isGoogleLogin && foundUser.provider === 'google') {
+              user = foundUser;
+              console.log('👤 Google user found by document ID:', user.name);
+            } else if (!isGoogleLogin && foundUser.provider === 'manual') {
+              user = foundUser;
+              console.log('👤 Manual user found by document ID:', user.name);
+            } else {
+              console.log('⚠️ User found by UID but provider mismatch:', foundUser.provider, 'vs', provider);
+              user = null;
+            }
           }
         }
       } catch (tokenError) {
@@ -1967,6 +2214,18 @@ app.get('/api/user/profile', async (req, res) => {
       return res.status(404).json({
         success: false,
         message: 'User not found'
+      });
+    }
+    
+    // Check if user is banned
+    if (user.is_banned === true) {
+      const banReason = user.banned_reason || 'Tài khoản đã bị khóa';
+      console.log('❌ Banned user attempted access:', user.email);
+      return res.status(403).json({
+        success: false,
+        is_banned: true,
+        banned_reason: banReason,
+        message: `Tài khoản đã bị khóa. Lý do: ${banReason}`
       });
     }
     
@@ -3184,6 +3443,8 @@ app.get('/api/products', async (req, res) => {
       products.push({
         id: doc.id,
         ...data,
+        // Ensure rating field always exists (default to 0 if missing)
+        rating: data.rating !== undefined ? data.rating : 0,
         // Convert Firestore Timestamp to ISO string if needed
         createdAt: data.createdAt?.toDate?.() || data.createdAt,
         updatedAt: data.updatedAt?.toDate?.() || data.updatedAt

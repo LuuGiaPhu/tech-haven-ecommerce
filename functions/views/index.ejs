@@ -281,14 +281,31 @@
                 });
                 
                 const result = await response.json();
+                
+                // Check if user is banned from /api/user response
+                if (result.is_banned === true) {
+                    const banMessage = result.banned_reason || 'Vi phạm chính sách sử dụng';
+                    console.log('🚫 BANNED USER in /api/user:', banMessage);
+                    alert(`🚫 TÀI KHOẢN ĐÃ BỊ KHÓA\n\nLý do: ${banMessage}\n\nVui lòng liên hệ admin để biết thêm chi tiết.`);
+                    
+                    // Sign out the user immediately
+                    await firebaseCompatAuth.signOut();
+                    window.currentUser = null;
+                    updateUIBasedOnAuthStatus();
+                    return;
+                }
+                
                 if (result.authenticated && result.user) {
                     console.log('✅ Server verification successful:', result.user);
-                    window.currentUser = result.user;
                     
-                    // Load full user profile from Firestore
-                    await loadUserProfile(idToken);
+                    // Load full user profile from Firestore and CHECK BAN STATUS FIRST
+                    const profileLoaded = await loadUserProfile(idToken);
                     
-                    updateUIBasedOnAuthStatus();
+                    // Only update UI if user is not banned (profileLoaded returns false if banned)
+                    if (profileLoaded !== false) {
+                        window.currentUser = result.user;
+                        updateUIBasedOnAuthStatus();
+                    }
                 } else {
                     console.log('❌ Server verification failed');
                 }
@@ -310,6 +327,22 @@
                 });
                 
                 const result = await response.json();
+                
+                // Check if user is banned - PRIORITY CHECK
+                if (result.is_banned === true) {
+                    const banMessage = result.banned_reason || 'Vi phạm chính sách sử dụng';
+                    console.log('🚫 BANNED USER DETECTED:', banMessage);
+                    alert(`🚫 TÀI KHOẢN ĐÃ BỊ KHÓA\n\nLý do: ${banMessage}\n\nVui lòng liên hệ admin để biết thêm chi tiết.`);
+                    
+                    // Sign out the user immediately
+                    await firebaseCompatAuth.signOut();
+                    window.currentUser = null;
+                    updateUIBasedOnAuthStatus();
+                    
+                    // Return false to signal ban status
+                    return false;
+                }
+                
                 if (result.success && result.profile) {
                     console.log('✅ User profile loaded:', result.profile);
                     window.currentUser = {
@@ -329,11 +362,15 @@
                             console.warn('⚠️ checkAndShowWelcomeModal not available yet');
                         }
                     }, 1000); // Wait 1 second for script.js to load
+                    
+                    return true; // User is not banned
                 } else {
                     console.log('❌ Failed to load user profile');
+                    return false;
                 }
             } catch (error) {
                 console.error('❌ Error loading user profile:', error);
+                return false;
             }
         }
 
